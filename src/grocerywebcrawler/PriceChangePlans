@@ -1,0 +1,52 @@
+Monitor Prices in multiple geographic regions.
+    San Jose
+        Pick 10 safeways
+
+    San Francisco
+        Pick 10 safeways
+
+    Los Angeles
+        Pick 10 safeways
+
+    Denver
+        Pick 10 safeways
+
+    Seattle
+        Pick 10 safeways
+
+    Cheapest safeway among the 10 safeways picked.
+
+    Get Prices Daily. Create a cron job to get prices of all 50 safeways every day.
+
+    Compare prices every month in the same store. Biggest price changes every month.
+
+    Find the cheapest safeway in each geographical region.
+
+    Allow people to put in a store. And start monitoring prices.
+        Allow people to watch particular items and categories
+
+    Create youtube video about the changes every month. For san jose.
+
+    Compare prices of the same items in the different geographic regions.
+
+Step 1 (Pick 50 safeways. 5 geographic regions)
+Move the csv file into aws dynamo db.
+https://towardsdatascience.com/aws-glue-101-all-you-need-to-know-with-a-real-world-example-f34af17b782f
+https://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html
+Step 2 (Build a cron job and get prices daily)
+https://machinelearningprojects.net/schedule-a-python-script-in-aws-glue-as-a-job/
+https://awstip.com/easiest-way-to-schedule-a-python-script-in-aws-glue-as-a-job-bd3b98f2a5e2
+
+
+Step 3 Get cheapest store, price difference each store each month.
+    cheapest state
+    are price changes the same across geographic regions
+
+Step 4. Build Youtube graphic
+
+Step 5. Allow people person entry
+
+
+
+
+

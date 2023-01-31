@@ -1,0 +1,47 @@
+<script>
+ 
+    import {itemData} from './store.js';
+
+    
+</script>
+{#if $itemData!= undefined}
+
+
+    <h2><strong>Item Name:</strong> {$itemData.name}</h2>
+    <p><strong>UPC:</strong> {$itemData.upc}</p>
+    <div class="bg-secondary">
+        <div class="row">
+            <div class="col-sm"><h2>Prices</h2></div>
+            <div class="col-sm"><h2>Price Changes</h2></div>
+            <div class="col-sm"><h2>Similar Items</h2></div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <p><strong>Price:</strong> {$itemData.price}</p>
+                <p><strong>Price Per:</strong>{$itemData.pricePer}</p>
+                <p><strong>Base Price:</strong>{$itemData.basePrice}</p>
+            </div>
+            <div class="col-sm">
+                <p><strong>Price Change Last 7 Days:</strong>{$itemData.priceChangeLast7Days}</p>
+                <p><strong>Percent Price Change Last 7 Days:</strong>{$itemData.percentPriceChange7Days}</p>
+                <p><strong>Price Change Last 30 Days:</strong>{$itemData.priceChange30days}</p>
+                <p><strong>Percent Price Change Last 30 Days:</strong>{$itemData.percentPriceChange30days}</p>
+                <p><strong>Price Change All Records:</strong>{$itemData.priceChangeForAllRecords}</p>
+                <p><strong>Percent Price Change All Records:</strong>{$itemData.percentPriceChangeForAllRecords}</p>
+            </div>
+            <div class="col-sm">   
+                <td>
+                    <p><strong>Category:</strong>{$itemData.category}</p>
+                    <p>Same Store Similar Items</p>
+                    <ul>
+                        {#each $itemData.itemsInCategory as { upc, name }}
+                        <li>{name}</li>
+                        {/each}
+                    </ul>
+                </td>
+            </div>
+        </div>
+    </div>
+
+{/if}
+<style></style>

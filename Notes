@@ -1,0 +1,49 @@
+SQL Queries
+select distinct(upc) as upc, name from (select * from safeway_item where LOWER(name) like LOWER('%dan%yogurt%')) as foo;
+
+select * from safeway_item where upc in (select distinct(upc) from safeway_item where LOWER(name) like LOWER('%dan%yogurt%'));
+
+select distinct(upc) as upc, name from (select * from safeway_item where LOWER(name) like LOWER('%napa%')) as foo;
+
+select * from safeway_item where upc in (select distinct(upc) from safeway_item where LOWER(name) like LOWER('%napa%'));
+
+select * from safeway_item where upc = '0048431001301'
+
+
+Python FastApi (Perfer Python)
+
+https://camelcamelcamel.com/product/B07YVYZ8T5?context=search
+
+
+Java Jaxrs
+
+5561 distinct upcs
+6days of data
+
+	Need full text search on names of items else wise impossible to find items
+
+
+
+getAllRegions
+
+getAllStoresInRegion
+
+full text search get items similar to the thing you typed
+	unique upc
+
+
+select * from safeway_item where LOWER(name) like LOWER('%yogurt%') [75 unique yogurts]
+
+select distinct(upc) as upc, name from (select * from safeway_item where LOWER(name) like LOWER('%yogurt%')) as foo
+
+names of all distinct yogurts at safeway
+
+dannon yogourts at safeway
+
+select distinct(upc) as upc, name from (select * from safeway_item where LOWER(name) like LOWER('%dan%yogurt%')) as foo;
+
+
+select * from safeway_item where upc in (select distinct(upc) from safeway_item where LOWER(name) like LOWER('%dan%yogurt%'));
+
+
+

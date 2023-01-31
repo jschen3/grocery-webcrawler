@@ -1,0 +1,35 @@
+Website Design
+
+Thumbnail 		Area(Bay area, colorado...) StoreId	[location of store]	Search Bar		Favorites
+
+Item Name [UPC, Department]		Price        				Similar Items
+Image [ignore image for now]	basePrice					different stores,
+								pricePer 					different items
+
+
+								averagePrice
+								lowestPrice  $      Location
+								highestPrice $      Location
+
+
+
+
+Graph (Week[last 7 days], Month[last 30 days] )
+
+
+
+Graph (week[last 7 days], Month[last 30days] ) (all same store summed together)
+
+
+
+Graph [Similar Items Graph] [week[last 7 days], month[last 30 days]] [Same Store]
+
+
+
+Graph [similar items graph] [same major store][same area]
+
+
+
+Graph [similar items graph][multiple stores etc, global trend]
+
+https://www.bain.com/insights/
