@@ -1,9 +1,9 @@
 from datetime import date
 from typing import Optional
-from sqlalchemy import Column, String, TIMESTAMP, FLOAT, Integer
+from sqlalchemy import Column, String, TIMESTAMP, FLOAT
 from sqlalchemy.orm import declarative_base
 
-from grocerywebcrawler.rds_connection import get_engine
+
 
 
 class PriceChangeObject:
@@ -34,7 +34,9 @@ class PriceChangeObject:
             priceChange7DaysAgo=self.priceChange7Days,
             percentPriceChange7DaysAgo=self.percentPriceChange7Days,
             date7DaysAgo=self.date7DaysAgo, currentDate=self.currentDate,
-            earliestPrice=self.earliestPrice, earliestDate=self.earliestDate)
+            earliestPrice=self.earliestPrice, earliestDate=self.earliestDate,
+            absPercentPriceChange7Days=abs(self.percentPriceChange7Days),
+            absPercentPriceChange30Days=abs(self.percentPriceChange30Days))
 
 
 Base = declarative_base()
@@ -58,5 +60,7 @@ class PriceChangeDBModel(Base):
     currentDate = Column(TIMESTAMP, index=True)
     earliestPrice = Column(FLOAT)
     earliestDate = Column(TIMESTAMP)
+    absPercentPriceChange7Days = Column(FLOAT)
+    absPercentPriceChange30Days = Column(FLOAT)
 
 # PriceChangeDBModel.__table__.create(get_engine())

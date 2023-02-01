@@ -97,15 +97,15 @@
     
     <form class="form-inline my-2 my-lg-0" autocomplete="off" on:submit|preventDefault={submitValue}>
       <div class="autocomplete">
-        <input class="form-control mr-sm-2" id="searchbar-input" 
+        <input class="form-control mr-sm-2 bg-dark text-white navbar" id="searchbar-input"
                          type="text" 
-                         placeholder="Search Store Items" 
+                         placeholder="Search Store Items..."
                          bind:this={searchInput}
                          bind:value={inputValueText} 
                          on:input={get_filter_options}>
       </div>
         
-      <button class="btn btn-outline-success my-2 my-sm-0 svelte-bar-submit-button" type="submit">Search</button>
+      <button class="btn btn-outline-dark my-2 my-sm-0 svelte-bar-submit-button" type="submit">Search</button>
         
         <!-- FILTERED LIST OF COUNTRIES -->
         <!-- need to mess with and change toa await promise and mess with promises. -->
@@ -128,17 +128,13 @@
     }
     input {
       border: 1px solid transparent;
-      background-color: #f1f1f1;
-      padding: 10px;
       font-size: 16px;
         margin: 0;
     }
     input[type=text] {
-      background-color: #f1f1f1;
       width: 100%;
     }
     input[type=submit] {
-      background-color: DodgerBlue;
       color: #fff;
       width:fit-content;
       margin-left: 20px;
@@ -152,5 +148,8 @@
         width: 297px;
         border: 1px solid #ddd;
         background-color: #ddd;
+    }
+    ::placeholder{
+        color:white;
     }
     </style>	

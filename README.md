@@ -15,8 +15,8 @@ Svelte UI where you can search and receive a graph of the price changes of an it
 * AWS RDS
 
 ## Getting started
-Piece 1 is called by the file webcrawl.py
-Piece 2 is called by the file pricechange.py
+- Piece 1 is called by the file webcrawl.py
+- Piece 2 is called by the file pricechange.py
 
 ## Website 
 ### grocerywebsite

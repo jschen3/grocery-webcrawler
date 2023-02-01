@@ -1,7 +1,7 @@
 import io
 import json
 import pandas
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from fastapi.responses import StreamingResponse
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
@@ -12,6 +12,8 @@ from grocerywebcrawler.rds_connection import get_engine, get_normal_session
 from fastapi.middleware.cors import CORSMiddleware
 from webserver.build_general_info_section import build_general_information
 from webserver.models.store import StoreDbModel, Store
+
+from src.webserver.models.price_change_object import PriceChangeDBModel
 
 app = FastAPI()
 
@@ -112,3 +114,18 @@ async def getItem(storeId: str, upc: str, db: Session = Depends(get_db)):
     # rest call here is too slow (# improve this call).
     general_info = build_general_information(storeId=storeId, upc=upc, db=db)
     return general_info
+
+
+@app.get("/greatest_7_day_price_changes")
+async def greatest_7_day_price_changes(limit: int, offset: int, db: Session = Depends(get_db)):
+    greatest_percent_items = db.query(PriceChangeDBModel).filter(
+        PriceChangeDBModel.currentDate > date.today()).order_by(PriceChangeDBModel.absPercentPriceChange7Days).limit(
+        limit).offset(offset).all()
+    return greatest_percent_items
+
+@app.get("/greatest_30_day_price_changes")
+async def greatest_7_day_price_changes(limit: int, offset: int, db: Session = Depends(get_db)):
+    greatest_percent_items = db.query(PriceChangeDBModel).filter(
+        PriceChangeDBModel.currentDate > date.today()).order_by(PriceChangeDBModel.absPercentPriceChange30Days.desc()).limit(
+        limit).offset(offset).all()
+    return greatest_percent_items

@@ -4,16 +4,16 @@
 </script>
 
 <header>
-	<nav class="header-nav navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Grocery Market Watch</a>
-		<select id="Area" class="header-area">
+	<nav class="header-nav navbar navbar-expand-lg bg-secondary">
+        <a class="navbar-brand navbar btn-secondary">Grocery Market Watch</a>
+		<select id="Area" class="header-area bg-dark text-white">
             <option>Bay Area</option>
             <!-- <option>San Francisco</option>
             <option>Denver</option>
             <option>Texas</option>
             <option>Northwest(washington, oregon)</option> -->   
         </select>
-        <select id="Store" class="header-store">
+        <select id="Store" class="header-store bg-dark text-white">
             <option>2948 645 San Antonio Rd</option>
         </select>
         <SelectBar/>
@@ -35,14 +35,16 @@
         flex-direction: row;
     }
     .header-area{
-        height:40px;
+        border-radius: 5px;
+        height: 40px;
+        margin-right:15px;
     }
     .header-store{
-        height:40px
+        border-radius: 5px;
+        height: 40px;
+        margin-right:15px;
     }
     .navbar{
-        margin-top: 10px;
-        padding-top: 10px;
-        height: 40px;
+        height: 60px;
     }
 </style>

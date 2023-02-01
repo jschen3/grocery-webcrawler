@@ -22,18 +22,18 @@ pricingData.forEach((d) => {
     d.date = new Date(d.date);
   });
 //console.log("pricingData:" +pricingData);
-  
+
     const padding = { top: 30, right: 10, bottom: 20, left: 20 };
     let width = 500
     let height = 250;
-  
+
     var formatTime = timeFormat("%b %d");
     var formatDollars = format("$.2f");
-  
+
     let m = { x: 0, y: 0 };
-  
+
     var bisect = bisector((d) => d.date).right;
-  
+
     function handleMousemove(event) {
       m.x = event.offsetX;
       m.y = event.offsetY;
@@ -42,7 +42,7 @@ pricingData.forEach((d) => {
         point = pricingData[i];
       }
     }
-    
+
     $: minX = pricingData[0].date;
     $: maxX = pricingData[pricingData.length - 1].date;
     $: extentY = extent(pricingData, (d) => d.price);
@@ -53,7 +53,7 @@ pricingData.forEach((d) => {
     $: yScale = scaleLinear()
       .domain([0, extentY[1]])
       .range([height - padding.bottom, padding.top]);
-  
+
     $: xTicks = xScale.ticks(5);
     $: yTicks = yScale.ticks(4);
 
@@ -75,7 +75,7 @@ pricingData.forEach((d) => {
 
     $: point = pricingData[0];
     $: last = pricingData[pricingData.length - 1];
-  
+
 
 
     // coords for horizontal tooltip line
@@ -86,7 +86,7 @@ pricingData.forEach((d) => {
     $: hline.x2 = width - padding.right;
 
 
-  
+
     // coords for vertical tooltip line
     let vline = {};
     $: vline.y1 = 0;
