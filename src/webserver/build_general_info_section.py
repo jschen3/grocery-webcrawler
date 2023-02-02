@@ -72,7 +72,7 @@ def build_general_information(upc, storeId, db):
 
     fillOutGeneralInformation(itemGeneralInformation, storeId, upc, db=db)
     fillOut5ItemsInCategory(currentItemGeneralInformation=itemGeneralInformation, storeId=storeId, db=db)
-    print(itemGeneralInformation.__dict__)
+    #print(itemGeneralInformation.__dict__)
     return itemGeneralInformation.__dict__
     # price 10 items
     # price change 10 items
@@ -117,7 +117,7 @@ def allTimeDataframe(storeId, upc, db):
 def calculatePriceChangeDays(dataFrameJsonObject: list[SafewayItemDBModel], startDate, endDate):
     indexOfStartDate = findIndex(dataFrameJsonObject, startDate.date())
     indexOfEndDate = findIndex(dataFrameJsonObject, endDate.date())
-    first: SafewayItemDBModel = SafewayItem.parse_obj(dataFrameJsonObject[indexOfStartDate])
+    first = SafewayItem.parse_obj(dataFrameJsonObject[indexOfStartDate])
     last = SafewayItem.parse_obj(dataFrameJsonObject[indexOfEndDate])
 
     priceChange = last.price - first.price

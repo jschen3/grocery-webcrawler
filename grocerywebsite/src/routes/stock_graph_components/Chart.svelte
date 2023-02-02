@@ -21,7 +21,7 @@ pricingData.forEach((d) => {
     d.date = timeParse("%Y-%m-%d")(d.date);
     d.date = new Date(d.date);
   });
-//console.log("pricingData:" +pricingData);
+console.log("pricingData:" +pricingData);
 
     const padding = { top: 30, right: 10, bottom: 20, left: 20 };
     let width = 500

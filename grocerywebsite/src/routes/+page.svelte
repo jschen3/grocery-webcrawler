@@ -3,18 +3,7 @@
     import Table from './Table.svelte';
     import Graph from './Graph.svelte';
     import {page_store_item} from './store.js';
-    import { onDestroy} from 'svelte';
-    //let store_item;
-
-    // const subscription=page_store_item.subscribe(value=>{
-    //     if (value!=null && value!=undefined){
-    //         store_item = value;
-    //         console.log("store_item:"+store_item);
-    //     }else{
-    //         store_item = null;
-    //     }       
-    // });
-    //onDestroy(subscription);
+    import TopPriceChange from './TopPriceChange.svelte';
 </script>
 <svelte:window/>
 
@@ -23,12 +12,21 @@
     </div>
     <div class="container">
     {#if $page_store_item}
-    <!-- rest calls caused by these sections dont occur.
-        https://linguinecode.com/post/3-methods-to-run-code-after-dom-update-in-svelte
-    --> 
-        <div><Table/></div>
-        <div>
-            <Graph/>
-            </div>
-        {/if}
+        <div class="table-div"><Table storeId="{$page_store_item.storeId}" upc="{$page_store_item.upc}"/></div>
+        <div class="graph-div">
+            <Graph storeId="{$page_store_item.storeId}" upc="{$page_store_item.upc}"/>
+        </div>
+    {/if}
+        <div class="top-price-change-div"><TopPriceChange/></div>
 </div>
+<style>
+    .table-div{
+        border-radius: 10px;
+    }
+    .graph-div{
+        margin-top: 50px;
+    }
+    .top-price-change-div{
+        border-radius: 10px;
+    }
+</style>

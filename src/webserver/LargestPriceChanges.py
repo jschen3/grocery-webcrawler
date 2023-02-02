@@ -12,16 +12,15 @@ from webserver.build_general_info_section import allTimeDataframe, calculatePric
 from webserver.models.price_change_object import PriceChangeObject, PriceChangeDBModel
 
 
-def setStandardFields(item, safeway_items, priceChangeObject):
+def setStandardFields(item:DistinctSafewayItem, safeway_items:list[SafewayItem], priceChangeObject: PriceChangeObject):
     earliestDate = datetime.strptime(safeway_items[0]["date"], '%Y-%m-%d')
     priceChangeObject.upc = item.upc
     priceChangeObject.storeId = item.storeId
     priceChangeObject.name = item.name
     priceChangeObject.earliestDate = earliestDate
-    priceChangeObject.earliestPrice = safeway_items[len(safeway_items) - 1]["price"]
-    priceChangeObject.currentPrice = safeway_items[0]["price"]
-
-
+    priceChangeObject.earliestPrice = safeway_items[0]["price"]
+    priceChangeObject.currentPrice = safeway_items[len(safeway_items) - 1]["price"]
+    priceChangeObject.category = item.departmentName
 
 
 def process_and_find_price_changes(i):

@@ -113,7 +113,7 @@
             <ul id="autocomplete-items-list navbar-nav mr-auto">
                 {#each filterOptions as filterOption, i}
                     <SelectOption itemLabel={filterOption.name} highlighted={i === hiLiteIndex} on:click={() => setInputVal(filterOption)} />
-                {/each}			
+                {/each}
             </ul>
         {/if}
     </form>
@@ -124,7 +124,7 @@
       /*the container must be positioned relative:*/
       position: relative;
       display: inline-block;
-        width: 350px;
+      width: 350px;
     }
     input {
       border: 1px solid transparent;
@@ -136,6 +136,7 @@
     }
     input[type=submit] {
       color: #fff;
+      margin-right: 20px;
       width:fit-content;
       margin-left: 20px;
     }
@@ -149,7 +150,11 @@
         border: 1px solid #ddd;
         background-color: #ddd;
     }
+    .svelte-bar-submit-button{
+        margin-left: 10px;
+    }
     ::placeholder{
         color:white;
     }
+
     </style>	

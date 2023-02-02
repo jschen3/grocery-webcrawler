@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from webserver.build_general_info_section import build_general_information
 from webserver.models.store import StoreDbModel, Store
 
-from src.webserver.models.price_change_object import PriceChangeDBModel
+from webserver.models.price_change_object import PriceChangeDBModel
 
 app = FastAPI()
 
@@ -116,16 +116,35 @@ async def getItem(storeId: str, upc: str, db: Session = Depends(get_db)):
     return general_info
 
 
-@app.get("/greatest_7_day_price_changes")
-async def greatest_7_day_price_changes(limit: int, offset: int, db: Session = Depends(get_db)):
-    greatest_percent_items = db.query(PriceChangeDBModel).filter(
-        PriceChangeDBModel.currentDate > date.today()).order_by(PriceChangeDBModel.absPercentPriceChange7Days).limit(
-        limit).offset(offset).all()
-    return greatest_percent_items
+@app.get("/greatest_price_changes")
+async def greatest_price_changes(limit: int, offset: int, thirty_or_7_days: bool, db: Session = Depends(get_db)):
+    if thirty_or_7_days:
+        greatest_percent_items = db.query(PriceChangeDBModel.upc.distinct(), PriceChangeDBModel.name,
+                                          PriceChangeDBModel.upc, PriceChangeDBModel.category,
+                                          PriceChangeDBModel.price7DaysAgo,
+                                          PriceChangeDBModel.price30DaysAgo,
+                                          PriceChangeDBModel.currentPrice, PriceChangeDBModel.priceChange7DaysAgo,
+                                          PriceChangeDBModel.priceChange30Days,
+                                          PriceChangeDBModel.percentPriceChange7DaysAgo,
+                                          PriceChangeDBModel.percentPriceChange30Days,
+                                          PriceChangeDBModel.absPercentPriceChange7Days,
+                                          PriceChangeDBModel.absPercentPriceChange30Days).filter(
+            PriceChangeDBModel.currentDate > date.today()).order_by(
+            PriceChangeDBModel.absPercentPriceChange30Days.desc()).limit(
+            limit).offset(offset).all()
+    else:
+        greatest_percent_items = db.query(PriceChangeDBModel.upc.distinct(), PriceChangeDBModel.name,
+                                          PriceChangeDBModel.upc, PriceChangeDBModel.category,
+                                          PriceChangeDBModel.price7DaysAgo,
+                                          PriceChangeDBModel.price30DaysAgo,
+                                          PriceChangeDBModel.currentPrice, PriceChangeDBModel.priceChange7DaysAgo,
+                                          PriceChangeDBModel.priceChange30Days,
+                                          PriceChangeDBModel.percentPriceChange7DaysAgo,
+                                          PriceChangeDBModel.percentPriceChange30Days,
+                                          PriceChangeDBModel.absPercentPriceChange7Days,
+                                          PriceChangeDBModel.absPercentPriceChange30Days).filter(
+            PriceChangeDBModel.currentDate > date.today()).order_by(
+            PriceChangeDBModel.absPercentPriceChange7Days.desc()).limit(
+            limit).offset(offset).all()
 
-@app.get("/greatest_30_day_price_changes")
-async def greatest_7_day_price_changes(limit: int, offset: int, db: Session = Depends(get_db)):
-    greatest_percent_items = db.query(PriceChangeDBModel).filter(
-        PriceChangeDBModel.currentDate > date.today()).order_by(PriceChangeDBModel.absPercentPriceChange30Days.desc()).limit(
-        limit).offset(offset).all()
     return greatest_percent_items
