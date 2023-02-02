@@ -100,7 +100,8 @@ const priceChanges=[{
         </tr>
         </thead>
         <tbody>
-        {#if $priceChangeData !=undefined && $priceChangeData.length>0}
+        {#if $priceChangeData}    
+        {#key $priceChangeData}
             {#each $priceChangeData as priceChange, i}
                 <tr>
                     <th scope="row">{i+1}</th>
@@ -115,6 +116,7 @@ const priceChanges=[{
                     <td>Graph</td>
                 </tr>
             {/each}    
+        {/key}
         {/if}
         </tbody>
     

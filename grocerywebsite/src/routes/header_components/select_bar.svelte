@@ -134,22 +134,6 @@
     input[type=text] {
       width: 100%;
     }
-    input[type=submit] {
-      color: #fff;
-      margin-right: 20px;
-      width:fit-content;
-      margin-left: 20px;
-    }
-        
-    #autocomplete-items-list {
-        position: relative;
-        margin: 0;
-        padding: 0;
-        top: 0;
-        width: 297px;
-        border: 1px solid #ddd;
-        background-color: #ddd;
-    }
     .svelte-bar-submit-button{
         margin-left: 10px;
     }
