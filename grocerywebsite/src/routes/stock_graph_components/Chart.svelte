@@ -1,6 +1,4 @@
 <script>
-// @ts-nocheck
-
   import { scaleLinear } from "d3-scale";
   import { extent, bisector } from "d3-array";
   import { line, area } from "d3-shape";
@@ -16,7 +14,18 @@
   import { timeParse } from "d3-time-format";
 
 export let pricingValue;
-const pricingData = pricingValue
+	let pricingData = pricingValue
+if (pricingData==undefined){
+  pricingData = [{
+    "name": "",
+    "upc": "",
+    "date": "2023-01-26",
+    "price": 0.0,
+    "basePrice": 0.0,
+    "pricePer": 0.0
+    }];
+}
+
 pricingData.forEach((d) => {
     d.date = timeParse("%Y-%m-%d")(d.date);
     d.date = new Date(d.date);
@@ -94,7 +103,7 @@ console.log("pricingData:" +pricingData);
     $: vline.x1 = xScale(point.date);
     $: vline.x2 = xScale(point.date);
   </script>
-  {#if pricingData}
+  {#key pricingValue}
   <div class="chart" bind:clientHeight={height} bind:clientWidth={width}>
     <TooltipTop value={formatTime(point.date)} left={xScale(point.date)} />
     
@@ -130,10 +139,7 @@ console.log("pricingData:" +pricingData);
       <TooltipPoint x={xScale(point.date)} y={yScale(point.price)} />  
     </svg>
   </div>
-  {:else}
-		Loading...
-	{/if}
-  
+  {/key}
   <style>
     .chart {
       width: 100%;

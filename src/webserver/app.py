@@ -118,6 +118,7 @@ async def getItem(storeId: str, upc: str, db: Session = Depends(get_db)):
 
 @app.get("/greatest_price_changes")
 async def greatest_price_changes(limit: int, offset: int, thirty_or_7_days: bool, db: Session = Depends(get_db)):
+    yesterday = date.today() - timedelta(days=1)
     if thirty_or_7_days:
         greatest_percent_items = db.query(PriceChangeDBModel.upc.distinct(), PriceChangeDBModel.name,
                                           PriceChangeDBModel.upc, PriceChangeDBModel.category,
@@ -129,7 +130,7 @@ async def greatest_price_changes(limit: int, offset: int, thirty_or_7_days: bool
                                           PriceChangeDBModel.percentPriceChange30Days,
                                           PriceChangeDBModel.absPercentPriceChange7Days,
                                           PriceChangeDBModel.absPercentPriceChange30Days).filter(
-            PriceChangeDBModel.currentDate > date.today()).order_by(
+            PriceChangeDBModel.currentDate > yesterday).order_by(
             PriceChangeDBModel.absPercentPriceChange30Days.desc()).limit(
             limit).offset(offset).all()
     else:
@@ -143,7 +144,7 @@ async def greatest_price_changes(limit: int, offset: int, thirty_or_7_days: bool
                                           PriceChangeDBModel.percentPriceChange30Days,
                                           PriceChangeDBModel.absPercentPriceChange7Days,
                                           PriceChangeDBModel.absPercentPriceChange30Days).filter(
-            PriceChangeDBModel.currentDate > date.today()).order_by(
+            PriceChangeDBModel.currentDate > yesterday).order_by(
             PriceChangeDBModel.absPercentPriceChange7Days.desc()).limit(
             limit).offset(offset).all()
 

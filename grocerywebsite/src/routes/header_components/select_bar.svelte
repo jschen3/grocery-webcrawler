@@ -1,6 +1,6 @@
 <script>
 	import axios from 'axios';
-    import {page_store_item} from '../store.js'
+    import {page_store_item, greatest_price_change_options} from '../store.js'
     
     import SelectOption from './select_options.svelte';	
         
@@ -57,7 +57,12 @@
             console.log(`${inputValueObject.name} is submitted!`);
             console.log(`${inputValueObject.upc} upc is:`);
             console.log(`${inputValueObject.storeId} storeId:`);
-            page_store_item.set({"upc":inputValueObject.upc, "storeId":inputValueObject.storeId})
+            page_store_item.set({"upc":inputValueObject.upc, "storeId":inputValueObject.storeId});
+            // let prev_greatest_price_change_options = $greatest_price_change_options
+            // if (prev_greatest_price_change_options!=null && prev_greatest_price_change_options!=undefined){
+            //     prev_greatest_price_change_options.visible=false;
+            // }    
+            // greatest_price_change_options.set(prev_greatest_price_change_options)
             // set these variables in a svelte store and pull data from svelte store 
             setTimeout(clearInput, 5000);
             filterOptions = [];
