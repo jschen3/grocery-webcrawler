@@ -2,7 +2,13 @@ import {writable, derived} from 'svelte/store';
 import axios from 'axios';
 export const page_store_item = writable(null);
 
-export const greatest_price_change_options=writable(null);
+export const greatest_price_change_options_7=writable(null);
+
+export const greatest_price_change_options_30=writable(null);
+
+export const display_7_days = writable(true);
+
+export const display_30_days = writable(true);
 
 export const itemData = derived(page_store_item, async($page_store_item, set)=>{
     if ($page_store_item!=null && $page_store_item!=undefined){
@@ -27,7 +33,23 @@ export const graphData = derived(page_store_item, async($page_store_item, set)=>
     }    
 });
 
-export const priceChangeData = derived(greatest_price_change_options, async($greatest_price_change_options, set)=>{
+export const priceChangeData7Days = derived(greatest_price_change_options_7, async($greatest_price_change_options, set)=>{
+    let thirty_day_or_7_day;
+    let offset;
+    let limit;
+    if ($greatest_price_change_options!=null){
+        thirty_day_or_7_day = $greatest_price_change_options.thirty_day_or_7_day;
+        offset = $greatest_price_change_options.offset;
+        limit = $greatest_price_change_options.limit;
+        const response = await axios.get("http://localhost:8000/greatest_price_changes?limit="+limit+"&offset="+offset+"&thirtyOr7Days="+thirty_day_or_7_day);
+        const data = await response.data;
+        console.log(data);
+        set(data);
+    }
+    
+});
+
+export const priceChangeData30Days = derived(greatest_price_change_options_30, async($greatest_price_change_options, set)=>{
     let thirty_day_or_7_day;
     let offset;
     let limit;

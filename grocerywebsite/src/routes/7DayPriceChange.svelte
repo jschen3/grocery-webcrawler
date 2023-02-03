@@ -2,19 +2,17 @@
 // @ts-nocheck
 
 	import { onMount } from 'svelte';
-
-
-    import {priceChangeData, greatest_price_change_options} from './store.js';
-
-    onMount(()=>greatest_price_change_options.set({
+    import {priceChangeData7Days, greatest_price_change_options_7, display_7_days} from './store.js';
+    onMount(()=>greatest_price_change_options_7.set({
 		"thirty_day_or_7_day": false,
 		"offset": 0,
 		"limit": 30,
-        "visible":true
 	}));
 
 </script>
-{#key $greatest_price_change_options!= undefined && $greatest_price_change_options.visible==true}
+{#key $display_7_days}
+{#if $display_7_days==true}
+<h1 class="text-white">Greatest Price Changes 7 Days</h1>
 <table class="table table-hover table-light table-striped table-bordered">
     <thead>
         <tr>
@@ -31,9 +29,9 @@
         </tr>
         </thead>
         <tbody>
-        {#if $priceChangeData}    
-        {#key $priceChangeData}
-            {#each $priceChangeData as priceChange, i}
+        {#if $priceChangeData7Days}    
+        {#key $priceChangeData7Days}
+            {#each $priceChangeData7Days as priceChange, i}
                 <tr>
                     <th scope="row">{i+1}</th>
                     <td>{priceChange.name}</td>
@@ -54,11 +52,15 @@
         {/if}
         </tbody>
 </table>
+{/if}
 {/key}
 
 
 <style>
+h1{
+    margin-top:25px;
+}
 .table{
-    margin-top:50px;
+    margin-top:25px;
 }
 </style>

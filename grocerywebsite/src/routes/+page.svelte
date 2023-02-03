@@ -3,7 +3,8 @@
     import Table from './Table.svelte';
     import Graph from './Graph.svelte';
     import {page_store_item} from './store.js';
-    import TopPriceChange from './TopPriceChange.svelte';
+    import SevenDayPriceChange from './7DayPriceChange.svelte';
+    import ThirtyDayPriceChange from './30DayPriceChange.svelte';
 </script>
 <svelte:window/>
 
@@ -17,7 +18,8 @@
             <Graph storeId="{$page_store_item.storeId}" upc="{$page_store_item.upc}"/>
         </div>
     {/if}
-        <div class="top-price-change-div"><TopPriceChange/></div>
+        <div class="top-price-change-div"><SevenDayPriceChange/></div>
+        <div class="top-price-change-div"><ThirtyDayPriceChange/></div>
 </div>
 <style>
     .table-div{
