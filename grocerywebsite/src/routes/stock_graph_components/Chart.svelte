@@ -108,14 +108,12 @@ console.log("pricingData:" +pricingData);
     <TooltipRight
       value={formatDollars(last.price)}
       top={yScale(last.price)}
-      left={xScale(point.date)}
       type="last"
     />
     <TooltipRight
       value={formatDollars(point.price)}
       top={yScale(point.price)}
-      left={xScale(point.date)}
-      
+
       type="point"
     />
     <svg on:mousemove={handleMousemove}>

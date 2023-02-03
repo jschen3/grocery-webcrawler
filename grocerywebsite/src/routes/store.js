@@ -8,7 +8,7 @@ export const greatest_price_change_options_30=writable(null);
 
 export const display_7_days = writable(true);
 
-export const display_30_days = writable(true);
+export const display_30_days = writable(false);
 
 export const itemData = derived(page_store_item, async($page_store_item, set)=>{
     if ($page_store_item!=null && $page_store_item!=undefined){

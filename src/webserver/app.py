@@ -111,7 +111,6 @@ def getDataFrameJsonObject(storeId, upc, days_before, db):
 
 @app.get("/items/{storeId}/{upc}")
 async def getItem(storeId: str, upc: str, db: Session = Depends(get_db)):
-    # rest call here is too slow (# improve this call).
     general_info = build_general_information(storeId=storeId, upc=upc, db=db)
     return general_info
 

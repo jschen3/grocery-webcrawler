@@ -9,6 +9,26 @@
 		"limit": 30,
 	}));
 
+    function percentText(percent){
+        if (percent>0){
+            return "<i class=\"bi bi-caret-up\"></i>"+" "+naiveRound(percent)
+        }
+        else{
+            return "<i class=\"bi bi-caret-down\"></i>"+" "+naiveRound(percent)
+        }
+    }
+
+    function naiveRound(num, decimalPlaces = 2) {
+        var p = Math.pow(10, decimalPlaces);
+        return (Math.round(num * p) / p).toFixed(2);
+
+    }
+
+    function addDollarSign(num){
+        return "$"+num.toFixed(2);
+    }
+
+
 </script>
 {#key $display_7_days}
 {#if $display_7_days==true}
@@ -22,7 +42,7 @@
             <th scope="col">Current Price</th>
             <th scope="col">Price 7 Days Ago</th>
             <!--<th scope="col">Price 30 Days Ago</th>-->
-            <th scope="col">Percent Price Change 7 Days Ago</th>
+            <th scope="col">Percent Price Change 7 Days</th>
             <!--
             <th scope="col">Percent Price Change 30 Days Ago</th> -->
             <th scope="col">Graph</th>
@@ -36,12 +56,12 @@
                     <th scope="row">{i+1}</th>
                     <td>{priceChange.name}</td>
                     <td>{priceChange.category}</td>
-                    <td>{priceChange.currentPrice}</td>
-                    <td>{priceChange.price7DaysAgo}</td>
+                    <td>{addDollarSign(priceChange.currentPrice)}</td>
+                    <td>{addDollarSign(priceChange.price7DaysAgo)}</td>
                     <!--
                     <td>{priceChange.price30DaysAgo}</td>
                     -->
-                    <td>{priceChange.percentPriceChange7DaysAgo}</td>
+                    <td>{@html percentText(priceChange.percentPriceChange7DaysAgo)}</td>
                     <!--        
                     <td>{priceChange.percentPriceChange30Days}</td>
                     -->
@@ -62,5 +82,11 @@ h1{
 }
 .table{
     margin-top:25px;
+}
+:global(.icon-flipped) {
+    transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
 }
 </style>

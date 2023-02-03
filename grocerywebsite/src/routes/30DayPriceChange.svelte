@@ -1,13 +1,31 @@
 <script>
     // @ts-nocheck
     
-        import { onMount } from 'svelte';
+    import { onMount } from 'svelte';
         import {priceChangeData30Days, greatest_price_change_options_30, display_30_days} from './store.js';
-        onMount(()=>greatest_price_change_options_30.set({
-            "thirty_day_or_7_day": true,
-            "offset": 0,
-            "limit": 30,
-        }));
+    onMount(()=>greatest_price_change_options_30.set({
+        "thirty_day_or_7_day": true,
+        "offset": 0,
+        "limit": 30,
+    }));
+    function percentText(percent){
+        if (percent>0){
+            return "<i class=\"bi bi-caret-up\"></i>"+" "+naiveRound(percent)
+        }
+        else{
+            return "<i class=\"bi bi-caret-down\"></i>"+" "+naiveRound(percent)
+        }
+    }
+
+    function naiveRound(num, decimalPlaces = 2) {
+        var p = Math.pow(10, decimalPlaces);
+        return (Math.round(num * p) / p).toFixed(2);
+
+    }
+
+    function addDollarSign(num){
+        return "$"+num.toFixed(2);
+    }
     
     </script>
     {#key $display_30_days}
@@ -22,7 +40,7 @@
                 <th scope="col">Current Price</th>
                 <th scope="col">Price 30 Days Ago</th>
                 <!--<th scope="col">Price 30 Days Ago</th>-->
-                <th scope="col">Percent Price Change 30 Days Ago</th>
+                <th scope="col">Percent Price Change 30 Days</th>
                 <!--
                 <th scope="col">Percent Price Change 30 Days Ago</th> -->
                 <th scope="col">Graph</th>
@@ -36,9 +54,9 @@
                         <th scope="row">{i+1}</th>
                         <td>{priceChange.name}</td>
                         <td>{priceChange.category}</td>
-                        <td>{priceChange.currentPrice}</td>
-                        <td>{priceChange.price30DaysAgo}</td>       
-                        <td>{priceChange.percentPriceChange30Days}</td>
+                        <td>{addDollarSign(priceChange.currentPrice)}</td>
+                        <td>{addDollarSign(priceChange.price30DaysAgo)}</td>       
+                        <td>{@html percentText(priceChange.percentPriceChange30Days)}</td>
                         <td>Graph</td>
                     </tr>
                 {/each}    
