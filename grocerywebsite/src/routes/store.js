@@ -28,14 +28,14 @@ export const graphData = derived(page_store_item, async($page_store_item, set)=>
 });
 
 export const priceChangeData = derived(greatest_price_change_options, async($greatest_price_change_options, set)=>{
-    let thirty_day_or_7_day = true;
-    let offset = 0;
-    let limit = 30;
+    let thirty_day_or_7_day;
+    let offset;
+    let limit;
     if ($greatest_price_change_options!=null){
         thirty_day_or_7_day = $greatest_price_change_options.thirty_day_or_7_day;
         offset = $greatest_price_change_options.offset;
         limit = $greatest_price_change_options.limit;
-        const response = await axios.get("http://localhost:8000/greatest_price_changes?limit="+limit+"&offset="+offset+"&thirty_or_7_days="+thirty_day_or_7_day);
+        const response = await axios.get("http://localhost:8000/greatest_price_changes?limit="+limit+"&offset="+offset+"&thirtyOr7Days="+thirty_day_or_7_day);
         const data = await response.data;
         console.log(data);
         set(data);

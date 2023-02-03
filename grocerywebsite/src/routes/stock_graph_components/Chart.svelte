@@ -94,8 +94,6 @@ console.log("pricingData:" +pricingData);
     $: hline.x1 = padding.left;
     $: hline.x2 = width - padding.right;
 
-
-
     // coords for vertical tooltip line
     let vline = {};
     $: vline.y1 = 0;
@@ -110,11 +108,14 @@ console.log("pricingData:" +pricingData);
     <TooltipRight
       value={formatDollars(last.price)}
       top={yScale(last.price)}
+      left={xScale(point.date)}
       type="last"
     />
     <TooltipRight
       value={formatDollars(point.price)}
       top={yScale(point.price)}
+      left={xScale(point.date)}
+      
       type="point"
     />
     <svg on:mousemove={handleMousemove}>

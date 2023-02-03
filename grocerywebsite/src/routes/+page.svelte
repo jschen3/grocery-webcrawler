@@ -17,7 +17,7 @@
             <Graph storeId="{$page_store_item.storeId}" upc="{$page_store_item.upc}"/>
         </div>
     {/if}
-        <!--<div class="top-price-change-div"><TopPriceChange/></div>-->
+        <div class="top-price-change-div"><TopPriceChange/></div>
 </div>
 <style>
     .table-div{

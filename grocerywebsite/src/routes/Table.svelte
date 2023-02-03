@@ -15,7 +15,7 @@
         </div>
         <div class="row">
             <div class="col-sm">
-                <p><strong>Price:</strong><img src={Buy_Icon} alt="buy"/>${$itemData.price}</p>
+                <p><strong>Current Price:</strong><img src={Buy_Icon} alt="buy"/>${$itemData.price}</p>
                 <p><strong>Price Per:</strong><img src={Buy_Icon} alt="buy"/>${$itemData.pricePer}</p>
                 <p><strong>Base Price:</strong><img src={Buy_Icon} alt="buy"/>${$itemData.basePrice}</p>
             </div>

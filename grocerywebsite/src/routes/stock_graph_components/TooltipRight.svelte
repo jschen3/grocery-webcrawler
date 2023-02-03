@@ -2,7 +2,6 @@
     export let value = "$100";
     export let top = 0;
     export let type = "initial";
-  
     let width = 50;
     let height = 15;
   
@@ -20,6 +19,14 @@
       2}px; width: {width}px; height: {height}px; line-height: {height}px; top: {top -
       height / 2}px; --bg-color: {backgroundColor}"
   >
+  <!--
+  <div
+    class="arrowBox"
+    style="--after-border: {height / 2}px; --after-margin-left: {-height /
+      2}px; width: {width}px; height: {height}px; line-height: {height}px; left: {left -
+      width / 2}px"
+  >
+  -->
     {value}
   </div>
   
@@ -33,7 +40,7 @@
       font-weight: 200;
       color: white;
       text-align: center;
-      left: 500px;
+      right: 0px;
     }
   
     .arrowBox:before {
