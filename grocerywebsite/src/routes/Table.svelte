@@ -24,8 +24,8 @@
                 <p><strong>Percent Price Change Last 7 Days: </strong>{$itemData.percentPriceChange7Days}</p>
                 <p><strong>Price Change Last 30 Days: </strong>{$itemData.priceChangeLast30days}</p>
                 <p><strong>Percent Price Change Last 30 Days: </strong>{$itemData.percentPriceChange30days}</p>
-                <p><strong>Price Change All Records: </strong>{$itemData.priceChangeForAllRecords}</p>
-                <p><strong>Percent Price Change All Records: </strong>{$itemData.percentPriceChangeForAllRecords}</p>
+                <!-- <p><strong>Price Change All Records: </strong>{$itemData.priceChangeForAllRecords}</p>
+                <p><strong>Percent Price Change All Records: </strong>{$itemData.percentPriceChangeForAllRecords}</p> -->
             </div>
             <div class="col-sm">   
                 <td>

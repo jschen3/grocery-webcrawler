@@ -120,8 +120,8 @@ def calculatePriceChangeDays(dataFrameJsonObject: list[SafewayItemDBModel], star
     first = SafewayItem.parse_obj(dataFrameJsonObject[indexOfStartDate])
     last = SafewayItem.parse_obj(dataFrameJsonObject[indexOfEndDate])
 
-    priceChange = last.price - first.price
-    percentPriceChange = (priceChange / last.price) * 100
+    priceChange = '{0:.2f}'.format(last.price - first.price)
+    percentPriceChange = '{0:.2f}'.format((priceChange / last.price) * 100)
     return {
         "startDate": first.date,
         "endDate": last.date,

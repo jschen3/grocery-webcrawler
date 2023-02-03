@@ -67,4 +67,7 @@
     .navbar{
         height: 60px;
     }
+    .nav-link{
+        margin-left: 10px;
+    }
 </style>

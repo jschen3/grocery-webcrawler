@@ -11,7 +11,7 @@
 
     function percentText(percent){
         if (percent>0){
-            return "<i class=\"bi bi-caret-up\"></i>"+" "+naiveRound(percent)
+            return "<i class=\"bi bi-caret-up\"></i>"+" +"+naiveRound(percent)
         }
         else{
             return "<i class=\"bi bi-caret-down\"></i>"+" "+naiveRound(percent)
@@ -45,7 +45,6 @@
             <th scope="col">Percent Price Change 7 Days</th>
             <!--
             <th scope="col">Percent Price Change 30 Days Ago</th> -->
-            <th scope="col">Graph</th>
         </tr>
         </thead>
         <tbody>
@@ -65,7 +64,6 @@
                     <!--        
                     <td>{priceChange.percentPriceChange30Days}</td>
                     -->
-                    <td>Graph</td>
                 </tr>
             {/each}    
         {/key}
