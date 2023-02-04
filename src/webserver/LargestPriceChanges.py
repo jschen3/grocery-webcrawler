@@ -53,9 +53,9 @@ def process_and_find_price_changes(i):
 
         priceChangeObject.earliestPrice = SafewayItem.parse_obj(all_time_dataframe[0]).price
         priceChangeObject.earliestDate = SafewayItem.parse_obj(all_time_dataframe[0]).date
-        priceChangeObject.priceChangeForAllRecords = priceChangeObject.earliestPrice - priceChangeObject.currentPrice
-        priceChangeObject.percentPriceChangeForAllRecords = (
-                                                                    priceChangeObject.priceChangeForAllRecords / priceChangeObject.earliestPrice) * 100
+        priceChangeObject.priceChangeForAllRecords = float('{:0.2f}'.format(priceChangeObject.earliestPrice - priceChangeObject.currentPrice))
+        priceChangeObject.percentPriceChangeForAllRecords = float('{:0.2f}'.format(
+                                                                    priceChangeObject.priceChangeForAllRecords / priceChangeObject.earliestPrice) * 100)
         setStandardFields(item, all_time_dataframe, priceChangeObject)
         if abs(priceChangeObject.priceChange30Days) > 0 or abs(priceChangeObject.priceChange7Days) > 0:
             db_object = priceChangeObject.to_db_object()

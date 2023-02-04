@@ -67,8 +67,8 @@ def build_general_information(upc, storeId, db):
 
         itemGeneralInformation.earliestPrice = SafewayItem.parse_obj(all_time_dataframe[0]).price
         itemGeneralInformation.priceChangeForAllRecords = itemGeneralInformation.earliestPrice - itemGeneralInformation.price
-        itemGeneralInformation.percentPriceChangeForAllRecords = (
-                                                                         itemGeneralInformation.priceChangeForAllRecords / itemGeneralInformation.earliestPrice) * 100
+        itemGeneralInformation.percentPriceChangeForAllRecords = float('{:0.2f}'.format((
+                                                                         itemGeneralInformation.priceChangeForAllRecords / itemGeneralInformation.earliestPrice) * 100))
 
     fillOutGeneralInformation(itemGeneralInformation, storeId, upc, db=db)
     fillOut5ItemsInCategory(currentItemGeneralInformation=itemGeneralInformation, storeId=storeId, db=db)
@@ -120,8 +120,8 @@ def calculatePriceChangeDays(dataFrameJsonObject: list[SafewayItemDBModel], star
     first = SafewayItem.parse_obj(dataFrameJsonObject[indexOfStartDate])
     last = SafewayItem.parse_obj(dataFrameJsonObject[indexOfEndDate])
 
-    priceChange = '{0:.2f}'.format(last.price - first.price)
-    percentPriceChange = '{0:.2f}'.format((priceChange / last.price) * 100)
+    priceChange = float('{:0.2f}'.format(last.price - first.price))
+    percentPriceChange = float('{:0.2f}'.format((priceChange / last.price) * 100))
     return {
         "startDate": first.date,
         "endDate": last.date,

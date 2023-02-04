@@ -27,7 +27,7 @@ Pygments==2.11.2
 python-dateutil==2.8.2
 s3transfer==0.6.0
 stack-data==0.1.4
-starlette==0.14.2
+starlette==0.22.0
 tomli==2.0.0
 traitlets==5.1.1
 typing-extensions==4.0.1
@@ -44,14 +44,13 @@ coverage==5.3
 pytest-cov==2.10.1
 pytype==2022.1.13
 click==8.0.4
-fastapi==0.65.2
+fastapi==0.89.1
 numpy==1.24.1
-sklearn
+scikit-learn
 pandas
 fakeredis==1.7.1
 python-redis-lock==3.7.0
 redis==3.5.3
-catboost==1.0.6
 apscheduler==3.9.1
 celery==5.2.2
 flower
