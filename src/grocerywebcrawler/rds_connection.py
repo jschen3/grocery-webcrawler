@@ -28,10 +28,10 @@ def get_Session_Local() -> Session:
 
 def get_engine():
     load_dotenv()
-    AWS_RDS_PATH = os.getenv('AWS_RDS_PATH')
-    AWS_RDS_PORT = os.getenv('AWS_RDS_PORT')
-    AWS_RDS_DATABASE_NAME = os.getenv('AWS_RDS_DATABASE_NAME')
-    AWS_RDS_PASSWORD = os.getenv('AWS_RDS_PASSWORD')
+    AWS_RDS_PATH = "grocerydb2.cefbww7xlh1g.us-west-2.rds.amazonaws.com" #os.getenv('AWS_RDS_PATH')
+    AWS_RDS_PORT = "8886" #int(os.getenv('AWS_RDS_PORT'))
+    AWS_RDS_DATABASE_NAME = "grocerydb" #os.getenv('AWS_RDS_DATABASE_NAME')
+    AWS_RDS_PASSWORD = "chocolatefrogrds" #os.getenv('AWS_RDS_PASSWORD')
     engine = create_engine(
         f"postgresql://postgres:{AWS_RDS_PASSWORD}@{AWS_RDS_PATH}:{AWS_RDS_PORT}/{AWS_RDS_DATABASE_NAME}",
         pool_size=20, pool_pre_ping=True, pool_recycle=600, max_overflow=0)
