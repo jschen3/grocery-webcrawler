@@ -32,10 +32,8 @@ app.add_middleware(
 
 def get_db():
     db = get_normal_session()
-    try:
-        yield db
-    finally:
-        db.close()
+    print("getting db")
+    return db
 
 
 @app.get("/")
