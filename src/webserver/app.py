@@ -8,8 +8,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, asc
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
 from grocerywebcrawler.models.safeway_item import SafewayItemDBModel
-from grocerywebcrawler.rds_connection import RDSConnection
 from fastapi.middleware.cors import CORSMiddleware
+
+from grocerywebcrawler.rds_connection import get_normal_session, get_engine
 from webserver.build_general_info_section import build_general_information
 from webserver.models.store import StoreDbModel, Store
 
@@ -31,10 +32,11 @@ app.add_middleware(
 
 
 def get_db():
-    rds_connection = RDSConnection()
-    db = rds_connection.get_normal_session()
-    print("getting db")
-    return db
+    db = get_normal_session()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 @app.get("/")
@@ -76,8 +78,8 @@ async def getPricesOfItem(store: str, upc: str, days: int, db: Session = Depends
         SafewayItemDBModel.storeId == store, SafewayItemDBModel.upc == upc,
         SafewayItemDBModel.date > days_before)).order_by(
         asc(SafewayItemDBModel.date))
-    rds_connection = RDSConnection()
-    df = pandas.read_sql_query(query.statement, con=rds_connection.get_engine())
+
+    df = pandas.read_sql_query(query.statement, con=get_engine())
     stream = io.StringIO()
     df.to_csv(stream, index=False)
     response = StreamingResponse(iter([stream.getvalue()]), media_type="application/csv")
@@ -96,8 +98,7 @@ def getDataFrameJsonObject(storeId, upc, days_before, db):
         SafewayItemDBModel.storeId == storeId, SafewayItemDBModel.upc == upc,
         SafewayItemDBModel.date > days_before)).order_by(
         asc(SafewayItemDBModel.date))
-    rds_connection = RDSConnection()
-    df = pandas.read_sql_query(query.statement, con=rds_connection.get_engine())
+    df = pandas.read_sql_query(query.statement, con=get_engine())
 
     jsonResponse = json.loads(df.to_json(orient='records'))
     newJsonResponse = []

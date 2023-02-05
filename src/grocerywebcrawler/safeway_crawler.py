@@ -8,7 +8,7 @@ import requests
 
 from grocerywebcrawler.models.safeway_item import SafewayItem, SafewayItemDBModel
 from grocerywebcrawler.headless_browser_util import headless_browser_request_id
-from grocerywebcrawler.rds_connection import RDSConnection
+from grocerywebcrawler.rds_connection import get_normal_session
 
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
 
@@ -59,8 +59,7 @@ def get_all_safeway_items_from_store(storeid):
     print(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
     doc_models = []
     next_parameters = request_parameters.copy()
-    rds_connection = RDSConnection()
-    session = rds_connection.get_normal_session()
+    session = get_normal_session()
     for i in range(0, num_found, 30):
         next_parameters["start"] = i
         try:
