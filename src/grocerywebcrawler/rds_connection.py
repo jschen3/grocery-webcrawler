@@ -13,7 +13,7 @@ class RDSConnection:
     aws_rds_password: str
 
     def __init__(self):
-        client = boto3.client('secretsmanager')
+        client = boto3.client('secretsmanager', region_name="us-west-2")
         response = client.get_secret_value(
             SecretId='rds_details'
         )
