@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+    grocerywebsite:
+      build: grocerywebsite
+      ports:
+        - "80:80"
+
+

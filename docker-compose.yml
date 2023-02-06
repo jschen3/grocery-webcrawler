@@ -7,9 +7,4 @@ services:
       ports:
         - "8000:8000"
 
-    grocerywebsite:
-      build: grocerywebsite
-      ports:
-        - "80:80"
-
 
