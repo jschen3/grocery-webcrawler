@@ -42,7 +42,7 @@ bandit==1.6.2
 black==22.6.0
 coverage==5.3
 pytest-cov==2.10.1
-pytype==2022.1.13
+pytype==2023.1.31
 click==8.0.4
 fastapi==0.89.1
 numpy==1.24.1

@@ -75,7 +75,7 @@ def createPriceChangeObjects():
     count = db.query(DistinctSafewayItem.upc).count()
     print(f"determining total distinct items. Total items {count}")
 
-    original_number_of_price_change_objects = db.query(PriceChangeDBModel).count()
+    original_number_of_price_change_objects = db.query(PriceChangeDBModel).count()  #refactor to work for more than 1 store.
     print(f"Original Number of Price Change Objects: {original_number_of_price_change_objects}. date: {datetime.now()}")
     ranges = []
     for i in range(0, count, 50):
