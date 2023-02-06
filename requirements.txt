@@ -30,7 +30,7 @@ stack-data==0.1.4
 starlette==0.22.0
 tomli==2.0.0
 traitlets==5.1.1
-typing-extensions==4.0.1
+typing-extensions>=4.3.0
 uvicorn==0.17.3
 wcwidth==0.2.5
 SQLAlchemy==1.4.45
