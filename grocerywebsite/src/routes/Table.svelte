@@ -40,7 +40,7 @@
             <div class="col-sm">
                 <p><strong>Price 7 Days Ago: </strong><img src={Buy_Icon} alt="buy"/>${$itemData.price7DaysAgo}</p>
                 <p><strong>Price Change Last 7 Days: </strong>{addDollarSign($itemData.priceChangeLast7Days)}</p>
-                <p><strong>Percent Price Change Last 7 Days: </strong>{@html percentText(itemData.percentPriceChange7Days)}</p>
+                <p><strong>Percent Price Change Last 7 Days: </strong>{@html percentText($itemData.percentPriceChange7Days)}</p>
                 <p><strong>Price 30 Days Ago: </strong><img src={Buy_Icon} alt="buy"/>${$itemData.price30DaysAgo}</p>
                 <p><strong>Price Change Last 30 Days: </strong>{addDollarSign($itemData.priceChangeLast30days)}</p>
                 <p><strong>Percent Price Change Last 30 Days: </strong>{@html percentText($itemData.percentPriceChange30days)}</p>
