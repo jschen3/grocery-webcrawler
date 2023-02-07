@@ -6,7 +6,7 @@
     onMount(()=>greatest_price_change_options_30.set({
         "thirty_day_or_7_day": true,
         "offset": 0,
-        "limit": 30,
+        "limit": 50,
     }));
     function percentText(percent){
         if (percent>0){
