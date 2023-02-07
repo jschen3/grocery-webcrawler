@@ -121,6 +121,7 @@ async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days
     yesterday = date.today() - timedelta(days=1)
     if thirtyOr7Days:
         greatest_percent_items = db.query(PriceChangeDBModel.upc.distinct(), PriceChangeDBModel.name,
+                                          PriceChangeDBModel.storeId,
                                           PriceChangeDBModel.upc, PriceChangeDBModel.category,
                                           PriceChangeDBModel.price7DaysAgo,
                                           PriceChangeDBModel.price30DaysAgo,
@@ -135,7 +136,8 @@ async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days
             limit).offset(offset).all()
     else:
         greatest_percent_items = db.query(PriceChangeDBModel.upc.distinct(), PriceChangeDBModel.name,
-                                          PriceChangeDBModel.upc, PriceChangeDBModel.category,
+                                          PriceChangeDBModel.upc, PriceChangeDBModel.storeId,
+                                          PriceChangeDBModel.category,
                                           PriceChangeDBModel.price7DaysAgo,
                                           PriceChangeDBModel.price30DaysAgo,
                                           PriceChangeDBModel.currentPrice, PriceChangeDBModel.priceChange7DaysAgo,

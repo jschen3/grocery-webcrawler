@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 	import { onMount } from 'svelte';
-    import {priceChangeData7Days, greatest_price_change_options_7, display_7_days} from './store.js';
+    import {priceChangeData7Days, greatest_price_change_options_7, display_7_days,display_30_days, page_store_item} from './store.js';
     onMount(()=>greatest_price_change_options_7.set({
 		"thirty_day_or_7_day": false,
 		"offset": 0,
@@ -26,6 +26,13 @@
 
     function addDollarSign(num){
         return "$"+num.toFixed(2);
+    }
+
+    function itemNameClicked(storeId, upc){
+        storeId=2948;
+        page_store_item.set({"upc":upc, "storeId":storeId});
+        display_7_days.set(false);
+        display_30_days.set(false);
     }
 
 
@@ -53,7 +60,7 @@
             {#each $priceChangeData7Days as priceChange, i}
                 <tr>
                     <th scope="row">{i+1}</th>
-                    <td>{priceChange.name}</td>
+                    <td><a on:click={itemNameClicked(priceChange.storeId, priceChange.upc)} class="text-black">{priceChange.name}</a></td>
                     <td>{priceChange.category}</td>
                     <td>{addDollarSign(priceChange.currentPrice)}</td>
                     <td>{addDollarSign(priceChange.price7DaysAgo)}</td>
