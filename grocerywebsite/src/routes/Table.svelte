@@ -2,7 +2,25 @@
     
     import {itemData} from './store.js';
     import Buy_Icon from "$lib/images/buy-icon.png";
+
+    function percentText(percent){
+        if (percent>0){
+            return "<i class=\"bi bi-caret-up\"></i>"+" +"+naiveRound(percent)
+        }
+        else{
+            return "<i class=\"bi bi-caret-down\"></i>"+" "+naiveRound(percent)
+        }
+    }
     
+    function naiveRound(num, decimalPlaces = 2) {
+        var p = Math.pow(10, decimalPlaces);
+        return (Math.round(num * p) / p).toFixed(2);
+
+    }
+
+    function addDollarSign(num){
+        return "$"+num.toFixed(2);
+    }
 </script>
 {#if $itemData!= undefined}
     <h2 class="text-white"><strong>Item Name: </strong> {$itemData.name}</h2>
@@ -20,12 +38,12 @@
                 <p><strong>Base Price:</strong><img src={Buy_Icon} alt="buy"/>${$itemData.basePrice}</p>
             </div>
             <div class="col-sm">
-                <p><strong>Price 7 Days Ago: </strong>${$itemData.price7DaysAgo}</p>
-                <p><strong>Price Change Last 7 Days: </strong>{$itemData.priceChangeLast7Days}</p>
-                <p><strong>Percent Price Change Last 7 Days: </strong>{$itemData.percentPriceChange7Days}</p>
-                <p><strong>Price 30 Days Ago: </strong>${$itemData.price30DaysAgo}</p>
-                <p><strong>Price Change Last 30 Days: </strong>{$itemData.priceChangeLast30days}</p>
-                <p><strong>Percent Price Change Last 30 Days: </strong>{$itemData.percentPriceChange30days}</p>
+                <p><strong>Price 7 Days Ago: </strong><img src={Buy_Icon} alt="buy"/>${$itemData.price7DaysAgo}</p>
+                <p><strong>Price Change Last 7 Days: </strong>{addDollarSign($itemData.priceChangeLast7Days)}</p>
+                <p><strong>Percent Price Change Last 7 Days: </strong>${percentText(itemData.percentPriceChange7Days)}</p>
+                <p><strong>Price 30 Days Ago: </strong><img src={Buy_Icon} alt="buy"/>${$itemData.price30DaysAgo}</p>
+                <p><strong>Price Change Last 30 Days: </strong>{addDollarSign($itemData.priceChangeLast30days)}</p>
+                <p><strong>Percent Price Change Last 30 Days: </strong>{percentText($itemData.percentPriceChange30days)}</p>
                 <!-- <p><strong>Price Change All Records: </strong>{$itemData.priceChangeForAllRecords}</p>
                 <p><strong>Percent Price Change All Records: </strong>{$itemData.percentPriceChangeForAllRecords}</p> -->
             </div>
