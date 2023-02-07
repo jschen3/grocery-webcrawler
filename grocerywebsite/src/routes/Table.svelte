@@ -20,8 +20,10 @@
                 <p><strong>Base Price:</strong><img src={Buy_Icon} alt="buy"/>${$itemData.basePrice}</p>
             </div>
             <div class="col-sm">
+                <p><strong>Price 7 Days Ago: </strong>${$itemData.price7DaysAgo}</p>
                 <p><strong>Price Change Last 7 Days: </strong>{$itemData.priceChangeLast7Days}</p>
                 <p><strong>Percent Price Change Last 7 Days: </strong>{$itemData.percentPriceChange7Days}</p>
+                <p><strong>Price 30 Days Ago: </strong>${$itemData.price30DaysAgo}</p>
                 <p><strong>Price Change Last 30 Days: </strong>{$itemData.priceChangeLast30days}</p>
                 <p><strong>Percent Price Change Last 30 Days: </strong>{$itemData.percentPriceChange30days}</p>
                 <!-- <p><strong>Price Change All Records: </strong>{$itemData.priceChangeForAllRecords}</p>
