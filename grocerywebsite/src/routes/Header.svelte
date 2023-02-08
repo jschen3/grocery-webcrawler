@@ -20,8 +20,7 @@
 <header>
 	<nav class="header-nav navbar navbar-expand-lg navbar-dark bg-secondary">
         <a class="navbar-brand navbar btn-secondary" href="#">
-            <img src={Stock_Market_Icon} class="stock-icon" alt="stock icon"/>
-            Grocery Market Watch</a>
+            <img src={Stock_Market_Icon} class="stock-icon" alt="stock icon"/></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
