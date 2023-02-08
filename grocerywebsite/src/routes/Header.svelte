@@ -18,27 +18,38 @@
 </script>
 
 <header>
-	<nav class="header-nav navbar navbar-expand-lg navbar-dark bg-secondary">
-        <div class="container-fluid">
-            <a class="navbar-brand navbar btn-secondary" href="#">
-                <img src={Stock_Market_Icon} class="stock-icon" alt="stock icon"/></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <select id="Area" class="nav-item header-area bg-dark text-white">
-                        <option>Bay Area</option>
-                        <!-- <option>San Francisco</option>
-                        <option>Denver</option>
-                        <option>Texas</option>
-                        <option>Northwest(washington, oregon)</option>    -->
-                    </select>
-                    <select id="Store" class="nav-item header-store bg-dark text-white">
-                        <option>2948 645 San Antonio Rd</option>
-                    </select>
-                    <SelectBar/>
-                    {#if $display_7_days==true}
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+  <div class="container-fluid">
+    <img src={Stock_Market_Icon} class="stock-icon" alt="stock icon"/>
+    <a class="navbar-brand" href="#">Grocery Market Watch</a><a class="navbar-brand navbar btn-secondary" href=".">
+        
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Area
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Bay Area</a></li>
+            <!-- <li><a class="dropdown-item" href="#">San Francisco</a></li>
+            <li><a class="dropdown-item" href="#">Denver</a></li>
+            <li><a class="dropdown-item" href="#">Texas</a></li>
+            <li><a class="dropdown-item" href="#">Northwest(washington, oregon</a></li> -->
+          </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Location
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">2948 645 San Antonio Rd</a></li>
+            </ul>
+          </li>
+          {#if $display_7_days==true}
                         <a class="nav-item nav-link active" on:click={seven_day_click}>7 Day Price Changes</a>
                         <a class="nav-item nav-link" on:click={thirty_day_click}>30 Day Price Changes</a>
                     {:else if $display_30_days==true}          
@@ -47,11 +58,12 @@
                     {:else}
                         <a class="nav-item nav-link" on:click={seven_day_click}>7 Day Price Changes</a>
                         <a class="nav-item nav-link" on:click={thirty_day_click}>30 Day Price Changes</a>
-                    {/if}                            
-                </div>    
-            </div>
-        </div>
-	</nav>
+            {/if}    
+      </ul>
+      <SelectBar/>
+    </div>
+  </div>
+</nav>
 </header>
 
 <style>
