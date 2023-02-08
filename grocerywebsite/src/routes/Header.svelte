@@ -29,10 +29,10 @@
                 <div class="navbar-nav me-auto mb-2 mb-lg-0">
                     <select id="Area" class="nav-item header-area bg-dark text-white">
                         <option>Bay Area</option>
-                        <option>San Francisco</option>
+                        <!-- <option>San Francisco</option>
                         <option>Denver</option>
                         <option>Texas</option>
-                        <option>Northwest(washington, oregon)</option>   
+                        <option>Northwest(washington, oregon)</option>    -->
                     </select>
                     <select id="Store" class="nav-item header-store bg-dark text-white">
                         <option>2948 645 San Antonio Rd</option>
