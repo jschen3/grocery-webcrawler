@@ -20,10 +20,7 @@
 <header>
 <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
   <div class="container-fluid">
-    <img src={Stock_Market_Icon} class="stock-icon" alt="stock icon"/>
-    <a class="navbar-brand" href="#">Grocery Market Watch</a><a class="navbar-brand navbar btn-secondary" href=".">
-        
-    </a>
+    <a class="navbar-brand" href="."><img src={Stock_Market_Icon} class="stock-icon" alt="stock icon"/>Grocery Market Watch</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -50,15 +47,15 @@
             </ul>
           </li>
           {#if $display_7_days==true}
-                        <a class="nav-item nav-link active" on:click={seven_day_click}>7 Day Price Changes</a>
-                        <a class="nav-item nav-link" on:click={thirty_day_click}>30 Day Price Changes</a>
-                    {:else if $display_30_days==true}          
-                        <a class="nav-item nav-link" on:click={seven_day_click}>7 Day Price Changes</a>
-                        <a class="nav-item nav-link active" on:click={thirty_day_click}>30 Day Price Changes</a>
-                    {:else}
-                        <a class="nav-item nav-link" on:click={seven_day_click}>7 Day Price Changes</a>
-                        <a class="nav-item nav-link" on:click={thirty_day_click}>30 Day Price Changes</a>
-            {/if}    
+              <a class="nav-item nav-link active" on:click={seven_day_click}>7 Day Price Changes</a>
+              <a class="nav-item nav-link" on:click={thirty_day_click}>30 Day Price Changes</a>
+          {:else if $display_30_days==true}          
+              <a class="nav-item nav-link" on:click={seven_day_click}>7 Day Price Changes</a>
+              <a class="nav-item nav-link active" on:click={thirty_day_click}>30 Day Price Changes</a>
+          {:else}
+              <a class="nav-item nav-link" on:click={seven_day_click}>7 Day Price Changes</a>
+              <a class="nav-item nav-link" on:click={thirty_day_click}>30 Day Price Changes</a>
+          {/if}    
       </ul>
       <SelectBar/>
     </div>

@@ -141,6 +141,7 @@
     }
     .svelte-bar-submit-button{
         margin-left: 10px;
+        height: 40px;
     }
     ::placeholder{
         color:white;

@@ -25,6 +25,7 @@
 {#if $itemData!= undefined}
     <h2 class="text-white"><strong>Item Name: </strong> {$itemData.name}</h2>
     <p class="text-white"><strong>UPC: </strong> {$itemData.upc}</p>
+    <p class="text-white"><strong>Go to safeway item: </strong><a href="https://www.safeway.com/shop/search-results.html?q={$itemData.name}">https://www.safeway.com/shop/search-results.html?q={$itemData.name}</a></p>
     <div class="table-div bg-secondary">
         <div class="row">
             <div class="col-sm"><h2>Prices</h2></div>
