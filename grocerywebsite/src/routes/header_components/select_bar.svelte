@@ -103,7 +103,7 @@
     
     <svelte:window on:keydown={navigateList} />
     
-    <form class="form-inline my-2 my-lg-0" autocomplete="off" on:submit|preventDefault={submitValue}>
+    <form class="form-inline my-2 my-lg-0 d-flex" autocomplete="off" on:submit|preventDefault={submitValue}>
       <div class="autocomplete">
         <input class="form-control mr-sm-2 bg-dark text-white navbar" id="searchbar-input"
                          type="text" 
@@ -114,9 +114,6 @@
       </div>
         
       <button class="btn btn-outline-dark my-2 my-sm-0 svelte-bar-submit-button" type="submit">Search</button>
-        
-        <!-- FILTERED LIST OF COUNTRIES -->
-        <!-- need to mess with and change toa await promise and mess with promises. -->
         {#if filterOptions.length > 0}
             <ul id="autocomplete-items-list navbar-nav mr-auto">
                 {#each filterOptions as filterOption, i}
