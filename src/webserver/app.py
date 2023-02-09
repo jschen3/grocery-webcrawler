@@ -192,3 +192,8 @@ async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days
             limit).offset(offset).all()
 
     return greatest_percent_items
+
+
+@app.get("/operations")
+def getOperations(db: Session = Depends(get_db)):
+    return db.query(OperationDbModel).all()
