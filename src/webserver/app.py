@@ -56,6 +56,7 @@ def get_db():
 
 
 def daily_scripts():
+    info("running daily scripts")
     db = get_postgres_session()
     stores = [2948]
     for store in stores:
@@ -63,10 +64,12 @@ def daily_scripts():
             operationRecord = db.query(OperationDbModel).filter(
                 OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{store}").one()
         except NoResultFound:
+            info(f"no results found. Running get safeway items for store:{store}")
             info(f"Web crawling ap scheduler. Store: {store}")
             get_all_safeway_items_from_store(store)
 
         if operationRecord.status != "Finished":
+            info(f"store {store} was not finished. Running get safeway items.")
             info(f"Web crawling ap scheduler. Store: {store}")
             get_all_safeway_items_from_store(store)
     try:
