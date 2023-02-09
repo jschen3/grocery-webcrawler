@@ -1,4 +1,4 @@
-from webserver.LargestPriceChanges import createPriceChangeObjects
+from webserver.largest_price_changes import createPriceChangeObjects
 
 if __name__ == '__main__':
     createPriceChangeObjects()

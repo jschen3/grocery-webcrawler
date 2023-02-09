@@ -1,17 +1,26 @@
 import io
 import json
+from time import sleep
+
 import pandas
 from datetime import datetime, timedelta, date
+
+from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi.responses import StreamingResponse
 from fastapi import FastAPI, Depends
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, asc
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
 from grocerywebcrawler.models.safeway_item import SafewayItemDBModel
 from fastapi.middleware.cors import CORSMiddleware
 
-from grocerywebcrawler.rds_connection import get_normal_session, get_engine
+from grocerywebcrawler.rds_connection import get_normal_session, get_engine, get_postgres_session
+from grocerywebcrawler.safeway_crawler import get_all_safeway_items_from_store
+from util.logging import info
 from webserver.build_general_info_section import build_general_information
+from webserver.largest_price_changes import createPriceChangeObjects
+from webserver.models.operation_db_model import OperationDbModel
 from webserver.models.store import StoreDbModel, Store
 
 from webserver.models.price_change_object import PriceChangeDBModel
@@ -31,12 +40,44 @@ app.add_middleware(
 )
 
 
+@app.on_event("startup")
+def startup():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(daily_scripts, 'interval', hours=4)
+    scheduler.start()
+
+
 def get_db():
     db = get_normal_session()
     try:
         yield db
     finally:
         db.close()
+
+
+def daily_scripts():
+    db = get_postgres_session()
+    stores = [2948]
+    for store in stores:
+        try:
+            operationRecord = db.query(OperationDbModel).filter(
+                OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{store}").one()
+        except NoResultFound:
+            info(f"Web crawling ap scheduler. Store: {store}")
+            get_all_safeway_items_from_store(store)
+
+        if operationRecord.status != "Finished":
+            info(f"Web crawling ap scheduler. Store: {store}")
+            get_all_safeway_items_from_store(store)
+    try:
+        priceAnalysisOperation = db.query(OperationDbModel).filter(
+            OperationDbModel.id == f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}").one()
+    except NoResultFound:
+        info(f"Price Analysis ap scheduler")
+        createPriceChangeObjects()
+    if priceAnalysisOperation.status != "Finished":
+        info(f"Price Analysis ap scheduler")
+        createPriceChangeObjects()
 
 
 @app.get("/")

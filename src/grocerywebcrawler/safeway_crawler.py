@@ -1,16 +1,16 @@
-import csv
-import json
-from datetime import date
-import os
+from datetime import date, datetime
 from time import sleep
 
 import requests
+from sqlalchemy.exc import NoResultFound
 
 from grocerywebcrawler.models.safeway_item import SafewayItem, SafewayItemDBModel
 from grocerywebcrawler.headless_browser_util import headless_browser_request_id
 from grocerywebcrawler.rds_connection import get_normal_session
 
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
+from util.logging import info
+from webserver.models.operation_db_model import OperationDbModel
 
 
 def _safeway_items_from_json(json_doc: dict, store_id: str, date: date, area: str, storeType: str) -> SafewayItem:
@@ -57,15 +57,24 @@ def get_all_safeway_items_from_store(storeid):
     first_response = requests.get(url=url, params=request_parameters, headers=headers).json()["response"]
     num_found = first_response["numFound"]
     print(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
-    doc_models = []
+    info(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
     next_parameters = request_parameters.copy()
     session = get_normal_session()
+    try:
+        existing = session.query(OperationDbModel).filter(OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").one()
+    except NoResultFound:
+        operationsRecord = OperationDbModel(id=f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}",
+                                        operationName="webcrawl", date=date.today(), totalItems=num_found,
+                                        currentProcessed=0, storeId=storeid, status="Started")
+        session.add(operationsRecord)
+        session.commit()
     for i in range(0, num_found, 30):
         next_parameters["start"] = i
         try:
             response = requests.get(url=url, params=next_parameters, headers=headers)
             if response.status_code == 204 or response.status_code == 429:
                 print(f"{response.reason}")
+                info(f"{response.reason}")
                 break
             json_response = requests.get(url=url, params=next_parameters, headers=headers).json()["response"]
             counter = 0
@@ -97,10 +106,11 @@ def get_all_safeway_items_from_store(storeid):
                             except:
                                 session.rollback()
                                 raise
-                        doc_models.append(doc_model)
                     except Exception as e:
                         print(e)
+                        info(e)
                         print(f"unable to process json_doc:{json_doc[1]}")
+                        info(f"unable to process json_doc:{json_doc[1]}")
                         continue
 
             else:
@@ -108,30 +118,27 @@ def get_all_safeway_items_from_store(storeid):
                 next_parameters["request-id"] = new_request_id
                 continue
         except Exception as e:
-            # print(response.content)
             print(e)
+            info(e)
             print(f"an error occurred processing items. i={i} out of num_found={num_found} counter={counter}")
+            info(f"an error occurred processing items. i={i} out of num_found={num_found} counter={counter}")
             continue
         session.commit()
+        if i % 300 == 0:
+            session.query(OperationDbModel).filter(
+                OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update({
+                "currentProcessed": i, "status": "Processing"
+            })
+            session.commit()
         print(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
+        info(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
         sleep(0.25)
     print(f"finished items at store: {storeid}")
-    return doc_models
-
-
-def _write_excel_file(doc_models, storeid):
-    dirname = os.path.dirname(__file__)
-    safeway_date_file = f"safeway-store-{storeid}-{date.today().strftime('%m-%d-%y')}.csv"
-    relative_path = os.path.join(dirname, f"safeway_csvs/{safeway_date_file}")
-
-    fieldnames = SafewayItem.__fields__.keys()
-    with open(relative_path, "w") as fp:
-        writer = csv.DictWriter(fp, fieldnames=fieldnames)
-        writer.writeheader()
-        for safeway_doc in doc_models:
-            writer.writerow(json.loads(safeway_doc.json()))
-
-    print(f"wrote csv file. All items in csv file. {safeway_date_file}")
+    info(f"finished items at store: {storeid}")
+    session.query(OperationDbModel).filter(
+        OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update(
+        {"status": "Finished"})
+    session.commit()
 
 # write_excel_file(doc_models, 2948)
 # https://pybit.es/articles/how-to-package-and-deploy-cli-apps/
