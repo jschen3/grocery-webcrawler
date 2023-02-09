@@ -131,17 +131,28 @@ async def getPricesOfItem(store: str, upc: str, days: int, db: Session = Depends
 
 
 @app.get("/items/{store}/{upc}/json/prices")
-async def getPricesOfItemJson(store: str, upc: str, days: int, db: Session = Depends(get_db)):
-    days_before = (datetime.today() - timedelta(days=days)).date()
-    return getDataFrameJsonObject(store, upc, days_before, db)
+async def getPricesOfItemJson(store: str, upc: str, days: int = -1, db: Session = Depends(get_db)):
+    if days == -1:
+        return getDataFrameJsonObject(store, upc, None, db)
+    else:
+        days_before = (datetime.today() - timedelta(days=days)).date()
+        return getDataFrameJsonObject(store, upc, days_before, db)
 
 
 def getDataFrameJsonObject(storeId, upc, days_before, db):
-    query = db.query(SafewayItemDBModel.name, SafewayItemDBModel.upc, SafewayItemDBModel.date, SafewayItemDBModel.price,
-                     SafewayItemDBModel.basePrice, SafewayItemDBModel.pricePer).filter(and_(
-        SafewayItemDBModel.storeId == storeId, SafewayItemDBModel.upc == upc,
-        SafewayItemDBModel.date > days_before)).order_by(
-        asc(SafewayItemDBModel.date))
+    if days_before is None:
+        query = db.query(SafewayItemDBModel.storeId, SafewayItemDBModel.name, SafewayItemDBModel.upc,
+                         SafewayItemDBModel.date,
+                         SafewayItemDBModel.price,
+                         SafewayItemDBModel.basePrice, SafewayItemDBModel.pricePer).filter(and_(
+            SafewayItemDBModel.storeId == storeId, SafewayItemDBModel.upc == upc))
+    else:
+        query = db.query(SafewayItemDBModel.storeId, SafewayItemDBModel.name, SafewayItemDBModel.upc,
+                         SafewayItemDBModel.date,
+                         SafewayItemDBModel.price,
+                         SafewayItemDBModel.basePrice, SafewayItemDBModel.pricePer).filter(and_(
+            SafewayItemDBModel.storeId == storeId, SafewayItemDBModel.upc == upc,
+            SafewayItemDBModel.date > days_before))
     df = pandas.read_sql_query(query.statement, con=get_engine())
 
     jsonResponse = json.loads(df.to_json(orient='records'))
@@ -150,7 +161,8 @@ def getDataFrameJsonObject(storeId, upc, days_before, db):
         currentDate = datetime.fromtimestamp(int(entry['date'] / 1000))
         entry['date'] = currentDate.strftime("%Y-%m-%d")
         newJsonResponse.append(entry)
-    return newJsonResponse
+    sortedJson = sorted(newJsonResponse, key=lambda x: x['date'], reverse=False)
+    return sortedJson
 
 
 @app.get("/items/{storeId}/{upc}")

@@ -27,7 +27,7 @@ export const graphData = derived(page_store_item, async($page_store_item, set)=>
     if ($page_store_item!=null && $page_store_item!=undefined){
         const storeId = $page_store_item.storeId;
         const upc = $page_store_item.upc;
-        const response = await axios.get(server_url+"/items/"+storeId+"/"+upc+"/json/prices?days=30");
+        const response = await axios.get(server_url+"/items/"+storeId+"/"+upc+"/json/prices");
         const data= await response.data;
         console.log(data);
         set(data);
