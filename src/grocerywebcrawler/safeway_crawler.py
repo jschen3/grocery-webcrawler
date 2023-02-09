@@ -61,11 +61,16 @@ def get_all_safeway_items_from_store(storeid):
     next_parameters = request_parameters.copy()
     session = get_normal_session()
     try:
-        existing = session.query(OperationDbModel).filter(OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").one()
+        existing = session.query(OperationDbModel).filter(
+            OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").one()
+        session.query(OperationDbModel).filter(
+            OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update(
+            {OperationDbModel.count: existing.count + 1})
+        session.commit()
     except NoResultFound:
         operationsRecord = OperationDbModel(id=f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}",
-                                        operationName="webcrawl", date=date.today(), totalItems=num_found,
-                                        currentProcessed=0, storeId=storeid, status="Started")
+                                            operationName="webcrawl", date=date.today(), totalItems=num_found,
+                                            currentProcessed=0, storeId=storeid, status="Started", count=0)
         session.add(operationsRecord)
         session.commit()
     for i in range(0, num_found, 30):
@@ -127,7 +132,7 @@ def get_all_safeway_items_from_store(storeid):
         if i % 300 == 0:
             session.query(OperationDbModel).filter(
                 OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update({
-                "currentProcessed": i, "status": "Processing"
+                OperationDbModel.currentProcessed: i, OperationDbModel.status: "Processing"
             })
             session.commit()
         print(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
@@ -137,7 +142,7 @@ def get_all_safeway_items_from_store(storeid):
     info(f"finished items at store: {storeid}")
     session.query(OperationDbModel).filter(
         OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update(
-        {"status": "Finished"})
+        {OperationDbModel.status: "Finished"})
     session.commit()
 
 # write_excel_file(doc_models, 2948)

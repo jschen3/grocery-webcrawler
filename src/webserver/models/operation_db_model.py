@@ -14,6 +14,7 @@ class OperationDbModel(Base):
     currentProcessed = Column(Integer)
     storeId = Column(String, index=True)
     status = Column(String, index=True)
+    count = Column(Integer)
 
     def toString(self):
         return f"Operations Record: id:{self.id} totalItems: {self.totalItems} currentProcessed: {self.currentProcessed} status: {self.status}"
