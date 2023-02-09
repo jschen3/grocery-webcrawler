@@ -65,22 +65,16 @@ def daily_scripts():
                 OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{store}").one()
         except NoResultFound:
             info(f"no results found. Running get safeway items for store:{store}")
-            info(f"Web crawling ap scheduler. Store: {store}")
-            get_all_safeway_items_from_store(store)
+        info(f"Web crawling ap scheduler. Store: {store}")
+        get_all_safeway_items_from_store(store)
 
-        if operationRecord.status != "Finished":
-            info(f"store {store} was not finished. Running get safeway items.")
-            info(f"Web crawling ap scheduler. Store: {store}")
-            get_all_safeway_items_from_store(store)
     try:
         priceAnalysisOperation = db.query(OperationDbModel).filter(
             OperationDbModel.id == f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}").one()
     except NoResultFound:
-        info(f"Price Analysis ap scheduler")
-        createPriceChangeObjects()
-    if priceAnalysisOperation.status != "Finished":
-        info(f"Price Analysis ap scheduler")
-        createPriceChangeObjects()
+        info(f"Price Analysis ap scheduler No results found.")
+    info("performing price analysis")
+    createPriceChangeObjects()
 
 
 @app.get("/")
