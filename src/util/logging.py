@@ -11,7 +11,7 @@ LOGGING_SETTINGS = {
         "applog": {
             "level": "DEBUG",
             "class": "logging.FileHandler",
-            "filename": "/opt/python/logs/app.log",
+            "filename": "/var/log/app.log",
             "formatter": "verbose",
             "mode": "w"
         }
@@ -23,16 +23,16 @@ LOGGING_SETTINGS = {
 
 
 def info(message: str):
-    if not os.path.exists("opt/python/logs/"):
-        os.makedirs("opt/python/logs/")
+    log_filename = "/var/log/app.log"
+    os.makedirs(os.path.dirname(log_filename), exist_ok=True)
     logging.config.dictConfig(LOGGING_SETTINGS)
     logger = logging.getLogger(__name__)
     logger.info(message)
 
 
 def debug(message: str):
-    if not os.path.exists("opt/python/logs/"):
-        os.makedirs("opt/python/logs/")
+    log_filename = "/var/log/app.log"
+    os.makedirs(os.path.dirname(log_filename), exist_ok=True)
     logging.config.dictConfig(LOGGING_SETTINGS)
     logger = logging.getLogger(__name__)
     logger.info(message)
