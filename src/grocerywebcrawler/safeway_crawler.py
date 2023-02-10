@@ -65,7 +65,7 @@ def get_all_safeway_items_from_store(storeid):
             OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").one()
         session.query(OperationDbModel).filter(
             OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update(
-            {OperationDbModel.count: existing.count + 1})
+            {OperationDbModel.count: existing.count + 1, OperationDbModel.date: date.today()})
         session.commit()
     except NoResultFound:
         operationsRecord = OperationDbModel(id=f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}",
@@ -129,12 +129,12 @@ def get_all_safeway_items_from_store(storeid):
             info(f"an error occurred processing items. i={i} out of num_found={num_found} counter={counter}")
             continue
         session.commit()
-        if i % 300 == 0:
-            session.query(OperationDbModel).filter(
-                OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update({
-                OperationDbModel.currentProcessed: i, OperationDbModel.status: "Processing"
-            })
-            session.commit()
+        # if i % 300 == 0:
+        #     session.query(OperationDbModel).filter(
+        #         OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update({
+        #         OperationDbModel.currentProcessed: i, OperationDbModel.status: "Processing"
+        #     })
+        #     session.commit()
         print(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
         info(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
         sleep(0.25)
@@ -142,7 +142,8 @@ def get_all_safeway_items_from_store(storeid):
     info(f"finished items at store: {storeid}")
     session.query(OperationDbModel).filter(
         OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update(
-        {OperationDbModel.status: "Finished"})
+        {OperationDbModel.status: "Finished",
+         OperationDbModel.date: date.today()})
     session.commit()
 
 # write_excel_file(doc_models, 2948)

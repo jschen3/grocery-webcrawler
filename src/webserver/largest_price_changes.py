@@ -7,7 +7,7 @@ from sqlalchemy.exc import NoResultFound
 from grocerywebcrawler.rds_connection import get_postgres_session
 
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
-from util.logging import info
+from util.logging import info, debug
 from webserver.build_general_info_section import allTimeDataframe, calculatePriceChangeDays
 from webserver.models.operation_db_model import OperationDbModel
 from webserver.models.price_change_object import PriceChangeObject, PriceChangeDBModel
@@ -35,7 +35,7 @@ def process_and_find_price_changes(i):
     print(f"start: {i} limit: 50")
     info(f"start: {i} limit: 50")
     for index, item in enumerate(all_distinct_items):
-        info(f"processing item: {item.name}, store: {item.storeId}, upc: {item.upc}")
+        debug(f"processing item: {item.name}, store: {item.storeId}, upc: {item.upc}")
         currentDate = datetime.today()
         all_time_dataframe = allTimeDataframe(item.storeId, item.upc, db)
 
@@ -75,16 +75,17 @@ def process_and_find_price_changes(i):
                 db.commit()
     print(f"Found price changes for items {i} through {i + 50}. Added to price change objects database.")
     info(f"Found price changes for items {i} through {i + 50}. Added to price change objects database.")
-    if i % 300 == 0:
-        try:
-            currentOperationsRecord = db.query(OperationDbModel).filter(
-                OperationDbModel.id == f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}").update({
-                OperationDbModel.currentProcessed: i, OperationDbModel.status: "Processing"
-            })
-            db.commit()
-            info(f"logging operations record: {currentOperationsRecord.toString()}")
-        except Exception:
-            info(f"Unable to log operations record. An error occurred")
+    return
+    # if i % 300 == 0:
+    #     try:
+    #         currentOperationsRecord = db.query(OperationDbModel).filter(
+    #             OperationDbModel.id == f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}").update({
+    #             OperationDbModel.currentProcessed: i, OperationDbModel.status: "Processing"
+    #         })
+    #         db.commit()
+    #         info(f"logging operations record: {currentOperationsRecord.toString()}")
+    #     except Exception:
+    #         info(f"Unable to log operations record. An error occurred")
 
 
 def createPriceChangeObjects():
@@ -106,9 +107,11 @@ def createPriceChangeObjects():
         existing = db.query(OperationDbModel).filter(
             OperationDbModel.id == f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}").one()
         db.query(OperationDbModel).filter(
-            OperationDbModel.id == f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}").update({
-            OperationDbModel.count: existing.count + 1
-        })
+            OperationDbModel.id == f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}").update(
+            {OperationDbModel.date: datetime.today(),
+             OperationDbModel.count: existing.count + 1
+             })
+        db.commit()
     except NoResultFound:
         operations_record = OperationDbModel(id=f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}",
                                              operationName="price_change_analysis", date=datetime.today(),
@@ -131,6 +134,7 @@ def createPriceChangeObjects():
     try:
         db.query(OperationDbModel).filter(
             OperationDbModel.id == f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}").update({
+            OperationDbModel.date: datetime.today(),
             OperationDbModel.status: "Finished"
         })
         db.commit()
