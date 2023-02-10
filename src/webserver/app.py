@@ -43,7 +43,7 @@ app.add_middleware(
 @app.on_event("startup")
 def startup():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(daily_scripts, 'interval', hours=4)
+    scheduler.add_job(daily_scripts, 'interval', seconds=5)
     scheduler.start()
 
 
