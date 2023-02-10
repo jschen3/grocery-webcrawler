@@ -13,7 +13,7 @@ LOGGING_SETTINGS = {
             "class": "logging.FileHandler",
             "filename": "/opt/python/logs/app.log",
             "formatter": "verbose",
-            "mode": "a"
+            "mode": "w"
         }
     },
     "loggers": {
