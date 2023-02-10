@@ -2,15 +2,14 @@ import logging
 
 
 def info(message: str):
-    logging.basicConfig(format='%(asctime)s,%(msecs)03d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',
+    logging.basicConfig(filename="/opt/python/log/app.log", format='%(asctime)s-%(process)d-%(levelname)s %(message)s',
                         datefmt='%Y-%m-%d:%H:%M:%S',
                         level=logging.DEBUG)
-
     logger = logging.getLogger(__name__)
     logger.info(message)
 
-def debug(message:str):
-    logging.basicConfig(format='%(asctime)s,%(msecs)03d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',
+def debug(message: str):
+    logging.basicConfig(filename="/opt/python/log/app.log", format='%(asctime)s-%(process)d-%(levelname)s %(message)s',
                         datefmt='%Y-%m-%d:%H:%M:%S',
                         level=logging.DEBUG)
 
