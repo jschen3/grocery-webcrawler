@@ -10,7 +10,7 @@ LOGGING_SETTINGS = {
         "applog": {
             "level": "DEBUG",
             "class": "logging.FileHandler",
-            "filename": "/opt/python/log/app.log",
+            "filename": "/opt/python/logs/app.log",
             "formatter": "verbose",
         }
     },

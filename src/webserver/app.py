@@ -1,5 +1,6 @@
 import io
 import json
+import os
 from time import sleep
 
 import pandas
@@ -42,6 +43,8 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup():
+    if not os.path.exists("opt/python/logs/"):
+        os.makedirs("opt/python/logs/")
     scheduler = BackgroundScheduler()
     scheduler.add_job(daily_scripts, 'interval', seconds=5)
     scheduler.start()
