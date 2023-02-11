@@ -1,5 +1,6 @@
 import logging
 import os
+from pathlib import Path
 
 LOGGING_SETTINGS = {
     "version": 1,
@@ -11,9 +12,9 @@ LOGGING_SETTINGS = {
         "applog": {
             "level": "DEBUG",
             "class": "logging.FileHandler",
-            "filename": "/var/log/app.log",
+            "filename": "/opt/python/log/app.log",
             "formatter": "verbose",
-            "mode": "w"
+            "mode": "a+"
         }
     },
     "loggers": {
@@ -23,16 +24,14 @@ LOGGING_SETTINGS = {
 
 
 def info(message: str):
-    log_filename = "/var/log/app.log"
-    os.makedirs(os.path.dirname(log_filename), exist_ok=True)
+    os.makedirs(os.path.dirname("/opt/python/log/app.log"), exist_ok=True)
     logging.config.dictConfig(LOGGING_SETTINGS)
     logger = logging.getLogger(__name__)
     logger.info(message)
 
 
 def debug(message: str):
-    log_filename = "/var/log/app.log"
-    os.makedirs(os.path.dirname(log_filename), exist_ok=True)
+    os.makedirs(os.path.dirname("/opt/python/log/app.log"), exist_ok=True)
     logging.config.dictConfig(LOGGING_SETTINGS)
     logger = logging.getLogger(__name__)
     logger.info(message)
