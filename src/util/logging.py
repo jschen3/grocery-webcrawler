@@ -11,7 +11,7 @@ LOGGING_SETTINGS = {
     "handlers": {
         "applog": {
             "level": "DEBUG",
-            "class": "logging.FileHandler",
+            "class": "logging.handlers.RotatingFileHandler",
             "filename": "/var/log/app.log",
             "formatter": "verbose",
             "mode": "a+"
