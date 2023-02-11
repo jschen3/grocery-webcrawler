@@ -1,14 +1,13 @@
 import io
 import json
-import os
-from pathlib import Path
 
 import pandas
 from datetime import datetime, timedelta, date
 
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi.responses import StreamingResponse
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, BackgroundTasks
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, asc
@@ -43,9 +42,9 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup():
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(daily_scripts, 'interval', seconds=5)
-    scheduler.start()
+    Schedule = AsyncIOScheduler()
+    Schedule.start()
+    Schedule.add_job(daily_script_action, 'interval', seconds=60*60*2)
 
 
 def get_db():
@@ -56,8 +55,7 @@ def get_db():
         db.close()
 
 
-def daily_scripts():
-    info("running daily scripts")
+def daily_script_action():
     db = get_postgres_session()
     stores = [2948]
     for store in stores:
@@ -68,7 +66,6 @@ def daily_scripts():
             info(f"no results found. Running get safeway items for store:{store}")
         info(f"Web crawling ap scheduler. Store: {store}")
         get_all_safeway_items_from_store(store)
-
     try:
         priceAnalysisOperation = db.query(OperationDbModel).filter(
             OperationDbModel.id == f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}").one()
