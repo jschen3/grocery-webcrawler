@@ -8,7 +8,7 @@ import pandas
 
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
 from grocerywebcrawler.models.safeway_item import SafewayItemDBModel, SafewayItem
-from grocerywebcrawler.rds_connection import get_engine
+from grocerywebcrawler.rds_connection import RDSConnection
 from webserver.models.item_general_information import ItemGeneralInformation
 
 
@@ -86,7 +86,7 @@ def getDataFrameJsonObject(storeId, upc, days_before, db) -> list[SafewayItemDBM
         SafewayItemDBModel.storeId == storeId, SafewayItemDBModel.upc == upc,
         SafewayItemDBModel.date > days_before)).order_by(
         asc(SafewayItemDBModel.date))
-    df = pandas.read_sql_query(query.statement, con=get_engine())
+    df = pandas.read_sql_query(query.statement, con=RDSConnection.get_engine())
 
     jsonResponse = json.loads(df.to_json(orient='records'))
     newJsonResponse = []
@@ -103,7 +103,7 @@ def allTimeDataframe(storeId, upc, db):
                      SafewayItemDBModel.basePrice, SafewayItemDBModel.pricePer).filter(and_(
         SafewayItemDBModel.storeId == storeId, SafewayItemDBModel.upc == upc)).order_by(
         asc(SafewayItemDBModel.date))
-    df = pandas.read_sql_query(query.statement, con=get_engine())
+    df = pandas.read_sql_query(query.statement, con=RDSConnection.get_engine())
     jsonResponse = json.loads(df.to_json(orient='records'))
     newJsonResponse = []
     for entry in jsonResponse:

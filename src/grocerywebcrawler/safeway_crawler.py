@@ -1,14 +1,13 @@
 from datetime import date, datetime
-from time import sleep
 
 import requests
 from sqlalchemy.exc import NoResultFound
 
 from grocerywebcrawler.models.safeway_item import SafewayItem, SafewayItemDBModel
 from grocerywebcrawler.headless_browser_util import headless_browser_request_id
-from grocerywebcrawler.rds_connection import get_normal_session
 
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
+from grocerywebcrawler.rds_connection import RDSConnection
 from util.logging import info
 from webserver.models.operation_db_model import OperationDbModel
 
@@ -59,7 +58,7 @@ def get_all_safeway_items_from_store(storeid):
     print(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
     info(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
     next_parameters = request_parameters.copy()
-    session = get_normal_session()
+    session = RDSConnection.get_normal_session()
     try:
         existing = session.query(OperationDbModel).filter(
             OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").one()
@@ -137,7 +136,7 @@ def get_all_safeway_items_from_store(storeid):
         #     session.commit()
         print(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
         info(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
-        sleep(0.25)
+        #sleep(0.25)
     print(f"finished items at store: {storeid}")
     info(f"finished items at store: {storeid}")
     session.query(OperationDbModel).filter(

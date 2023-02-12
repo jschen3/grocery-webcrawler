@@ -4,9 +4,10 @@ from datetime import datetime, timedelta
 from grocerywebcrawler.models.safeway_item import SafewayItem
 from sqlalchemy.exc import NoResultFound
 
-from grocerywebcrawler.rds_connection import get_postgres_session
+
 
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
+from grocerywebcrawler.rds_connection import RDSConnection
 from util.logging import info, debug
 from webserver.build_general_info_section import allTimeDataframe, calculatePriceChangeDays
 from webserver.models.operation_db_model import OperationDbModel
@@ -28,7 +29,7 @@ def setStandardFields(item: DistinctSafewayItem, safeway_items: list[SafewayItem
 def process_and_find_price_changes(i):
     print(f"processing and find changes for items start at i: {i}")
     info(f"processing and find changes for items start at i: {i}")
-    db = get_postgres_session()
+    db = RDSConnection.get_postgres_session()
     priceChangeObjects: list[PriceChangeObject] = []
     all_distinct_items: list[DistinctSafewayItem] = db.query(DistinctSafewayItem).offset(i).limit(
         50).all()  # put a limit and do it in fragments
@@ -89,7 +90,7 @@ def process_and_find_price_changes(i):
 
 
 def createPriceChangeObjects():
-    db = get_postgres_session()
+    db = RDSConnection.get_postgres_session()
     count = db.query(DistinctSafewayItem.upc).count()
     print(f"determining total distinct items. Total items {count}")
     info(f"determining total distinct items. Total items {count}")
