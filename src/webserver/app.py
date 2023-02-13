@@ -15,7 +15,7 @@ from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
 from grocerywebcrawler.models.safeway_item import SafewayItemDBModel
 from fastapi.middleware.cors import CORSMiddleware
 
-from grocerywebcrawler.rds_connection import get_normal_session, get_engine, get_postgres_session
+from grocerywebcrawler.rds_connection import RDSConnection
 from grocerywebcrawler.safeway_crawler import get_all_safeway_items_from_store
 from util.logging import info
 from webserver.build_general_info_section import build_general_information
@@ -44,11 +44,11 @@ app.add_middleware(
 def startup():
     Schedule = AsyncIOScheduler()
     Schedule.start()
-    Schedule.add_job(daily_script_action, 'interval', seconds=60*60*2)
+    Schedule.add_job(daily_script_action, 'interval', seconds=60 * 60 * 2)
 
 
 def get_db():
-    db = get_normal_session()
+    db = RDSConnection.get_normal_session()
     try:
         yield db
     finally:
@@ -56,7 +56,7 @@ def get_db():
 
 
 def daily_script_action():
-    db = get_postgres_session()
+    db = RDSConnection.get_postgres_session()
     stores = [2948]
     for store in stores:
         try:
@@ -115,7 +115,7 @@ async def getPricesOfItem(store: str, upc: str, days: int, db: Session = Depends
         SafewayItemDBModel.date > days_before)).order_by(
         asc(SafewayItemDBModel.date))
 
-    df = pandas.read_sql_query(query.statement, con=get_engine())
+    df = pandas.read_sql_query(query.statement, con=RDSConnection.get_engine())
     stream = io.StringIO()
     df.to_csv(stream, index=False)
     response = StreamingResponse(iter([stream.getvalue()]), media_type="application/csv")
@@ -145,7 +145,7 @@ def getDataFrameJsonObject(storeId, upc, days_before, db):
                          SafewayItemDBModel.basePrice, SafewayItemDBModel.pricePer).filter(and_(
             SafewayItemDBModel.storeId == storeId, SafewayItemDBModel.upc == upc,
             SafewayItemDBModel.date > days_before))
-    df = pandas.read_sql_query(query.statement, con=get_engine())
+    df = pandas.read_sql_query(query.statement, con=RDSConnection.get_engine())
 
     jsonResponse = json.loads(df.to_json(orient='records'))
     newJsonResponse = []
@@ -203,4 +203,4 @@ async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days
 
 @app.get("/operations")
 def getOperations(db: Session = Depends(get_db)):
-    return db.query(OperationDbModel).all()
+    return db.query(OperationDbModel).order_by(OperationDbModel.date.desc()).all()
