@@ -37,7 +37,7 @@
     </script>
     {#key $display_30_days}
     {#if $display_30_days==true}
-    <h1 class="text-white">Greatest Price Changes 30 Days</h1>
+    <h1 class="text-white">Greatest Price Changes in the Last 30 Days</h1>
     <table class="table table-hover table-light table-striped table-bordered">
         <thead>
             <tr>
