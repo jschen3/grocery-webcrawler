@@ -104,22 +104,22 @@
     <svelte:window on:keydown={navigateList} />
     
     <form class="form-inline my-2 my-lg-0 d-flex" autocomplete="off" on:submit|preventDefault={submitValue}>
-      <div class="autocomplete">
-        <input class="form-control mr-sm-2 bg-dark text-white navbar" id="searchbar-input"
-                         type="text" 
-                         placeholder="Search Store Items..."
-                         bind:this={searchInput}
-                         bind:value={inputValueText} 
-                         on:input={get_filter_options}>
-        {#if filterOptions.length > 0}
-            <ul id="autocomplete-items-list">
-                {#each filterOptions as filterOption, i}
-                    <SelectOption itemLabel={filterOption.name} highlighted={i === hiLiteIndex} on:click={() => setInputVal(filterOption)} />
-                {/each}
-            </ul>
-        {/if}
-    </div>
-      <button class="btn btn-outline-dark my-2 my-sm-0 svelte-bar-submit-button" type="submit">Search</button>
+        <div class="autocomplete">
+            <input class="form-control mr-sm-2 bg-dark text-white navbar" id="searchbar-input"
+                            type="text" 
+                            placeholder="Search Store Items..."
+                            bind:this={searchInput}
+                            bind:value={inputValueText} 
+                            on:input={get_filter_options}>
+            {#if filterOptions.length > 0}
+                <ul id="autocomplete-items-list">
+                    {#each filterOptions as filterOption, i}
+                        <SelectOption itemLabel={filterOption.name} highlighted={i === hiLiteIndex} on:click={() => setInputVal(filterOption)} />
+                    {/each}
+                </ul>
+            {/if}
+        </div>
+        <button class="btn btn-outline-dark my-sm-0 svelte-bar-submit-button" type="submit">Search</button>
         
     </form>
         
