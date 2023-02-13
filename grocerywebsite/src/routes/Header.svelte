@@ -26,25 +26,25 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Area
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Bay Area</a></li>
-            <!-- <li><a class="dropdown-item" href="#">San Francisco</a></li>
-            <li><a class="dropdown-item" href="#">Denver</a></li>
-            <li><a class="dropdown-item" href="#">Texas</a></li>
-            <li><a class="dropdown-item" href="#">Northwest(washington, oregon</a></li> -->
-          </ul>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Bay Area</a>
+            <!-- <a class="dropdown-item" href="#">San Francisco</a>
+            <a class="dropdown-item" href="#">Denver</a>
+            <a class="dropdown-item" href="#">Texas</a>
+            <a class="dropdown-item" href="#">Northwest(washington, oregon</a> -->
+          </div>
         </li>
-        <li class="nav-item">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Location
             </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">2948 645 San Antonio Rd</a></li>
-            </ul>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">2948 645 San Antonio</a>
+            </div>
           </li>
           {#if $display_7_days==true}
               <a class="nav-item nav-link active" on:click={seven_day_click}>7 Day Price Changes</a>
@@ -81,9 +81,10 @@
         height: 40px;
         margin-right:15px;
     }
-    /* .navbar{
+    .navbar{
         height: 60px;
     }
+    /*
     .nav-link{
         margin-left: 10px;
     } */

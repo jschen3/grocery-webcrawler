@@ -11,6 +11,7 @@
     list-style: none;
     border-bottom: 1px solid #d4d4d4;
     z-index: 99;
+    top:100%;
     /*position the autocomplete items to be the same width as the container:*/
     left: 0;
     right: 0;

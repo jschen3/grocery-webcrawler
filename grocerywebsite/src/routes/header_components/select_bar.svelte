@@ -111,20 +111,32 @@
                          bind:this={searchInput}
                          bind:value={inputValueText} 
                          on:input={get_filter_options}>
-      </div>
-        
-      <button class="btn btn-outline-dark my-2 my-sm-0 svelte-bar-submit-button" type="submit">Search</button>
         {#if filterOptions.length > 0}
-            <ul id="autocomplete-items-list navbar-nav mr-auto">
+            <ul id="autocomplete-items-list">
                 {#each filterOptions as filterOption, i}
                     <SelectOption itemLabel={filterOption.name} highlighted={i === hiLiteIndex} on:click={() => setInputVal(filterOption)} />
                 {/each}
             </ul>
         {/if}
+    </div>
+      <button class="btn btn-outline-dark my-2 my-sm-0 svelte-bar-submit-button" type="submit">Search</button>
+        
     </form>
         
         
     <style>
+    #searchbar-input{
+        position: relative;
+    }    
+    #autocomplete-items-list {
+        position:absolute;
+        margin: 0;
+        padding: 0;
+        top: 100%;
+        width: 297px;
+        border: 1px solid #ddd;
+        background-color: #ddd;
+    }	
     div.autocomplete {
       /*the container must be positioned relative:*/
       position: relative;
