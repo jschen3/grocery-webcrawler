@@ -81,9 +81,9 @@
         height: 40px;
         margin-right:15px;
     }
-    .navbar{
+    /* .navbar{
         height: 60px;
-    }
+    } */
     /*
     .nav-link{
         margin-left: 10px;
