@@ -4,8 +4,6 @@ from datetime import datetime, timedelta
 from grocerywebcrawler.models.safeway_item import SafewayItem
 from sqlalchemy.exc import NoResultFound
 
-
-
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
 from grocerywebcrawler.rds_connection import RDSConnection
 from util.logging import info, debug
