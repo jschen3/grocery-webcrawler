@@ -166,8 +166,8 @@ async def getItem(storeId: str, upc: str, db: Session = Depends(get_db)):
 @app.get("/greatest_price_changes")
 async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days: bool = False,
                                  db: Session = Depends(get_db)):
-    yesterday = date.today() - timedelta(days=1)
     if thirtyOr7Days:
+        thirty_days_ago = date.today() - timedelta(days=30)
         greatest_percent_items = db.query(PriceChangeDBModel.upc.distinct(), PriceChangeDBModel.name,
                                           PriceChangeDBModel.storeId,
                                           PriceChangeDBModel.upc, PriceChangeDBModel.category,
@@ -179,10 +179,11 @@ async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days
                                           PriceChangeDBModel.percentPriceChange30Days,
                                           PriceChangeDBModel.absPercentPriceChange7Days,
                                           PriceChangeDBModel.absPercentPriceChange30Days).filter(
-            PriceChangeDBModel.currentDate > yesterday).order_by(
+            PriceChangeDBModel.currentDate > thirty_days_ago).order_by(
             PriceChangeDBModel.absPercentPriceChange30Days.desc()).limit(
             limit).offset(offset).all()
     else:
+        one_week_ago = date.today() - timedelta(days=7)
         greatest_percent_items = db.query(PriceChangeDBModel.upc.distinct(), PriceChangeDBModel.name,
                                           PriceChangeDBModel.upc, PriceChangeDBModel.storeId,
                                           PriceChangeDBModel.category,
@@ -194,7 +195,7 @@ async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days
                                           PriceChangeDBModel.percentPriceChange30Days,
                                           PriceChangeDBModel.absPercentPriceChange7Days,
                                           PriceChangeDBModel.absPercentPriceChange30Days).filter(
-            PriceChangeDBModel.currentDate > yesterday).order_by(
+            PriceChangeDBModel.currentDate > one_week_ago).order_by(
             PriceChangeDBModel.absPercentPriceChange7Days.desc()).limit(
             limit).offset(offset).all()
 

@@ -1,0 +1,5 @@
+* * * * * echo "Hello world" >> /var/log/cron.log 2>&1
+0 */6 * * * /code/grocerywebcrawler.sh >> /var/log/cron.log 2>&1
+#0 12 * * * root bash grocerywebcrawler.sh  >> /var/log/cron.log 2>&1
+#30 12 * * * root bash grocerywebcrawler.sh  >> /var/log/cron.log 2>&1
+#0 1 * * * root bash grocerywebcrawler.sh  >> /var/log/cron.log 2>&1
