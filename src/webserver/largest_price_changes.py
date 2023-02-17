@@ -102,21 +102,11 @@ def createPriceChangeObjects():
         ranges.append(i)
     start = datetime.now()
     print(f"Creating Operations Record")
-    try:
-        existing = db.query(OperationDbModel).filter(
-            OperationDbModel.id == f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}").one()
-        db.query(OperationDbModel).filter(
-            OperationDbModel.id == f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}").update(
-            {OperationDbModel.date: datetime.today(),
-             OperationDbModel.count: existing.count + 1
-             })
-        db.commit()
-    except NoResultFound:
-        operations_record = OperationDbModel(id=f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}",
+    operations_record = OperationDbModel(id=f"price_change_analysis_{datetime.today()}",
                                              operationName="price_change_analysis", date=datetime.today(),
                                              totalItems=count, currentProcessed=0, status="Started", count=0)
-        db.add(operations_record)
-        db.commit()
+    db.add(operations_record)
+    db.commit()
     try:
         pool_obj = multiprocessing.Pool()
         pool_obj.map(process_and_find_price_changes, ranges)

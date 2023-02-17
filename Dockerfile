@@ -2,7 +2,6 @@ FROM python:3.9-bullseye
 WORKDIR /code
 RUN apt-get update && apt-get install -y cron python3-venv python3-pip nano
 RUN apt-get install -y wget xvfb unzip
-# Set up the Chrome PPA
 RUN apt-get install -y gnupg wget curl unzip --no-install-recommends && \
     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
     echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list && \

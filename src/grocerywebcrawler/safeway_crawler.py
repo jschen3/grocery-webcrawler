@@ -1,8 +1,6 @@
 from datetime import date, datetime
 
 import requests
-from sqlalchemy.exc import NoResultFound
-
 from grocerywebcrawler.models.safeway_item import SafewayItem, SafewayItemDBModel
 from grocerywebcrawler.headless_browser_util import headless_browser_request_id
 
@@ -59,19 +57,13 @@ def get_all_safeway_items_from_store(storeid):
     info(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
     next_parameters = request_parameters.copy()
     session = RDSConnection.get_normal_session()
-    try:
-        existing = session.query(OperationDbModel).filter(
-            OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").one()
-        session.query(OperationDbModel).filter(
-            OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update(
-            {OperationDbModel.count: existing.count + 1, OperationDbModel.date: date.today()})
-        session.commit()
-    except NoResultFound:
-        operationsRecord = OperationDbModel(id=f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}",
-                                            operationName="webcrawl", date=date.today(), totalItems=num_found,
-                                            currentProcessed=0, storeId=storeid, status="Started", count=0)
-        session.add(operationsRecord)
-        session.commit()
+    current_count = session.query(SafewayItemDBModel).count()
+    operationsRecord = OperationDbModel(id=f"webcrawl_{datetime.today()}_{storeid}",
+                                        operationName="webcrawl", date=date.today(), totalItems=current_count,
+                                        newItems=0, prevItemCount=current_count,
+                                        storeId=storeid, status="Started", count=0)
+    session.add(operationsRecord)
+    session.commit()
     for i in range(0, num_found, 30):
         next_parameters["start"] = i
         try:
@@ -136,14 +128,18 @@ def get_all_safeway_items_from_store(storeid):
         #     session.commit()
         print(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
         info(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
-        #sleep(0.25)
+        # sleep(0.25)
     print(f"finished items at store: {storeid}")
     info(f"finished items at store: {storeid}")
-    session.query(OperationDbModel).filter(
-        OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update(
-        {OperationDbModel.status: "Finished",
-         OperationDbModel.date: date.today()})
+    new_count = session.query(SafewayItemDBModel).count()
+    finishedOperationRecord = OperationDbModel(id=f"webcrawl_{datetime.today()}_{storeid}",
+                                               operationName="webcrawl", date=date.today(),
+                                               newItems=new_count - current_count, prevItemCount=current_count,
+                                               totalItems=new_count,
+                                               storeId=storeid, status="Finished", count=0)
+    session.add(finishedOperationRecord)
     session.commit()
-
+    print(
+        f"new items for store {storeid} | original count: {current_count} new count: {new_count - current_count} total count: {new_count}")
 # write_excel_file(doc_models, 2948)
 # https://pybit.es/articles/how-to-package-and-deploy-cli-apps/
