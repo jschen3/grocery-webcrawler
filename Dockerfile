@@ -17,7 +17,7 @@ RUN python3 -m venv venv
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 COPY ./src /code
 RUN chmod +x /code/grocerywebcrawler.sh
-COPY /mycrontab /code/mycrontab
+COPY ./mycrontab /code/mycrontab
 RUN touch /var/log/cron.log
 RUN crontab /code/mycrontab
 EXPOSE 80
