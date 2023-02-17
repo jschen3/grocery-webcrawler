@@ -1,6 +1,6 @@
 import multiprocessing
 import traceback
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from grocerywebcrawler.models.safeway_item import SafewayItem
 from sqlalchemy.exc import NoResultFound
 
@@ -103,7 +103,7 @@ def createPriceChangeObjects():
     start = datetime.now()
     print(f"Creating Operations Record")
     operations_record = OperationDbModel(id=f"price_change_analysis_{datetime.today()}",
-                                         operationName="price_change_analysis", date=datetime.today(),
+                                         operationName="price_change_analysis", date=date.today(),
                                          totalItems=count, newItems=0, prevItemCount=count, status="Started", count=0)
     db.add(operations_record)
     db.commit()
@@ -122,10 +122,10 @@ def createPriceChangeObjects():
         f"New price change objects. {newCount - original_number_of_price_change_objects}. original_count: {original_number_of_price_change_objects} total_items: {newCount} time: {datetime.now()}")
 
     new_operations_record = OperationDbModel(id=f"price_change_analysis_{datetime.today()}",
-                                             operationName="price_change_analysis", date=datetime.today(),
+                                             operationName="price_change_analysis", date=date.today(),
                                              totalItems=newCount,
                                              newItems=newCount - original_number_of_price_change_objects,
-                                             prevItemCount=original_number_of_price_change_objects, status="Started",
+                                             prevItemCount=original_number_of_price_change_objects, status="Finished",
                                              count=0)
     db.add(new_operations_record)
     db.commit()
