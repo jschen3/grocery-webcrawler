@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+    cronjob:
+      build:
+        context: ../
+        dockerfile: cronjob/Dockerfile
+      ports:
+        - "80:80"
+
+
