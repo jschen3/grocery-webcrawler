@@ -1,7 +1,9 @@
 version: "3.9"
 services:
-    web:
+    server:
+      container_name: server
       build: .
+      shm_size: "2gb"
       env_file:
         - .env
       ports:

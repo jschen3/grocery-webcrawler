@@ -54,6 +54,10 @@ def headless_browser_request_id() -> int:
     capabilities = DesiredCapabilities.CHROME
     capabilities["goog:loggingPrefs"] = {"performance": "ALL"}
     options = webdriver.ChromeOptions()
+    options.add_argument("--no-sandbox")
+    #options.add_argument("--disable-gpu")
+    #options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-extensions")
     options.headless = True
     with webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()),
                           desired_capabilities=capabilities, options=options) as driver:
