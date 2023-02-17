@@ -103,8 +103,8 @@ def createPriceChangeObjects():
     start = datetime.now()
     print(f"Creating Operations Record")
     operations_record = OperationDbModel(id=f"price_change_analysis_{datetime.today()}",
-                                             operationName="price_change_analysis", date=datetime.today(),
-                                             totalItems=count, currentProcessed=0, status="Started", count=0)
+                                         operationName="price_change_analysis", date=datetime.today(),
+                                         totalItems=count, newItems=0, prevItemCount=count, status="Started", count=0)
     db.add(operations_record)
     db.commit()
     try:
@@ -120,12 +120,12 @@ def createPriceChangeObjects():
         f"New price change objects. {newCount - original_number_of_price_change_objects}. original_count: {original_number_of_price_change_objects} total_items: {newCount} time: {datetime.now()}")
     print(
         f"New price change objects. {newCount - original_number_of_price_change_objects}. original_count: {original_number_of_price_change_objects} total_items: {newCount} time: {datetime.now()}")
-    try:
-        db.query(OperationDbModel).filter(
-            OperationDbModel.id == f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}").update({
-            OperationDbModel.date: datetime.today(),
-            OperationDbModel.status: "Finished"
-        })
-        db.commit()
-    except Exception:
-        info("An error occurred saving Operation Object")
+
+    new_operations_record = OperationDbModel(id=f"price_change_analysis_{datetime.today()}",
+                                             operationName="price_change_analysis", date=datetime.today(),
+                                             totalItems=newCount,
+                                             newItems=newCount - original_number_of_price_change_objects,
+                                             prevItemCount=original_number_of_price_change_objects, status="Started",
+                                             count=0)
+    db.add(new_operations_record)
+    db.commit()
