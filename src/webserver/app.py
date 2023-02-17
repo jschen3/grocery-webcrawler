@@ -39,14 +39,6 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-
-@app.on_event("startup")
-def startup():
-    Schedule = AsyncIOScheduler()
-    Schedule.start()
-    Schedule.add_job(daily_script_action, 'interval', seconds=60 * 60 * 2)
-
-
 def get_db():
     db = RDSConnection.get_normal_session()
     try:
@@ -54,25 +46,6 @@ def get_db():
     finally:
         db.close()
 
-
-def daily_script_action():
-    db = RDSConnection.get_postgres_session()
-    stores = [2948]
-    for store in stores:
-        try:
-            operationRecord = db.query(OperationDbModel).filter(
-                OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{store}").one()
-        except NoResultFound:
-            info(f"no results found. Running get safeway items for store:{store}")
-        info(f"Web crawling ap scheduler. Store: {store}")
-        get_all_safeway_items_from_store(store)
-    try:
-        priceAnalysisOperation = db.query(OperationDbModel).filter(
-            OperationDbModel.id == f"price_change_analysis_{datetime.today().strftime('%Y-%m-%d')}").one()
-    except NoResultFound:
-        info(f"Price Analysis ap scheduler No results found.")
-    info("performing price analysis")
-    createPriceChangeObjects()
 
 
 @app.get("/")
@@ -168,37 +141,17 @@ async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days
                                  db: Session = Depends(get_db)):
     if thirtyOr7Days:
         thirty_days_ago = date.today() - timedelta(days=30)
-        greatest_percent_items = db.query(PriceChangeDBModel.upc.distinct(), PriceChangeDBModel.name,
-                                          PriceChangeDBModel.storeId,
-                                          PriceChangeDBModel.upc, PriceChangeDBModel.category,
-                                          PriceChangeDBModel.price7DaysAgo,
-                                          PriceChangeDBModel.price30DaysAgo,
-                                          PriceChangeDBModel.currentPrice, PriceChangeDBModel.priceChange7DaysAgo,
-                                          PriceChangeDBModel.priceChange30Days,
-                                          PriceChangeDBModel.percentPriceChange7DaysAgo,
-                                          PriceChangeDBModel.percentPriceChange30Days,
-                                          PriceChangeDBModel.absPercentPriceChange7Days,
-                                          PriceChangeDBModel.absPercentPriceChange30Days).filter(
+        greatest_percent_items = db.query(PriceChangeDBModel).distinct(PriceChangeDBModel.upc).filter_by(
             PriceChangeDBModel.currentDate > thirty_days_ago).order_by(
             PriceChangeDBModel.absPercentPriceChange30Days.desc()).limit(
             limit).offset(offset).all()
     else:
         one_week_ago = date.today() - timedelta(days=7)
-        greatest_percent_items = db.query(PriceChangeDBModel.upc.distinct(), PriceChangeDBModel.name,
-                                          PriceChangeDBModel.upc, PriceChangeDBModel.storeId,
-                                          PriceChangeDBModel.category,
-                                          PriceChangeDBModel.price7DaysAgo,
-                                          PriceChangeDBModel.price30DaysAgo,
-                                          PriceChangeDBModel.currentPrice, PriceChangeDBModel.priceChange7DaysAgo,
-                                          PriceChangeDBModel.priceChange30Days,
-                                          PriceChangeDBModel.percentPriceChange7DaysAgo,
-                                          PriceChangeDBModel.percentPriceChange30Days,
-                                          PriceChangeDBModel.absPercentPriceChange7Days,
-                                          PriceChangeDBModel.absPercentPriceChange30Days).filter(
+        greatest_percent_items = db.query(PriceChangeDBModel).distinct(PriceChangeDBModel.upc).filter_by(
             PriceChangeDBModel.currentDate > one_week_ago).order_by(
             PriceChangeDBModel.absPercentPriceChange7Days.desc()).limit(
             limit).offset(offset).all()
-
+    print(greatest_percent_items)
     return greatest_percent_items
 
 
