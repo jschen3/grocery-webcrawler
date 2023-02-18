@@ -176,6 +176,16 @@ async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days
             limit).offset(offset).all()
     return greatest_percent_items
 
+
 @app.get("/operations")
 def getOperations(db: Session = Depends(get_db)):
     return db.query(OperationDbModel).order_by(OperationDbModel.date.desc()).all()
+
+
+@app.get("/trigger")
+def triggerProcessData(db: Session = Depends(get_db)):
+    yesterday = date.today() - timedelta(days=1)
+    count_today = db.query(OperationDbModel).filter(OperationDbModel.date > yesterday).count()
+    if count_today < 24:
+        get_all_safeway_items_from_store(2948)
+        createPriceChangeObjects()
