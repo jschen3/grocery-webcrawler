@@ -4,11 +4,8 @@ import json
 import pandas
 from datetime import datetime, timedelta, date
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi.responses import StreamingResponse
 from fastapi import FastAPI, Depends, BackgroundTasks
-from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, asc
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
@@ -182,10 +179,15 @@ def getOperations(db: Session = Depends(get_db)):
     return db.query(OperationDbModel).order_by(OperationDbModel.date.desc()).all()
 
 
+def dailyTasks():
+    get_all_safeway_items_from_store(2948)
+    createPriceChangeObjects()
+
+
 @app.get("/trigger")
-def triggerProcessData(db: Session = Depends(get_db)):
+def triggerProcessData(background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     yesterday = date.today() - timedelta(days=1)
     count_today = db.query(OperationDbModel).filter(OperationDbModel.date > yesterday).count()
     if count_today < 24:
-        get_all_safeway_items_from_store(2948)
-        createPriceChangeObjects()
+        background_tasks.add_task(dailyTasks)
+        return {"message": "Daily tasks: price calculations and web crawling."}
