@@ -9,5 +9,11 @@ services:
       ports:
         - "80:80"
 
+      logging:
+        driver: "awslogs"
+        options:
+          awslogs-region: "us-west-2"
+          awslogs-group: "groceryserverdocker"
+          awslogs-stream: "groceryserverlogs"
 
 
