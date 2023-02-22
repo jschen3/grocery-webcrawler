@@ -1,7 +1,6 @@
 from sqlalchemy import String, Column, TIMESTAMP, Integer
 
 from grocerywebcrawler.models.safeway_item import Base
-from grocerywebcrawler.rds_connection import RDSConnection
 
 
 class OperationDbModel(Base):

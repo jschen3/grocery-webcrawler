@@ -5,18 +5,15 @@ import pandas
 from datetime import datetime, timedelta, date
 
 from fastapi.responses import StreamingResponse
-from fastapi import FastAPI, Depends, BackgroundTasks
+from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, asc
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
 from grocerywebcrawler.models.safeway_item import SafewayItemDBModel
 from fastapi.middleware.cors import CORSMiddleware
-
 from grocerywebcrawler.rds_connection import RDSConnection
-from grocerywebcrawler.safeway_crawler import get_all_safeway_items_from_store
-from util.logging import info
 from webserver.build_general_info_section import build_general_information
-from webserver.largest_price_changes import createPriceChangeObjects
+from counter import Counter
 from webserver.models.operation_db_model import OperationDbModel
 from webserver.models.store import StoreDbModel, Store
 
@@ -179,15 +176,6 @@ def getOperations(db: Session = Depends(get_db)):
     return db.query(OperationDbModel).order_by(OperationDbModel.date.desc()).all()
 
 
-def dailyTasks():
-    get_all_safeway_items_from_store(2948)
-    createPriceChangeObjects()
-
-
-@app.get("/trigger")
-def triggerProcessData(background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
-    yesterday = date.today() - timedelta(days=1)
-    count_today = db.query(OperationDbModel).filter(OperationDbModel.date > yesterday).count()
-    if count_today < 24:
-        background_tasks.add_task(dailyTasks)
-        return {"message": "Daily tasks: price calculations and web crawling."}
+@app.get("/counter")
+def getCounter(db: Session = Depends(get_db)):
+    return db.query(Counter).all()

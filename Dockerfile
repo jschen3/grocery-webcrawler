@@ -1,6 +1,8 @@
 FROM python:3.9-bullseye
 WORKDIR /code
-RUN apt-get update && apt-get install -y cron python3-venv python3-pip nano
+RUN apt-get update && apt-get install -y cron python3-venv python3-pip nano supervisor
+RUN mkdir -p /etc/supervisor/conf.d
+
 RUN apt-get install -y wget xvfb unzip
 RUN apt-get install -y gnupg wget curl unzip --no-install-recommends && \
     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
@@ -20,17 +22,21 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 COPY ./src /code
 COPY ./mycrontab /code/mycrontab
 COPY ./grocerywebcrawler.sh /code
+COPY ./increment_counter.sh /code
 
 RUN chmod +x /code/grocerywebcrawler.sh
+RUN chmod +x /code/increment_counter.sh
 
 RUN touch /var/log/cron.log
 RUN crontab /code/mycrontab
+
 EXPOSE 80
-COPY ./startup.sh /code/startup.sh
-RUN chmod +x ./startup.sh
+
 
 WORKDIR /cronjob
 COPY ./src /cronjob
 COPY ./requirements.txt /cronjob
 WORKDIR /code
-CMD ["./startup.sh"]
+
+ADD supervisor.conf /etc/supervisor.conf
+CMD ["supervisord", "-c", "/etc/supervisor.conf"]
