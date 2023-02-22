@@ -1,4 +1,5 @@
 import os
+import pathlib
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, scoped_session
@@ -33,6 +34,7 @@ class RDSConnection:
         return RDSConnection.__engine
 
 def create_rds_engine():
+    print(pathlib.Path().absolute())
     load_dotenv()
     AWS_RDS_PATH = os.getenv('AWS_RDS_PATH')
     if AWS_RDS_PATH is None:
