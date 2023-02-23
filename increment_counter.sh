@@ -1,2 +1,5 @@
 echo "incrementing counter"
-python3 ./counter.py
+cd /cronjob
+python3 -m venv venv
+pip install -r /cronjob/requirements.txt
+python3 /cronjob/counter.py
