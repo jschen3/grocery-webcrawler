@@ -102,9 +102,12 @@ def createPriceChangeObjects():
         ranges.append(i)
     start = datetime.now()
     print(f"Creating Operations Record")
+    intId = db.query(OperationDbModel).count()
+    countToday = db.query(OperationDbModel).filter(OperationDbModel.date >= date.today()).count()
     operations_record = OperationDbModel(id=f"price_change_analysis_{datetime.today()}",
                                          operationName="price_change_analysis", date=date.today(),
-                                         totalItems=count, newItems=0, prevItemCount=count, status="Started", count=0)
+                                         totalItems=count, newItems=0, prevItemCount=count, status="Started",
+                                         countToday=countToday + 1, intId=intId + 1)
     db.add(operations_record)
     db.commit()
     try:
@@ -120,12 +123,13 @@ def createPriceChangeObjects():
         f"New price change objects. {newCount - original_number_of_price_change_objects}. original_count: {original_number_of_price_change_objects} total_items: {newCount} time: {datetime.now()}")
     print(
         f"New price change objects. {newCount - original_number_of_price_change_objects}. original_count: {original_number_of_price_change_objects} total_items: {newCount} time: {datetime.now()}")
-
+    newIntId = db.query(OperationDbModel).count()
+    newCountToday = db.query(OperationDbModel).filter(OperationDbModel.date >= date.today()).count()
     new_operations_record = OperationDbModel(id=f"price_change_analysis_{datetime.today()}",
                                              operationName="price_change_analysis", date=date.today(),
                                              totalItems=newCount,
                                              newItems=newCount - original_number_of_price_change_objects,
                                              prevItemCount=original_number_of_price_change_objects, status="Finished",
-                                             count=0)
+                                             countToday=newCountToday + 1, intId=newIntId + 1)
     db.add(new_operations_record)
     db.commit()

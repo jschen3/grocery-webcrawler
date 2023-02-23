@@ -58,10 +58,12 @@ def get_all_safeway_items_from_store(storeid):
     next_parameters = request_parameters.copy()
     session = RDSConnection.get_normal_session()
     current_count = session.query(SafewayItemDBModel).count()
+    record_count = session.query(OperationDbModel).count()
+    countToday = session.query(OperationDbModel).filter(OperationDbModel.date >= date.today()).count()
     operationsRecord = OperationDbModel(id=f"webcrawl_{datetime.today()}_{storeid}",
                                         operationName="webcrawl", date=date.today(), totalItems=current_count,
-                                        newItems=0, prevItemCount=current_count,
-                                        storeId=storeid, status="Started", count=0)
+                                        newItems=0, prevItemCount=current_count, intId=record_count + 1,
+                                        storeId=storeid, status="Started", countToday=countToday + 1)
     session.add(operationsRecord)
     session.commit()
     for i in range(0, num_found, 30):
@@ -131,15 +133,16 @@ def get_all_safeway_items_from_store(storeid):
         # sleep(0.25)
     print(f"finished items at store: {storeid}")
     info(f"finished items at store: {storeid}")
+    newCountToday = session.query(OperationDbModel).filter(OperationDbModel.date >= date.today()).count()
+    newIntId = session.query(OperationDbModel).count()
     new_count = session.query(SafewayItemDBModel).count()
     finishedOperationRecord = OperationDbModel(id=f"webcrawl_{datetime.today()}_{storeid}",
                                                operationName="webcrawl", date=date.today(),
                                                newItems=new_count - current_count, prevItemCount=current_count,
                                                totalItems=new_count,
-                                               storeId=storeid, status="Finished", count=0)
+                                               storeId=storeid, status="Finished", countToday=newCountToday + 1,
+                                               intId=newIntId + 1)
     session.add(finishedOperationRecord)
     session.commit()
     print(
         f"new items for store {storeid} | original count: {current_count} new count: {new_count - current_count} total count: {new_count}")
-# write_excel_file(doc_models, 2948)
-# https://pybit.es/articles/how-to-package-and-deploy-cli-apps/
