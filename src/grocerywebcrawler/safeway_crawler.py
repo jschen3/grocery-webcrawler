@@ -36,6 +36,8 @@ def _safeway_items_from_json(json_doc: dict, store_id: str, date: date, area: st
 
 
 def get_all_safeway_items_from_store(storeid):
+    print("Starting webcrawling.")
+    info("Starting webcrawling.")
     request_parameters = {
         "request-id": 2051668903794860761,
         "rows": 30,
