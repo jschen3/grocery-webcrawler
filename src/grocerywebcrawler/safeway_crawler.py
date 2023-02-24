@@ -51,16 +51,18 @@ def get_all_safeway_items_from_store(storeid):
         "Ocp-Apim-Subscription-Key": "e914eec9448c4d5eb672debf5011cf8f",
         "Accept": "application/json, text/plain, */*",
         "sec-ch-ua": "",
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/110.0.5481.177 Safari/537.36",
+        "User-Agent": "Mozilla/5.0",
         "Referer": "https://www.safeway.com/shop/deals/member-specials.html",
         "sec-ch-ua-mobile": "?0",
-        "sec-ch-ua-platform": ""
+        "sec-ch-ua-platform": "",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Connection": "keep-alive"
     }
     url = "https://www.safeway.com/abs/pub/xapi/search/products?url=https://www.safeway.com&pageurl=https://www.safeway.com&pagename=search&search-type=keyword&search-uid=&q=&sort=&dvid=web-4.1search&channel=instore"
     request_id = headless_browser_request_id()
     request_parameters["request-id"] = request_id["request-id"]
     headers["ocp-apim-subscription-key"] = request_id["ocp-apim-subscription-key"]
-    response = requests.get(url=url, params=request_parameters, headers=headers)
+    response = requests.get(url=url, params=request_parameters, headers=headers, timeout=10)
     response.raise_for_status()
     first_response = response.json()["response"]
     info(first_response)
