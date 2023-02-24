@@ -58,14 +58,15 @@ def get_all_safeway_items_from_store(storeid):
           "%253D1668295333830%253Ahc%253D18&q=&dvid=web-4.1search&channel=instore"
     request_id = headless_browser_request_id()
     request_parameters["request-id"] = request_id
-    try:
-        response = requests.get(url=url, params=request_parameters, headers=headers).json()
-        info(response)
-        print(response)
-        first_response = response["response"]
-    except JSONDecodeError:
-        first_response = \
-        json.loads(requests.get(url=url, params=request_parameters, headers=headers).text, strict=False)["response"]
+
+    response = requests.get(url=url, params=request_parameters, headers=headers)
+    response.raise_for_status()
+    if response.status_code != 204:
+        responseJson=response.json()
+    info(responseJson)
+    print(responseJson)
+    first_response = responseJson["response"]
+
     info(first_response)
     print(first_response)
     num_found = first_response["numFound"]
