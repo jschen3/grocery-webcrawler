@@ -137,38 +137,53 @@ async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days
 
     if thirtyOr7Days:
         thirty_days_ago = date.today() - timedelta(days=30)
-        greatest_percent_items = db.query(PriceChangeDBModel.upc.distinct(), PriceChangeDBModel.upc,
-                                          PriceChangeDBModel.name,
-                                          PriceChangeDBModel.storeId, PriceChangeDBModel.category,
-                                          PriceChangeDBModel.price7DaysAgo,
-                                          PriceChangeDBModel.price30DaysAgo,
-                                          PriceChangeDBModel.currentPrice, PriceChangeDBModel.priceChange7DaysAgo,
-                                          PriceChangeDBModel.priceChange30Days,
-                                          PriceChangeDBModel.percentPriceChange7DaysAgo,
-                                          PriceChangeDBModel.percentPriceChange30Days,
-                                          PriceChangeDBModel.absPercentPriceChange7Days,
-                                          PriceChangeDBModel.absPercentPriceChange30Days).filter(
+        greatest_percent_items: list[PriceChangeDBModel] = db.query(PriceChangeDBModel.upc,
+                                                                    PriceChangeDBModel.name,
+                                                                    PriceChangeDBModel.storeId,
+                                                                    PriceChangeDBModel.category,
+                                                                    PriceChangeDBModel.price7DaysAgo,
+                                                                    PriceChangeDBModel.price30DaysAgo,
+                                                                    PriceChangeDBModel.currentPrice,
+                                                                    PriceChangeDBModel.priceChange7DaysAgo,
+                                                                    PriceChangeDBModel.priceChange30Days,
+                                                                    PriceChangeDBModel.percentPriceChange7DaysAgo,
+                                                                    PriceChangeDBModel.percentPriceChange30Days,
+                                                                    PriceChangeDBModel.absPercentPriceChange7Days,
+                                                                    PriceChangeDBModel.absPercentPriceChange30Days).filter(
             PriceChangeDBModel.currentDate > thirty_days_ago).order_by(
             PriceChangeDBModel.absPercentPriceChange30Days.desc()).limit(
-            limit).offset(offset).all()
+            limit * 10).offset(offset).all()
     else:
         one_week_ago = date.today() - timedelta(days=7)
-        greatest_percent_items = db.query(PriceChangeDBModel.upc.distinct(), PriceChangeDBModel.upc,
-                                          PriceChangeDBModel.name,
-                                          PriceChangeDBModel.storeId,
-                                          PriceChangeDBModel.category,
-                                          PriceChangeDBModel.price7DaysAgo,
-                                          PriceChangeDBModel.price30DaysAgo,
-                                          PriceChangeDBModel.currentPrice, PriceChangeDBModel.priceChange7DaysAgo,
-                                          PriceChangeDBModel.priceChange30Days,
-                                          PriceChangeDBModel.percentPriceChange7DaysAgo,
-                                          PriceChangeDBModel.percentPriceChange30Days,
-                                          PriceChangeDBModel.absPercentPriceChange7Days,
-                                          PriceChangeDBModel.absPercentPriceChange30Days).filter(
+        greatest_percent_items: list[PriceChangeDBModel] = db.query(PriceChangeDBModel.upc,
+                                                                    PriceChangeDBModel.name,
+                                                                    PriceChangeDBModel.storeId,
+                                                                    PriceChangeDBModel.category,
+                                                                    PriceChangeDBModel.price7DaysAgo,
+                                                                    PriceChangeDBModel.price30DaysAgo,
+                                                                    PriceChangeDBModel.currentPrice,
+                                                                    PriceChangeDBModel.priceChange7DaysAgo,
+                                                                    PriceChangeDBModel.priceChange30Days,
+                                                                    PriceChangeDBModel.percentPriceChange7DaysAgo,
+                                                                    PriceChangeDBModel.percentPriceChange30Days,
+                                                                    PriceChangeDBModel.absPercentPriceChange7Days,
+                                                                    PriceChangeDBModel.absPercentPriceChange30Days).filter(
             PriceChangeDBModel.currentDate > one_week_ago).order_by(
             PriceChangeDBModel.absPercentPriceChange7Days.desc()).limit(
-            limit).offset(offset).all()
-    return greatest_percent_items
+            limit * 10).offset(offset).all()
+
+    upcs = set()
+    items = []
+    for item in greatest_percent_items:
+        if item.upc in upcs:
+            continue
+        else:
+            upcs.add(item.upc)
+            items.append(item)
+    if limit < len(items):
+        return items[0:limit]
+    else:
+        return items
 
 
 @app.get("/operations")
