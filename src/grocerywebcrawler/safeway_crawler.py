@@ -50,7 +50,8 @@ def get_all_safeway_items_from_store(storeid):
     headers = {
         "ocp-apim-subscription-key": "e914eec9448c4d5eb672debf5011cf8f",
         "Accept": "application/json",
-        "Content-type": "application/json"
+        "Content-type": "application/json",
+        "charset": "utf-8"
     }
     url = "https://www.safeway.com/abs/pub/xapi/search/products?url=https://www.safeway.com&pageurl=https://www.safeway" \
           ".com&pagename=search&search-type=keyword&search-uid=uid%253D5224296067385%253Av%253D12.0%253Ats" \
