@@ -42,21 +42,24 @@ def _get_request_id(search_requests):
         raise Exception("more than 1 search request")
     else:
         search_request = search_requests[0]
+        ocp_key = search_requests[0]["params"]["request"]["headers"]["Ocp-Apim-Subscription-Key"]
         url = search_request["params"]["request"]["url"]
         parsed_url = urlparse(url)
         query_params = parse_qs(parsed_url.query)
         request_id = query_params["request-id"][0]
-    return request_id
+    return {
+        "request-id": request_id,
+        "ocp-apim-subscription-key": ocp_key}
 
 
-def headless_browser_request_id() -> int:
+def headless_browser_request_id()->dict:
     url = "https://www.safeway.com/shop/deals/member-specials.html"
     capabilities = DesiredCapabilities.CHROME
     capabilities["goog:loggingPrefs"] = {"performance": "ALL"}
     options = webdriver.ChromeOptions()
     options.add_argument("--no-sandbox")
-    #options.add_argument("--disable-gpu")
-    #options.add_argument("--disable-dev-shm-usage")
+    # options.add_argument("--disable-gpu")
+    # options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-extensions")
     options.headless = True
     with webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()),

@@ -56,7 +56,8 @@ def get_all_safeway_items_from_store(storeid):
           ".com&pagename=search&search-type=keyword&search-uid=uid%253D5224296067385%253Av%253D12.0%253Ats" \
           "%253D1668295333830%253Ahc%253D18&q=&sort=&dvid=web-4.1search&channel=instore"
     request_id = headless_browser_request_id()
-    request_parameters["request-id"] = request_id
+    request_parameters["request-id"] = request_id["request-id"]
+    headers["ocp-apim-subscription-key"] = request_id["ocp-apim-subscription-key"]
     first_response = requests.get(url=url, params=request_parameters, headers=headers).json()["response"]
     num_found = first_response["numFound"]
     print(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")

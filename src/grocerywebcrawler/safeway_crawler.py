@@ -53,26 +53,20 @@ def get_all_safeway_items_from_store(storeid):
         "Content-Type": "application/json",
         "charset": "utf-8"
     }
-    url = "https://www.safeway.com/abs/pub/xapi/search/products?url=https://www.safeway.com&pageurl=https://www.safeway" \
-          ".com&pagename=search&search-type=keyword&search-uid=uid%253D5224296067385%253Av%253D12.0%253Ats" \
-          "%253D1668295333830%253Ahc%253D18&q=&dvid=web-4.1search&channel=instore"
+    url = "https://www.safeway.com/abs/pub/xapi/search/products?url=https://www.safeway.com&pageurl=https://www.safeway.com&pagename=search&search-type=keyword&search-uid=&q=&sort=&dvid=web-4.1search&channel=instore"
     request_id = headless_browser_request_id()
-    request_parameters["request-id"] = request_id
-
+    request_parameters["request-id"] = request_id["request-id"]
+    headers["ocp-apim-subscription-key"] = request_id["ocp-apim-subscription-key"]
     response = requests.get(url=url, params=request_parameters, headers=headers)
     response.raise_for_status()
-    if response.status_code != 204:
-        responseJson=response.json()
-    info(responseJson)
-    print(responseJson)
-    first_response = responseJson["response"]
-
+    first_response = response.json()["response"]
     info(first_response)
     print(first_response)
     num_found = first_response["numFound"]
     print(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
     info(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
     next_parameters = request_parameters.copy()
+    next_headers = headers.copy()
     session = RDSConnection.get_normal_session()
     current_count = session.query(SafewayItemDBModel).count()
     record_count = session.query(OperationDbModel).count()
@@ -86,12 +80,12 @@ def get_all_safeway_items_from_store(storeid):
     for i in range(0, num_found, 30):
         next_parameters["start"] = i
         try:
-            response = requests.get(url=url, params=next_parameters, headers=headers)
+            response = requests.get(url=url, params=next_parameters, headers=next_headers)
             if response.status_code == 204 or response.status_code == 429:
                 print(f"{response.reason}")
                 info(f"{response.reason}")
                 break
-            json_response = requests.get(url=url, params=next_parameters, headers=headers).json()["response"]
+            json_response = requests.get(url=url, params=next_parameters, headers=next_headers).json()["response"]
             counter = 0
             if json_response is not None:
                 docs = json_response["docs"]
@@ -130,7 +124,8 @@ def get_all_safeway_items_from_store(storeid):
 
             else:
                 new_request_id = headless_browser_request_id()
-                next_parameters["request-id"] = new_request_id
+                next_parameters["request-id"] = new_request_id["request-id"]
+                next_headers["ocp-apim-subscription-key"] = new_request_id["ocp-apim-subscription-key"]
                 continue
         except Exception as e:
             print(e)
