@@ -1,3 +1,4 @@
+import random
 from datetime import date, datetime
 import requests
 from grocerywebcrawler.models.safeway_item import SafewayItem, SafewayItemDBModel
@@ -35,36 +36,17 @@ def _safeway_items_from_json(json_doc: dict, store_id: str, date: date, area: st
 
 
 def get_all_safeway_items_from_store(storeid):
-    proxies = {
-        "https": "145.40.103.113:3128"
-    }
     print("Starting webcrawling.")
     info("Starting webcrawling.")
-    request_parameters = {'request-id': '3621677258217438273', 'rows': '30',
-                          'start': '0', 'storeid': '2948'}
-
-    headers = {
-        "Ocp-Apim-Subscription-Key": "e914eec9448c4d5eb672debf5011cf8f",
-        "Accept": "application/json, text/plain, */*",
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/110.0.5481.177 Safari/537.36",
-        "Referer": "https://www.safeway.com/shop/deals/member-specials.html",
-        "Connection": "keep-alive",
-        "sec-ch-ua": "", "sec-ch-ua-mobile": "?0", "sec-ch-ua-platform": ""
-    }
-    url = "https://www.safeway.com/abs/pub/xapi/search/products?url=https://www.safeway.com&pageurl=https://www.safeway.com&pagename=search&search-type=keyword&featured=false&search-uid=&q=&sort=&userid=&featuredsessionid=&screenwidth=800,600&dvid=web-4.1search&channel=instore&banner=safeway&fq=promoType:%22P%22&fq=instoreInventory:%221%22"
     request_id = headless_browser_request_id()
-    request_parameters["request-id"] = request_id["request-id"]
-    headers["ocp-apim-subscription-key"] = request_id["ocp-apim-subscription-key"]
-    response = requests.get(url, proxies=proxies, params=request_parameters, headers=headers)
-    response.raise_for_status()
-    first_response = response.json()["response"]
-    info(first_response)
-    print(first_response)
-    num_found = first_response["numFound"]
+    prevRequestId = request_id["request-id"]
+    prevOcpKey = request_id["ocp-apim-subscription-key"]
+    response = makeRestRequest(prevRequestId, prevOcpKey, 0, storeid)
+    info(response)
+    print(response)
+    num_found = response["numFound"]
     print(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
     info(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
-    next_parameters = request_parameters.copy()
-    next_headers = headers.copy()
     session = RDSConnection.get_normal_session()
     current_count = session.query(SafewayItemDBModel).count()
     record_count = session.query(OperationDbModel).count()
@@ -75,17 +57,9 @@ def get_all_safeway_items_from_store(storeid):
                                         storeId=storeid, status="Started", countToday=countToday + 1)
     session.add(operationsRecord)
     session.commit()
-    for i in range(0, num_found, 30):
-        next_parameters["start"] = i
-        try:
-            response = requests.get(url, proxies=proxies, params=next_parameters, headers=next_headers)
-            if response.status_code == 204 or response.status_code == 429:
-                print(f"{response.reason}")
-                info(f"{response.reason}")
-                break
-            json_response = requests.get(url=url, proxies=proxies, params=next_parameters, headers=next_headers).json()[
-                "response"]
-            counter = 0
+    try:
+        for i in range(0, num_found, 30):
+            json_response = makeRestRequest(prevRequestId, prevOcpKey, i, 2948)
             if json_response is not None:
                 docs = json_response["docs"]
                 for json_doc in enumerate(docs):
@@ -120,28 +94,18 @@ def get_all_safeway_items_from_store(storeid):
                         print(f"unable to process json_doc:{json_doc[1]}")
                         info(f"unable to process json_doc:{json_doc[1]}")
                         continue
-
-            else:
-                new_request_id = headless_browser_request_id()
-                next_parameters["request-id"] = new_request_id["request-id"]
-                next_headers["ocp-apim-subscription-key"] = new_request_id["ocp-apim-subscription-key"]
-                continue
-        except Exception as e:
-            print(e)
-            info(e)
-            print(f"an error occurred processing items. i={i} out of num_found={num_found} counter={counter}")
-            info(f"an error occurred processing items. i={i} out of num_found={num_found} counter={counter}")
-            continue
-        session.commit()
-        # if i % 300 == 0:
-        #     session.query(OperationDbModel).filter(
-        #         OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update({
-        #         OperationDbModel.currentProcessed: i, OperationDbModel.status: "Processing"
-        #     })
-        #     session.commit()
-        print(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
-        info(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
-        # sleep(0.25)
+            session.commit()
+            # if i % 300 == 0:
+            #     session.query(OperationDbModel).filter(
+            #         OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update({
+            #         OperationDbModel.currentProcessed: i, OperationDbModel.status: "Processing"
+            #     })
+            #     session.commit()
+            print(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
+            info(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
+            # sleep(0.25)
+    except Exception:
+        print("loop failed unable to go through all items")
     print(f"finished items at store: {storeid}")
     info(f"finished items at store: {storeid}")
     newCountToday = session.query(OperationDbModel).filter(OperationDbModel.date >= date.today()).count()
@@ -156,4 +120,60 @@ def get_all_safeway_items_from_store(storeid):
     session.add(finishedOperationRecord)
     session.commit()
     print(
-        f"new items for store {storeid} | original count: {current_count} new count: {new_count - current_count} total count: {new_count}")
+        f"new items for store {storeid} | original count: {current_count} | new count: {new_count - current_count} | total count: {new_count}")
+
+
+def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: int):
+    proxies = [{"https": "104.223.135.178:10000"},
+               {"https": "169.55.89.6:8123"},
+               {"https": "198.211.27.215:3128"},
+               {"https": "150.136.136.248:8181"},
+               {"https": "5.78.50.231:8888"},
+               {"https": "147.28.182.125:3128"},
+               {"https": "159.89.53.247:443"},
+               {"https": "145.40.103.113:3128"},
+               {"https": "20.241.236.196:3128"}]
+    better_proxies = [{
+        "https": "145.40.103.113:3128"}
+    ]
+    request_parameters = {'request-id': '3621677258217438273', 'rows': '30',
+                          'start': '0', 'storeid': '2948'}
+    headers = {
+        "Ocp-Apim-Subscription-Key": "e914eec9448c4d5eb672debf5011cf8f",
+        "Accept": "application/json, text/plain, */*",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/110.0.5481.177 Safari/537.36",
+        "Referer": "https://www.safeway.com/shop/deals/member-specials.html",
+        "Connection": "keep-alive",
+        "sec-ch-ua": "", "sec-ch-ua-mobile": "?0", "sec-ch-ua-platform": ""
+    }
+    url = "https://www.safeway.com/abs/pub/xapi/search/products?url=https://www.safeway.com&pageurl=https://www.safeway.com&pagename=search&search-type=keyword&featured=false&search-uid=&q=&sort=&userid=&featuredsessionid=&screenwidth=800,600&dvid=web-4.1search&channel=instore&banner=safeway&fq=promoType:%22P%22&fq=instoreInventory:%221%22"
+    request_parameters["request-id"] = prevRequestId
+    request_parameters["storeid"] = storeId
+    request_parameters["start"] = start
+    headers["Ocp-Apim-Subscription-Key"] = prevOcpKey
+    proxy = random.choice(better_proxies)
+    attempts = 0
+    while attempts < 10:
+        try:
+            print(proxy)
+            response = requests.get(url, proxies=proxy, params=request_parameters, headers=headers, timeout=5)
+            status = response.status_code
+            if status == 200:
+                return response.json()["response"]
+            else:
+                request_ids = headless_browser_request_id()
+                headers["Ocp-Apim-Subscription-Key"] = request_ids["ocp-apim-subscription-key"]
+                request_parameters["request_id"] = request_ids["request-id"]
+                proxy = random.choice(proxies)
+                attempts += 1
+        except Exception as e:
+            print(e)
+            print(proxy)
+            attempts += 1
+            request_ids = headless_browser_request_id()
+            headers["Ocp-Apim-Subscription-Key"] = request_ids["ocp-apim-subscription-key"]
+            request_parameters["request_id"] = request_ids["request-id"]
+            proxy = random.choice(proxies)
+            continue
+    print(f"Unable to successively retrieve items from store. at start {start} storeid: {storeId}")
+    raise Exception(f"Unable to successively retrieve items from store. at start {start} storeid: {storeId}")

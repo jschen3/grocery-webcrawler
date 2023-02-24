@@ -43,13 +43,13 @@ def _get_request_id(search_requests):
     else:
         search_request = search_requests[0]
         ocp_key = search_requests[0]["params"]["request"]["headers"]["Ocp-Apim-Subscription-Key"]
-        print(search_requests[0]["params"]["request"]["headers"])
+        #print(search_requests[0]["params"]["request"]["headers"])
         url = search_request["params"]["request"]["url"]
-        print(url)
+        #print(url)
         parsed_url = urlparse(url)
         query_params = parse_qs(parsed_url.query)
         request_id = query_params["request-id"][0]
-        print(query_params)
+        #print(query_params)
     return {
         "request-id": request_id,
         "ocp-apim-subscription-key": ocp_key}
@@ -73,5 +73,5 @@ def headless_browser_request_id()->dict:
         request_id = _get_request_id(search_requests)
         sleep(3)
         driver.quit()
-        print(f"Safeway request id obtained. request_id: {request_id}")
+        #print(f"Safeway request id obtained. request_id: {request_id}")
         return request_id
