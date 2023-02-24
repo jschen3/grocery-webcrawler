@@ -1,4 +1,4 @@
-FROM python:3.9-bullseye
+FROM python:3.10.10-bullseye
 WORKDIR /code
 RUN apt-get update && apt-get install -y cron python3-venv python3-pip nano supervisor
 RUN mkdir -p /etc/supervisor/conf.d
