@@ -53,7 +53,10 @@ def get_all_safeway_items_from_store(storeid):
           "%253D1668295333830%253Ahc%253D18&q=&sort=&dvid=web-4.1search&channel=instore"
     request_id = headless_browser_request_id()
     request_parameters["request-id"] = request_id
-    first_response = requests.get(url=url, params=request_parameters, headers=headers).json()["response"]
+    response = requests.get(url=url, params=request_parameters, headers=headers).json()
+    print(response)
+    first_response = response["response"]
+    print(first_response)
     num_found = first_response["numFound"]
     print(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
     info(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
