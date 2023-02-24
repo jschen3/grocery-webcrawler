@@ -1,7 +1,4 @@
-import json
 from datetime import date, datetime
-from json import JSONDecodeError
-
 import requests
 from grocerywebcrawler.models.safeway_item import SafewayItem, SafewayItemDBModel
 from grocerywebcrawler.headless_browser_util import headless_browser_request_id
@@ -38,6 +35,9 @@ def _safeway_items_from_json(json_doc: dict, store_id: str, date: date, area: st
 
 
 def get_all_safeway_items_from_store(storeid):
+    proxies = {
+        "https": "145.40.103.113:3128"
+    }
     print("Starting webcrawling.")
     info("Starting webcrawling.")
     request_parameters = {'request-id': '3621677258217438273', 'rows': '30',
@@ -55,7 +55,7 @@ def get_all_safeway_items_from_store(storeid):
     request_id = headless_browser_request_id()
     request_parameters["request-id"] = request_id["request-id"]
     headers["ocp-apim-subscription-key"] = request_id["ocp-apim-subscription-key"]
-    response = requests.get(url=url, params=request_parameters, headers=headers)
+    response = requests.get(url, proxies=proxies, params=request_parameters, headers=headers)
     response.raise_for_status()
     first_response = response.json()["response"]
     info(first_response)
@@ -78,12 +78,13 @@ def get_all_safeway_items_from_store(storeid):
     for i in range(0, num_found, 30):
         next_parameters["start"] = i
         try:
-            response = requests.get(url=url, params=next_parameters, headers=next_headers)
+            response = requests.get(url, proxies=proxies, params=next_parameters, headers=next_headers)
             if response.status_code == 204 or response.status_code == 429:
                 print(f"{response.reason}")
                 info(f"{response.reason}")
                 break
-            json_response = requests.get(url=url, params=next_parameters, headers=next_headers).json()["response"]
+            json_response = requests.get(url=url, proxies=proxies, params=next_parameters, headers=next_headers).json()[
+                "response"]
             counter = 0
             if json_response is not None:
                 docs = json_response["docs"]
