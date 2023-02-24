@@ -44,17 +44,20 @@ def get_all_safeway_items_from_store(storeid):
         "request-id": 2051668903794860761,
         "rows": 30,
         "start": 0,
-        "storeid": storeid
+        "storeid": storeid,
+        "url": "https: // www.safeway.com",
+        "pageurl": "https://www.safeway.com"
     }
 
     headers = {
         "Ocp-Apim-Subscription-Key": "e914eec9448c4d5eb672debf5011cf8f",
         "Accept": "application/json, text/plain, */*",
-        "User-Agent": "PostmanRuntime/7.28.4",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/110.0.5481.177 Safari/537.36",
         "Referer": "https://www.safeway.com/shop/deals/member-specials.html",
-        "Connection": "keep-alive"
+        "Connection": "keep-alive",
+        "sec-ch-ua": "", "sec-ch-ua-mobile": "?0", "sec-ch-ua-platform": ""
     }
-    url = "https://www.safeway.com/abs/pub/xapi/search/products?url=https://www.safeway.com&pageurl=https://www.safeway.com&pagename=search&search-type=keyword&search-uid=&q=&sort=&dvid=web-4.1search&channel=instore"
+    url = "https://www.safeway.com/abs/pub/xapi/search/products?request-id=9451677257385312366&url=https://www.safeway.com&pageurl=https://www.safeway.com&pagename=search&rows=30&start=0&search-type=keyword&storeid=3132&featured=false&search-uid=&q=&sort=&userid=&featuredsessionid=&screenwidth=800,600&dvid=web-4.1search&channel=instore&banner=safeway&fq=promoType:%22P%22&fq=instoreInventory:%221%22"
     request_id = headless_browser_request_id()
     request_parameters["request-id"] = request_id["request-id"]
     headers["ocp-apim-subscription-key"] = request_id["ocp-apim-subscription-key"]

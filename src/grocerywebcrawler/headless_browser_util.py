@@ -49,6 +49,7 @@ def _get_request_id(search_requests):
         parsed_url = urlparse(url)
         query_params = parse_qs(parsed_url.query)
         request_id = query_params["request-id"][0]
+        print(query_params)
     return {
         "request-id": request_id,
         "ocp-apim-subscription-key": ocp_key}
