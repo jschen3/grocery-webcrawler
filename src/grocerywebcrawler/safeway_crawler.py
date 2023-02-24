@@ -1,4 +1,6 @@
+import json
 from datetime import date, datetime
+from json import JSONDecodeError
 
 import requests
 from grocerywebcrawler.models.safeway_item import SafewayItem, SafewayItemDBModel
@@ -46,16 +48,20 @@ def get_all_safeway_items_from_store(storeid):
     }
 
     headers = {
-        "ocp-apim-subscription-key": "e914eec9448c4d5eb672debf5011cf8f"
+        "ocp-apim-subscription-key": "e914eec9448c4d5eb672debf5011cf8f",
+        "Accept": "application/json",
+        "Content-type": "application/json"
     }
     url = "https://www.safeway.com/abs/pub/xapi/search/products?url=https://www.safeway.com&pageurl=https://www.safeway" \
           ".com&pagename=search&search-type=keyword&search-uid=uid%253D5224296067385%253Av%253D12.0%253Ats" \
-          "%253D1668295333830%253Ahc%253D18&q=&sort=&dvid=web-4.1search&channel=instore"
+          "%253D1668295333830%253Ahc%253D18&q=&dvid=web-4.1search&channel=instore"
     request_id = headless_browser_request_id()
     request_parameters["request-id"] = request_id
+
     response = requests.get(url=url, params=request_parameters, headers=headers).json()
     print(response)
     first_response = response["response"]
+
     print(first_response)
     num_found = first_response["numFound"]
     print(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
