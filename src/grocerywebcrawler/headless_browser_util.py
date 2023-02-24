@@ -68,7 +68,7 @@ def headless_browser_request_id()->dict:
         logs = driver.get_log("performance")
         search_requests = _get_search_requests(logs)
         request_id = _get_request_id(search_requests)
-        sleep(5)
+        sleep(3)
         driver.quit()
         print(f"Safeway request id obtained. request_id: {request_id}")
         return request_id
