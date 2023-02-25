@@ -105,7 +105,7 @@ def createPriceChangeObjects():
     intId = db.query(OperationDbModel).count()
     countToday = db.query(OperationDbModel).filter(OperationDbModel.date >= date.today()).count()
     operations_record = OperationDbModel(id=f"price_change_analysis_{datetime.today()}",
-                                         operationName="price_change_analysis", date=date.today(),
+                                         operationName="price_change_analysis", date=date.now(),
                                          totalItems=count, newItems=0, prevItemCount=count, status="Started",
                                          countToday=countToday + 1, intId=intId + 1)
     db.add(operations_record)
@@ -126,7 +126,7 @@ def createPriceChangeObjects():
     newIntId = db.query(OperationDbModel).count()
     newCountToday = db.query(OperationDbModel).filter(OperationDbModel.date >= date.today()).count()
     new_operations_record = OperationDbModel(id=f"price_change_analysis_{datetime.today()}",
-                                             operationName="price_change_analysis", date=date.today(),
+                                             operationName="price_change_analysis", date=date.now(),
                                              totalItems=newCount,
                                              newItems=newCount - original_number_of_price_change_objects,
                                              prevItemCount=original_number_of_price_change_objects, status="Finished",

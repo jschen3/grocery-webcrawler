@@ -52,7 +52,7 @@ def get_all_safeway_items_from_store(storeid):
     record_count = session.query(OperationDbModel).count()
     countToday = session.query(OperationDbModel).filter(OperationDbModel.date >= date.today()).count()
     operationsRecord = OperationDbModel(id=f"webcrawl_{datetime.today()}_{storeid}",
-                                        operationName="webcrawl", date=date.today(), totalItems=current_count,
+                                        operationName="webcrawl", date=date.now(), totalItems=current_count,
                                         newItems=0, prevItemCount=current_count, intId=record_count + 1,
                                         storeId=storeid, status="Started", countToday=countToday + 1)
     session.add(operationsRecord)
@@ -112,7 +112,7 @@ def get_all_safeway_items_from_store(storeid):
     newIntId = session.query(OperationDbModel).count()
     new_count = session.query(SafewayItemDBModel).count()
     finishedOperationRecord = OperationDbModel(id=f"webcrawl_{datetime.today()}_{storeid}",
-                                               operationName="webcrawl", date=date.today(),
+                                               operationName="webcrawl", date=date.now(),
                                                newItems=new_count - current_count, prevItemCount=current_count,
                                                totalItems=new_count,
                                                storeId=storeid, status="Finished", countToday=newCountToday + 1,
