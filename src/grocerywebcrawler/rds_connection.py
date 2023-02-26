@@ -48,7 +48,7 @@ def create_rds_engine():
     AWS_RDS_PASSWORD = os.getenv('AWS_RDS_PASSWORD')
     if AWS_RDS_PASSWORD is None:
         AWS_RDS_PASSWORD = os.getenv('AWS_RDS_PASSWORD')
-    engine_url = f"postgresql://postgres:{AWS_RDS_PASSWORD}@{AWS_RDS_PATH}:{AWS_RDS_PORT}/{AWS_RDS_DATABASE_NAME}"
+    engine_url = f"postgresql://postgres:{AWS_RDS_PASSWORD}@{AWS_RDS_PATH}:8886/{AWS_RDS_DATABASE_NAME}"
     # print("engine_url:" + engine_url)
     engine = create_engine(engine_url, pool_size=20, pool_pre_ping=True, pool_recycle=600, max_overflow=0)
     return engine
