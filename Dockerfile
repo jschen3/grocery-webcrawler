@@ -14,7 +14,7 @@ RUN apt-get install -y gnupg wget curl unzip --no-install-recommends && \
     wget -q --continue -P /chromedriver "http://chromedriver.storage.googleapis.com/$DRIVERVER/chromedriver_linux64.zip" && \
     unzip /chromedriver/chromedriver* -d /chromedriver
 COPY ./requirements.txt /code/requirements.txt
-
+COPY .env /code/.env
 RUN python3 -m venv venv
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
@@ -35,6 +35,7 @@ EXPOSE 80
 WORKDIR /cronjob
 COPY ./src /cronjob
 COPY ./requirements.txt /cronjob
+COPY .env /cronjob/.env
 WORKDIR /code
 
 ADD supervisor.conf /etc/supervisor.conf
