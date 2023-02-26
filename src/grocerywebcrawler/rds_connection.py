@@ -39,9 +39,6 @@ def create_rds_engine():
     AWS_RDS_PATH = os.getenv('AWS_RDS_PATH')
     if AWS_RDS_PATH is None:
         AWS_RDS_PATH = os.environ.get('AWS_RDS_PATH')
-    AWS_RDS_PORT = int(os.getenv('AWS_RDS_PORT'))
-    if AWS_RDS_PORT is None:
-        AWS_RDS_PORT = os.environ.get('AWS_RDS_PORT')
     AWS_RDS_DATABASE_NAME = os.getenv('AWS_RDS_DATABASE_NAME')
     if AWS_RDS_DATABASE_NAME is None:
         AWS_RDS_DATABASE_NAME = os.environ.get('AWS_RDS_DATABASE_NAME')
