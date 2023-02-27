@@ -19,6 +19,8 @@ from webserver.models.store import StoreDbModel, Store
 
 from webserver.models.price_change_object import PriceChangeDBModel
 
+from util.logging import info
+
 app = FastAPI()
 
 origins = [
@@ -49,6 +51,7 @@ async def root():
 
 @app.get("/regions")
 async def get_regions():
+    info("testing logging quickly inside docker")
     return {"regions": ["bay-area"]}  # later when more regions are available update
 
 

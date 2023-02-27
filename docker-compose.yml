@@ -8,5 +8,12 @@ services:
         - .env
       ports:
         - "80:80"
-
+#      logging:
+#        driver: "awslogs"
+#        options:
+#          awslogs-region: "us-west-2"
+#          awslogs-group: "log-group"
+#          awslogs-stream: "log-stream"
+      volumes:
+        - /var/log
 

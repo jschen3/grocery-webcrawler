@@ -12,7 +12,7 @@ LOGGING_SETTINGS = {
         "applog": {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": "/opt/python/log/app.log",
+            "filename": "var/log/app.log",
             "formatter": "verbose",
             "mode": "a+"
         }
@@ -24,14 +24,14 @@ LOGGING_SETTINGS = {
 
 
 def info(message: str):
-    os.makedirs(os.path.dirname("/opt/python/log/app.log"), exist_ok=True)
+    os.makedirs(os.path.dirname("var/log/app.log"), exist_ok=True)
     logging.config.dictConfig(LOGGING_SETTINGS)
     logger = logging.getLogger(__name__)
     logger.info(message)
 
 
 def debug(message: str):
-    os.makedirs(os.path.dirname("/opt/python/log/app.log"), exist_ok=True)
+    os.makedirs(os.path.dirname("var/log/app.log"), exist_ok=True)
     logging.config.dictConfig(LOGGING_SETTINGS)
     logger = logging.getLogger(__name__)
     logger.info(message)
