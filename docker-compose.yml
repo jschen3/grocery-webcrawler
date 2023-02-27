@@ -15,5 +15,5 @@ services:
 #          awslogs-group: "log-group"
 #          awslogs-stream: "log-stream"
       volumes:
-        - /var/log
+        - /var/log:/var/log
 
