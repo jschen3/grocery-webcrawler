@@ -35,6 +35,7 @@ COPY ./grocerywebcrawler.sh /code
 COPY ./increment_counter.sh /code
 RUN chmod +x /code/grocerywebcrawler.sh
 RUN chmod +x /code/increment_counter.sh
+RUN crontab /code/mycrontab
 
 
 ### UI

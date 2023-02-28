@@ -15,6 +15,4 @@ services:
 #          awslogs-region: "us-west-2"
 #          awslogs-group: "log-group"
 #          awslogs-stream: "log-stream"
-      volumes:
-        - /var/log:/var/log
 
