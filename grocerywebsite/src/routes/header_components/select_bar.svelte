@@ -14,7 +14,7 @@
         if (inputValueText && inputValueText.length>3){
             let storeItems;
             //console.log("store items starting async method")
-            const response = await axios.get("http://localhost:5000/items/2948?q="+inputValueText);
+            const response = await axios.get("https://grocerymarketwatch.com:5000/items/2948?q="+inputValueText);
             const data = await response.data;
             //console.log(data);
             storeItems = data;
