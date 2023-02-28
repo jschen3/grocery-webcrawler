@@ -190,8 +190,11 @@ async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days
 
 
 @app.get("/operations")
-def getOperations(db: Session = Depends(get_db)):
-    return db.query(OperationDbModel).order_by(OperationDbModel.date.desc()).all()
+def getOperations(operation: str = "webcrawl", status: str = "finished", db: Session = Depends(get_db)):
+    return db.query(OperationDbModel).filter(
+        and_(OperationDbModel.status == status.lower(),
+             OperationDbModel.operationName == operation.lower())).order_by(
+        OperationDbModel.date.desc()).all()
 
 
 @app.get("/counter")
