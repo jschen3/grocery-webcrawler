@@ -58,7 +58,8 @@ flower
 jinja2
 more_itertools
 slack_sdk
-beautifulsoup4==4.11.1
+beautifulsoup4
+html5lib
 selenium==4.6.1
 webdriver-manager==3.8.5
 amazon-dax-client>=1.1.7

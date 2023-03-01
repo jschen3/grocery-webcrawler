@@ -5,6 +5,7 @@ from grocerywebcrawler.models.safeway_item import SafewayItem, SafewayItemDBMode
 from grocerywebcrawler.headless_browser_util import headless_browser_request_id
 
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
+from grocerywebcrawler.proxy_util import ProxyUtil
 from grocerywebcrawler.rds_connection import RDSConnection
 from util.logging import info
 from webserver.models.operation_db_model import OperationDbModel
@@ -124,18 +125,6 @@ def get_all_safeway_items_from_store(storeid):
 
 
 def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: int):
-    proxies = [{"https": "104.223.135.178:10000"},
-               {"https": "169.55.89.6:8123"},
-               {"https": "198.211.27.215:3128"},
-               {"https": "150.136.136.248:8181"},
-               {"https": "5.78.50.231:8888"},
-               {"https": "147.28.182.125:3128"},
-               {"https": "159.89.53.247:443"},
-               {"https": "145.40.103.113:3128"},
-               {"https": "20.241.236.196:3128"}]
-    better_proxies = [{
-        "https": "145.40.103.113:3128"}
-    ]
     request_parameters = {'request-id': '3621677258217438273', 'rows': '30',
                           'start': '0', 'storeid': '2948'}
     headers = {
@@ -151,29 +140,44 @@ def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: in
     request_parameters["storeid"] = storeId
     request_parameters["start"] = start
     headers["Ocp-Apim-Subscription-Key"] = prevOcpKey
-    proxy = random.choice(better_proxies)
+    #proxy = ProxyUtil.getProxy()
     attempts = 0
     while attempts < 10:
         try:
-            print(proxy)
-            response = requests.get(url, proxies=proxy, params=request_parameters, headers=headers, timeout=5)
+            # print(proxy)
+            response = make_http_request(url=url, params=request_parameters, headers=headers, use_proxy=True)
             status = response.status_code
             if status == 200:
                 return response.json()["response"]
             else:
+                # proxy = ProxyUtil.getProxy()
                 request_ids = headless_browser_request_id()
                 headers["Ocp-Apim-Subscription-Key"] = request_ids["ocp-apim-subscription-key"]
                 request_parameters["request_id"] = request_ids["request-id"]
-                proxy = random.choice(proxies)
                 attempts += 1
         except Exception as e:
-            print(e)
-            print(proxy)
+            #print(e)
+            # print(proxy)
             attempts += 1
             request_ids = headless_browser_request_id()
             headers["Ocp-Apim-Subscription-Key"] = request_ids["ocp-apim-subscription-key"]
             request_parameters["request_id"] = request_ids["request-id"]
-            proxy = random.choice(proxies)
+            # proxy = ProxyUtil.getProxy()
             continue
     print(f"Unable to successively retrieve items from store. at start {start} storeid: {storeId}")
     raise Exception(f"Unable to successively retrieve items from store. at start {start} storeid: {storeId}")
+
+
+def make_http_request(url, params, headers, use_proxy: bool):
+    if use_proxy:
+        proxy = ProxyUtil.getProxy()
+        print(f"proxy: {proxy}")
+        try:
+            response = requests.get(url, proxies=proxy, params=params, headers=headers, timeout=5)
+        except Exception as e:
+            ProxyUtil.increment(proxy["https"])
+            print(e)
+            raise Exception
+        return response
+    else:
+        return requests.get(url, params=params, headers=headers, timeout=5)

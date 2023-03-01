@@ -15,7 +15,7 @@ class OperationDbModel(Base):
     prevItemCount = Column(Integer)
     storeId = Column(String, index=True)
     status = Column(String, index=True)
+    itemsCrawled = Column(Integer)
 
     def toString(self):
         return f"Operations Record: id:{self.id} totalItems: {self.totalItems} newItems: {self.newItems} prevItemCount: {self.prevItemCount} status: {self.status} intId: {self.intId} countToday: {self.countToday}"
-
