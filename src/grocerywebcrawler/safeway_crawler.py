@@ -117,7 +117,7 @@ def get_all_safeway_items_from_store(storeid):
                                                newItems=new_count - current_count, prevItemCount=current_count,
                                                totalItems=new_count,
                                                storeId=storeid, status="Finished", countToday=newCountToday + 1,
-                                               intId=newIntId + 1)
+                                               intId=newIntId + 1, itemsCrawled=i)
     session.add(finishedOperationRecord)
     session.commit()
     print(
@@ -140,7 +140,7 @@ def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: in
     request_parameters["storeid"] = storeId
     request_parameters["start"] = start
     headers["Ocp-Apim-Subscription-Key"] = prevOcpKey
-    #proxy = ProxyUtil.getProxy()
+    # proxy = ProxyUtil.getProxy()
     attempts = 0
     while attempts < 10:
         try:
@@ -156,7 +156,7 @@ def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: in
                 request_parameters["request_id"] = request_ids["request-id"]
                 attempts += 1
         except Exception as e:
-            #print(e)
+            # print(e)
             # print(proxy)
             attempts += 1
             request_ids = headless_browser_request_id()
