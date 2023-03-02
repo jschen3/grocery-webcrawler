@@ -1,4 +1,4 @@
 * * * * * echo "Hello world" >> /var/log/cron.log 2>&1
 */10 * * * * /code/increment_counter.sh >> /var/log/cron.log 2>&1
-0 */4 * * * /code/grocerywebcrawler.sh >> /var/log/cron.log 2>&1
+0 */3 * * * /code/grocerywebcrawler.sh >> /var/log/cron.log 2>&1
 0 */8 * * * /code/price_calculate.sh >> /var/log/cron.log 2>&1
