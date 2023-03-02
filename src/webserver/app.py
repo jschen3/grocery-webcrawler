@@ -1,6 +1,7 @@
 import io
 import json
-
+import pytz  # $ pip install pytz
+import tzlocal  # $ pip install tzlocal
 import pandas
 from datetime import datetime, timedelta, date
 
@@ -192,9 +193,15 @@ async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days
 @app.get("/operations")
 def getOperations(operation: str = "webcrawl", status: str = "finished", db: Session = Depends(get_db)):
     return db.query(OperationDbModel).filter(
-        OperationDbModel.operationName == operation.lower()).order_by(
-            OperationDbModel.intId.desc()).all()
+        and_(OperationDbModel.operationName == operation.lower(), OperationDbModel.status == status)).order_by(
+        OperationDbModel.intId.desc()).all()
+
 
 @app.get("/counter")
 def getCounter(db: Session = Depends(get_db)):
-    return db.query(Counter).all()
+    count: list[Counter] = db.query(Counter).all()
+    utc_date = count[0].date
+    local_timezone = tzlocal.get_localzone()  # get pytz tzinfo
+    local_time = utc_date.replace(tzinfo=pytz.utc).astimezone(local_timezone)
+    count[0].date = local_time
+    return count

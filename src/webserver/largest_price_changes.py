@@ -106,7 +106,7 @@ def createPriceChangeObjects():
     countToday = db.query(OperationDbModel).filter(OperationDbModel.date >= date.today()).count()
     operations_record = OperationDbModel(id=f"price_change_analysis_{datetime.today()}",
                                          operationName="price_change_analysis", date=datetime.now(),
-                                         totalItems=count, newItems=0, prevItemCount=count, status="Started",
+                                         totalItems=count, newItems=0, prevItemCount=count, status="started",
                                          countToday=countToday + 1, intId=intId + 1)
     db.add(operations_record)
     db.commit()
@@ -129,7 +129,7 @@ def createPriceChangeObjects():
                                              operationName="price_change_analysis", date=datetime.now(),
                                              totalItems=newCount,
                                              newItems=newCount - original_number_of_price_change_objects,
-                                             prevItemCount=original_number_of_price_change_objects, status="Finished",
+                                             prevItemCount=original_number_of_price_change_objects, status="finished",
                                              countToday=newCountToday + 1, intId=newIntId + 1)
     db.add(new_operations_record)
     db.commit()

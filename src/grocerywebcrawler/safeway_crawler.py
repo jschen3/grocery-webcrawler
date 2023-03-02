@@ -7,7 +7,6 @@ from grocerywebcrawler.headless_browser_util import headless_browser_request_id
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
 from grocerywebcrawler.proxy_util import ProxyUtil
 from grocerywebcrawler.rds_connection import RDSConnection
-from util.logging import info
 from webserver.models.operation_db_model import OperationDbModel
 
 
@@ -38,16 +37,13 @@ def _safeway_items_from_json(json_doc: dict, store_id: str, date: date, area: st
 
 def get_all_safeway_items_from_store(storeid):
     print("Starting webcrawling.")
-    info("Starting webcrawling.")
     request_id = headless_browser_request_id()
     prevRequestId = request_id["request-id"]
     prevOcpKey = request_id["ocp-apim-subscription-key"]
     response = makeRestRequest(prevRequestId, prevOcpKey, 0, storeid)
-    info(response)
     print(response)
     num_found = response["numFound"]
-    print(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
-    info(f"Initial request performed. Total number of items at store: {storeid} num_found: {num_found}")
+    print(f"Initial request performed. Total number of items at store: {num_found}  storeid: {storeid}")
     session = RDSConnection.get_normal_session()
     current_count = session.query(SafewayItemDBModel).count()
     record_count = session.query(OperationDbModel).count()
@@ -55,7 +51,7 @@ def get_all_safeway_items_from_store(storeid):
     operationsRecord = OperationDbModel(id=f"webcrawl_{datetime.today()}_{storeid}",
                                         operationName="webcrawl", date=datetime.now(), totalItems=current_count,
                                         newItems=0, prevItemCount=current_count, intId=record_count + 1,
-                                        storeId=storeid, status="Started", countToday=countToday + 1)
+                                        storeId=storeid, status="started", countToday=countToday + 1)
     session.add(operationsRecord)
     session.commit()
     try:
@@ -91,9 +87,7 @@ def get_all_safeway_items_from_store(storeid):
                                 raise
                     except Exception as e:
                         print(e)
-                        info(e)
                         print(f"unable to process json_doc:{json_doc[1]}")
-                        info(f"unable to process json_doc:{json_doc[1]}")
                         continue
             session.commit()
             # if i % 300 == 0:
@@ -103,12 +97,10 @@ def get_all_safeway_items_from_store(storeid):
             #     })
             #     session.commit()
             print(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
-            info(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
             # sleep(0.25)
     except Exception:
         print("loop failed unable to go through all items")
     print(f"finished items at store: {storeid}")
-    info(f"finished items at store: {storeid}")
     newCountToday = session.query(OperationDbModel).filter(OperationDbModel.date >= date.today()).count()
     newIntId = session.query(OperationDbModel).count()
     new_count = session.query(SafewayItemDBModel).count()
@@ -116,12 +108,12 @@ def get_all_safeway_items_from_store(storeid):
                                                operationName="webcrawl", date=datetime.now(),
                                                newItems=new_count - current_count, prevItemCount=current_count,
                                                totalItems=new_count,
-                                               storeId=storeid, status="Finished", countToday=newCountToday + 1,
+                                               storeId=storeid, status="finished", countToday=newCountToday + 1,
                                                intId=newIntId + 1, itemsCrawled=i)
     session.add(finishedOperationRecord)
     session.commit()
     print(
-        f"new items for store {storeid} | original count: {current_count} | new count: {new_count - current_count} | total count: {new_count}")
+        f"webcrawled store {storeid} | original count: {current_count} | new count: {new_count - current_count} | total count: {new_count} items_crawled: {i}")
 
 
 def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: int):
@@ -142,7 +134,7 @@ def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: in
     headers["Ocp-Apim-Subscription-Key"] = prevOcpKey
     # proxy = ProxyUtil.getProxy()
     attempts = 0
-    while attempts < 10:
+    while attempts < 20:
         try:
             # print(proxy)
             response = make_http_request(url=url, params=request_parameters, headers=headers, use_proxy=True)
