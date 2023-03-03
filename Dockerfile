@@ -17,7 +17,8 @@ WORKDIR /cronjob
 COPY ./src /cronjob
 COPY ./requirements.txt /cronjob
 COPY .env /cronjob/.env
-RUN touch /var/log/cron.log
+RUN touch /var/log/webcrawl.log
+RUN touch /var/log/pricecalculate.log
 
 ### Uvicorn Server
 WORKDIR /code
