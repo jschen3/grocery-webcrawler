@@ -1,6 +1,7 @@
 <script>
     
     import {itemData} from './store.js';
+    import Safeway_Icon from "$lib/images/safeway-icon.png";
     import Buy_Icon from "$lib/images/buy-icon.png";
 
     function percentText(percent){
@@ -21,11 +22,15 @@
     function addDollarSign(num){
         return "$"+num.toFixed(2);
     }
+
+    function capitalize(input){
+        return input.charAt(0).toUpperCase() + input.slice(1)
+    }    
 </script>
 {#if $itemData!= undefined}
     <h2 class="text-white item-name-header"><strong>Item Name: </strong> {$itemData.name}</h2>
     <div class="row store-info">
-        <div class="col-sm text-white"><strong>Store Name: </strong>{$itemData.storeType} </div>
+        <div class="col-sm text-white"><strong>Store Name: </strong><img src={Safeway_Icon} alt="safeway icon"/>{capitalize($itemData.storeType)} </div>
         <div class="col-sm text-white"><strong>Location:</strong> {$itemData.storeLocation} </div>
     </div>
     <div class="row store-info">
