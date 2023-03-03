@@ -15,7 +15,7 @@ RUN apt-get install -y gnupg wget curl unzip --no-install-recommends && \
 
 WORKDIR /cronjob
 COPY ./src /cronjob
-COPY ./requirements.txt /cronjob
+COPY ./requirements.txt /cronjob/requirements.txt
 COPY .env /cronjob/.env
 RUN touch /var/log/webcrawl.log
 RUN touch /var/log/pricecalculate.log
@@ -45,18 +45,16 @@ RUN crontab /code/mycrontab
 RUN mkdir -p /etc/supervisor/conf.d
 RUN curl -fsSL https://deb.nodesource.com/setup_19.x | bash - &&\
 apt-get install -y nodejs
-RUN node -v
-RUN npm -v
 WORKDIR /frontend
-ADD ./grocerywebsite/package.json /frontend/package.json
-ADD ./grocerywebsite/package-lock.json /frontend/package-lock.json
-ADD ./grocerywebsite/playwright.config.ts /frontend/playwright.config.ts
-ADD ./grocerywebsite/svelte.config.js /frontend/svelte.config.js
-ADD ./grocerywebsite/tsconfig.json /frontend/tsconfig.json
-ADD ./grocerywebsite/vite.config.js /frontend/vite.config.js
-ADD ./grocerywebsite/src /frontend/src
-ADD ./grocerywebsite/static /frontend/static
-ADD ./grocerywebsite/tests /frontend/tests
+COPY ./grocerywebsite/package.json /frontend/package.json
+COPY ./grocerywebsite/package-lock.json /frontend/package-lock.json
+COPY ./grocerywebsite/playwright.config.ts /frontend/playwright.config.ts
+COPY ./grocerywebsite/svelte.config.js /frontend/svelte.config.js
+COPY ./grocerywebsite/tsconfig.json /frontend/tsconfig.json
+COPY ./grocerywebsite/vite.config.js /frontend/vite.config.js
+COPY ./grocerywebsite/src /frontend/src
+COPY ./grocerywebsite/static /frontend/static
+COPY ./grocerywebsite/tests /frontend/tests
 RUN npm --prefix /frontend install
 RUN npm --prefix /frontend run build
 EXPOSE 80
@@ -65,5 +63,5 @@ WORKDIR /code
 
 ### Supervisor
 
-ADD supervisor.conf /etc/supervisor.conf
+COPY supervisor.conf /etc/supervisor.conf
 CMD ["supervisord", "-c", "/etc/supervisor.conf"]
