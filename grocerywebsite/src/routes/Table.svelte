@@ -23,9 +23,12 @@
     }
 </script>
 {#if $itemData!= undefined}
-    <h2 class="text-white"><strong>Item Name: </strong> {$itemData.name}</h2>
-    <p class="text-white"><strong>UPC: </strong> {$itemData.upc}</p>
-    <p class="text-white"><strong>Go to safeway item: </strong><a href="https://www.safeway.com/shop/search-results.html?q={$itemData.name}">https://www.safeway.com/shop/search-results.html?q={$itemData.name}</a></p>
+    <h2 class="text-white item-name-header"><strong>Item Name: </strong> {$itemData.name}</h2>
+    <div class="row store-info">
+        <div class="col-sm text-white"><strong>Store Name: </strong>{$itemData.storeType} </div>
+        <div class="col-sm text-white"><strong>Location:</strong>  </div>
+    </div>
+    <p class="text-white go-to-safeway-link"><strong>Go to item: </strong><a href="https://www.safeway.com/shop/search-results.html?q={$itemData.name}">https://www.safeway.com/shop/search-results.html?q={$itemData.name}</a></p>
     <div class="table-div bg-secondary">
         <div class="row">
             <div class="col-sm"><h2>Prices</h2></div>
@@ -67,5 +70,14 @@
     .table-div{
         border-radius: 5px;
         padding-inline: 10px;
+    }
+    .go-to-safeway-link{
+        padding-top:10px
+    }
+    .store-info{
+        padding-top:10px
+    }
+    .item-name-header{
+        padding-top: 5px;
     }
 </style>
