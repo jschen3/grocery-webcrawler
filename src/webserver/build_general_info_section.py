@@ -10,7 +10,7 @@ from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
 from grocerywebcrawler.models.safeway_item import SafewayItemDBModel, SafewayItem
 from grocerywebcrawler.rds_connection import RDSConnection
 from webserver.models.item_general_information import ItemGeneralInformation
-from webserver.models.store import Store, StoreDbModel
+from webserver.models.store import StoreDbModel
 
 
 def fillOut5ItemsInCategory(currentItemGeneralInformation, storeId, db):
@@ -37,7 +37,8 @@ def fillOutGeneralInformation(itemGeneralInformation, storeId, upc, db):
     todays_info: SafewayItemDBModel = db.query(SafewayItemDBModel).where(
         and_(SafewayItemDBModel.upc == upc, SafewayItemDBModel.storeId == storeId)).order_by(
         SafewayItemDBModel.date.desc()).all()[0]
-    storeInfo:StoreDbModel = db.query(StoreDbModel).where(StoreDbModel.storeId == storeId).one()
+    storeInfo: StoreDbModel = db.query(StoreDbModel).where(StoreDbModel.storeId == storeId).one()
+
     itemGeneralInformation.name = todays_info.name
     itemGeneralInformation.upc = todays_info.upc
     itemGeneralInformation.price = todays_info.price
@@ -47,7 +48,7 @@ def fillOutGeneralInformation(itemGeneralInformation, storeId, upc, db):
     itemGeneralInformation.storeLocation = storeInfo.location  # get from store table
     itemGeneralInformation.storeType = storeInfo.storeType
     itemGeneralInformation.category = todays_info.departmentName
-    itemGeneralInformation.date = todays_info.date
+    itemGeneralInformation.date = todays_info.date.strftime("%B %d, %Y")
 
 
 def build_general_information(upc, storeId, db):
@@ -73,6 +74,7 @@ def build_general_information(upc, storeId, db):
         itemGeneralInformation.percentPriceChangeForAllRecords = float('{:0.2f}'.format((
                                                                                                 itemGeneralInformation.priceChangeForAllRecords / itemGeneralInformation.earliestPrice) * 100))
 
+        itemGeneralInformation.lastUpdatedDate = datetime.strptime(thirtyDayPriceChangeObject["latestDate"], "%Y-%m-%d").strftime("%B %d, %Y")
     fillOutGeneralInformation(itemGeneralInformation, storeId, upc, db=db)
     fillOut5ItemsInCategory(currentItemGeneralInformation=itemGeneralInformation, storeId=storeId, db=db)
     # print(itemGeneralInformation.__dict__)
@@ -130,7 +132,8 @@ def calculatePriceChangeDays(dataFrameJsonObject: list[SafewayItemDBModel], star
         "firstPrice": first.price,
         "lastPrice": last.price,
         "priceChange": priceChange,
-        "percentPriceChange": percentPriceChange
+        "percentPriceChange": percentPriceChange,
+        "latestDate": dataFrameJsonObject[len(dataFrameJsonObject)-1]["date"]
     }
 
 

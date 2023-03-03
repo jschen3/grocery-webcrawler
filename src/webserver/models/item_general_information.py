@@ -29,6 +29,7 @@ class ItemGeneralInformation:
     lowestPriceAtLocalStores: Optional[str]
     highestPriceAtLocalStores: Optional[str]
     earliestDatePriceAvailable: Optional[str]
+    lastUpdatedDate: Optional[date]
 
     def dict(self):
         return {
@@ -54,7 +55,8 @@ class ItemGeneralInformation:
             "priceOfAllSimilarName": self.priceOfAllSimilarName,
             "lowestPriceAtLocalStores": self.lowestPriceAtLocalStores,
             "highestPriceAtLocalStores": self.highestPriceAtLocalStores,
-            "earliestDatePriceAvailable": self.earliestDatePriceAvailable
+            "earliestDatePriceAvailable": self.earliestDatePriceAvailable,
+            "lastUpdatedDate": self.lastUpdatedDate
         }
 # think about name
 

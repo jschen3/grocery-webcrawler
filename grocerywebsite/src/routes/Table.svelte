@@ -28,6 +28,10 @@
         <div class="col-sm text-white"><strong>Store Name: </strong>{$itemData.storeType} </div>
         <div class="col-sm text-white"><strong>Location:</strong> {$itemData.storeLocation} </div>
     </div>
+    <div class="row store-info">
+        <div class="col-sm text-white"><strong>Last Updated Date: </strong>{$itemData.lastUpdatedDate} </div>
+        <div class="col-sm text-white"><strong>Current Date:</strong> {$itemData.date} </div>
+    </div>
     <p class="text-white go-to-safeway-link"><strong>Go to item: </strong><a href="https://www.safeway.com/shop/search-results.html?q={$itemData.name}">https://www.safeway.com/shop/search-results.html?q={$itemData.name}</a></p>
     <div class="table-div bg-secondary">
         <div class="row">
