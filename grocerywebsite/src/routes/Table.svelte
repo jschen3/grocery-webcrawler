@@ -26,7 +26,7 @@
     <h2 class="text-white item-name-header"><strong>Item Name: </strong> {$itemData.name}</h2>
     <div class="row store-info">
         <div class="col-sm text-white"><strong>Store Name: </strong>{$itemData.storeType} </div>
-        <div class="col-sm text-white"><strong>Location:</strong>  </div>
+        <div class="col-sm text-white"><strong>Location:</strong> {$itemData.storeLocation} </div>
     </div>
     <p class="text-white go-to-safeway-link"><strong>Go to item: </strong><a href="https://www.safeway.com/shop/search-results.html?q={$itemData.name}">https://www.safeway.com/shop/search-results.html?q={$itemData.name}</a></p>
     <div class="table-div bg-secondary">
