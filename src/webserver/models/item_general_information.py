@@ -10,6 +10,7 @@ class ItemGeneralInformation:
     basePrice: Optional[str]
     pricePer: Optional[str]
     storeId: Optional[str]
+    storeType: Optional[str]
     storeLocation: Optional[str]
     price7DaysAgo: Optional[float]
     priceChangeLast7Days: Optional[float]
@@ -38,6 +39,7 @@ class ItemGeneralInformation:
             "pricePer": self.pricePer,
             "storeId": self.storeId,
             "storeLocation": self.storeLocation,
+            "storeType": self.storeType,
             "priceChangeLast7Days": self.priceChangeLast7Days,
             "percentPriceChange7Days": self.priceChangeLast7Days,
             "priceChangeLast30Days": self.priceChangeLast30days,
