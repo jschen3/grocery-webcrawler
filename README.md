@@ -23,3 +23,6 @@ Svelte UI where you can search and receive a graph of the price changes of an it
 ### grocerywebsite
 1. npm install
 2. npm run dev
+
+## More Detailed FAQ
+https://docs.google.com/document/d/1lk6KaXkdY_-acrKYbjEW9h_ECPEg7JN7C1RDlYvtrX4/edit?usp=sharing
