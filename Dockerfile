@@ -19,6 +19,7 @@ COPY ./requirements.txt /cronjob/requirements.txt
 COPY .env /cronjob/.env
 RUN touch /var/log/webcrawl.log
 RUN touch /var/log/pricecalculate.log
+RUN touch /var/log/cron.log
 
 ### Uvicorn Server
 WORKDIR /code
