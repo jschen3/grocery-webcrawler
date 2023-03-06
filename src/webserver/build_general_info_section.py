@@ -48,7 +48,7 @@ def fillOutGeneralInformation(itemGeneralInformation, storeId, upc, db):
     itemGeneralInformation.storeLocation = storeInfo.location  # get from store table
     itemGeneralInformation.storeType = storeInfo.storeType
     itemGeneralInformation.category = todays_info.departmentName
-    itemGeneralInformation.date = todays_info.date.strftime("%B %d, %Y")
+    itemGeneralInformation.date = datetime.today().strftime("%B %d, %Y")
 
 
 def build_general_information(upc, storeId, db):
