@@ -10,12 +10,13 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, asc
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
-from grocerywebcrawler.models.safeway_item import SafewayItemDBModel
+from grocerywebcrawler.models.safeway_item import SafewayItemDBModel, SafewayItem
 from fastapi.middleware.cors import CORSMiddleware
 from grocerywebcrawler.rds_connection import RDSConnection
 from webserver.build_general_info_section import build_general_information
 from counter import Counter
 from webserver.models.operation_db_model import OperationDbModel
+from webserver.models.price_change_row import PriceChangeRow
 from webserver.models.store import StoreDbModel, Store
 
 from webserver.models.price_change_object import PriceChangeDBModel
@@ -65,24 +66,24 @@ async def getStoreFromRegion(region: str, db: Session = Depends(get_db)) -> list
     return stores
 
 
-@app.get("/items/{store}")
-async def getItemsFromStore(store: str, q: str, limit: int = 30, db: Session = Depends(get_db)):
+@app.get("/items/{storeId}")
+async def getItemsFromStore(storeId: str, q: str, limit: int = 30, db: Session = Depends(get_db)):
     split_q = q.split(" ")
     like_phrase = f"%{'%'.join(split_q)}%"
     safeway_items_from_query: list[DistinctSafewayItem] = db.query(DistinctSafewayItem.name, DistinctSafewayItem.upc,
                                                                    DistinctSafewayItem.storeId).filter(and_(
-        DistinctSafewayItem.storeId == store,
+        DistinctSafewayItem.storeId == storeId,
         func.lower(DistinctSafewayItem.name).like(func.lower(like_phrase)))).order_by(DistinctSafewayItem.name).limit(
         limit).all()
     return safeway_items_from_query
 
 
-@app.get("/items/{store}/{upc}/prices")
-async def getPricesOfItem(store: str, upc: str, days: int, db: Session = Depends(get_db)):
+@app.get("/items/{storeId}/{upc}/prices")
+async def getPricesOfItem(storeId: str, upc: str, days: int, db: Session = Depends(get_db)):
     days_before = (datetime.today() - timedelta(days=days)).date()
     query = db.query(SafewayItemDBModel.name, SafewayItemDBModel.upc, SafewayItemDBModel.date, SafewayItemDBModel.price,
                      SafewayItemDBModel.basePrice, SafewayItemDBModel.pricePer).filter(and_(
-        SafewayItemDBModel.storeId == store, SafewayItemDBModel.upc == upc,
+        SafewayItemDBModel.storeId == storeId, SafewayItemDBModel.upc == upc,
         SafewayItemDBModel.date > days_before)).order_by(
         asc(SafewayItemDBModel.date))
 
@@ -93,27 +94,25 @@ async def getPricesOfItem(store: str, upc: str, days: int, db: Session = Depends
     return response
 
 
-@app.get("/items/{store}/{upc}/json/prices")
-async def getPricesOfItemJson(store: str, upc: str, days: int = -1, db: Session = Depends(get_db)):
+@app.get("/items/{storeId}/{upc}/json/prices")
+async def getPricesOfItemJson(storeId: str, upc: str, days: int = -1, db: Session = Depends(get_db)):
+    return getPricesOfItemJsonHelper(storeId, upc, days, db)
+
+
+def getPricesOfItemJsonHelper(storeId: str, upc: str, days: int, db: Session):
     if days == -1:
-        return getDataFrameJsonObject(store, upc, None, db)
+        return getDataFrameJsonObject(storeId, upc, None, db)
     else:
         days_before = (datetime.today() - timedelta(days=days)).date()
-        return getDataFrameJsonObject(store, upc, days_before, db)
+        return getDataFrameJsonObject(storeId, upc, days_before, db)
 
 
 def getDataFrameJsonObject(storeId, upc, days_before, db):
     if days_before is None:
-        query = db.query(SafewayItemDBModel.storeId, SafewayItemDBModel.name, SafewayItemDBModel.upc,
-                         SafewayItemDBModel.date,
-                         SafewayItemDBModel.price,
-                         SafewayItemDBModel.basePrice, SafewayItemDBModel.pricePer).filter(and_(
+        query = db.query(SafewayItemDBModel).filter(and_(
             SafewayItemDBModel.storeId == storeId, SafewayItemDBModel.upc == upc))
     else:
-        query = db.query(SafewayItemDBModel.storeId, SafewayItemDBModel.name, SafewayItemDBModel.upc,
-                         SafewayItemDBModel.date,
-                         SafewayItemDBModel.price,
-                         SafewayItemDBModel.basePrice, SafewayItemDBModel.pricePer).filter(and_(
+        query = db.query(SafewayItemDBModel).filter(and_(
             SafewayItemDBModel.storeId == storeId, SafewayItemDBModel.upc == upc,
             SafewayItemDBModel.date > days_before))
     df = pandas.read_sql_query(query.statement, con=RDSConnection.get_engine())
@@ -135,12 +134,13 @@ async def getItem(storeId: str, upc: str, db: Session = Depends(get_db)):
 
 
 @app.get("/greatest_price_changes")
-async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days: bool = False,
+async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset: int = 0, thirtyOr7Days: bool = False,
                                  db: Session = Depends(get_db)):
     # don't know why this query doesn't quite work. The distinct piece doesn't work....
 
     if thirtyOr7Days:
-        thirty_days_ago = date.today() - timedelta(days=30)
+        thirty_days_ago = date.today() - timedelta(
+            days=7)  # a price change occurred in the last 7 days. Compared to the price 7 days ago was one of the top 50 greatest price changes.
         greatest_percent_items: list[PriceChangeDBModel] = db.query(PriceChangeDBModel.upc,
                                                                     PriceChangeDBModel.name,
                                                                     PriceChangeDBModel.storeId,
@@ -153,8 +153,9 @@ async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days
                                                                     PriceChangeDBModel.percentPriceChange7DaysAgo,
                                                                     PriceChangeDBModel.percentPriceChange30Days,
                                                                     PriceChangeDBModel.absPercentPriceChange7Days,
-                                                                    PriceChangeDBModel.absPercentPriceChange30Days).filter(
-            PriceChangeDBModel.currentDate > thirty_days_ago).order_by(
+                                                                    PriceChangeDBModel.absPercentPriceChange30Days,
+                                                                    PriceChangeDBModel.currentDate).filter(and_(
+            PriceChangeDBModel.currentDate > thirty_days_ago, PriceChangeDBModel.storeId == storeId)).order_by(
             PriceChangeDBModel.absPercentPriceChange30Days.desc()).limit(
             limit * 10).offset(offset).all()
     else:
@@ -171,8 +172,9 @@ async def greatest_price_changes(limit: int = 30, offset: int = 0, thirtyOr7Days
                                                                     PriceChangeDBModel.percentPriceChange7DaysAgo,
                                                                     PriceChangeDBModel.percentPriceChange30Days,
                                                                     PriceChangeDBModel.absPercentPriceChange7Days,
-                                                                    PriceChangeDBModel.absPercentPriceChange30Days).filter(
-            PriceChangeDBModel.currentDate > one_week_ago).order_by(
+                                                                    PriceChangeDBModel.absPercentPriceChange30Days,
+                                                                    PriceChangeDBModel.currentDate).filter(and_(
+            PriceChangeDBModel.currentDate > one_week_ago, PriceChangeDBModel.storeId == storeId)).order_by(
             PriceChangeDBModel.absPercentPriceChange7Days.desc()).limit(
             limit * 10).offset(offset).all()
 
@@ -205,3 +207,46 @@ def getCounter(db: Session = Depends(get_db)):
     local_time = utc_date.replace(tzinfo=pytz.utc).astimezone(local_timezone)
     count[0].date = local_time
     return count
+
+
+@app.get("/pricechangetable/{storeId}/{upc}")
+def priceChangeTable(upc: str, storeId: str, days: int = -1, db: Session = Depends(get_db)):
+    price_change_dataframe: list[dict] = getPricesOfItemJsonHelper(storeId=storeId, upc=upc, days=days, db=db)
+    if price_change_dataframe != None and len(price_change_dataframe) > 0:
+        """
+        Price Range
+        [start, end]   | Price   | Percentage from today...
+        """
+        latestRow = SafewayItem.parse_obj(price_change_dataframe[len(price_change_dataframe) - 1])
+        latestPrice = latestRow.price
+        priceChangeRows = []
+        currentPriceChangeRow = None
+        for dataframe_item in enumerate(price_change_dataframe):
+            item = SafewayItem.parse_obj(dataframe_item[1])
+            if dataframe_item[0] == 0:
+                currentPriceChangeRow = PriceChangeRow()
+                currentPriceChangeRow.startDate = item.date
+                currentPriceChangeRow.currentPrice = item.price
+                currentPriceChangeRow.basePrice = item.basePrice
+                currentPriceChangeRow.pricePer = item.pricePer
+                currentPriceChangeRow.unitOfMeasure = item.unitOfMeasure
+            if item.price != currentPriceChangeRow.currentPrice:
+                currentPriceChangeRow.endDate = item.date
+                currentPriceChangeRow.currentPriceChangeFromToday = currentPriceChangeRow.currentPrice - latestPrice
+                currentPriceChangeRow.currentPriceChangePercentageFromToday = currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice
+                currentPriceChangeRow.startDateEndDateStr = f"{currentPriceChangeRow.startDate.strftime('%B %d, %Y')} -- {currentPriceChangeRow.endDate.strftime('%B %d, %Y')}"
+                priceChangeRows.append(currentPriceChangeRow.copy())
+                currentPriceChangeRow = PriceChangeRow()
+                currentPriceChangeRow.startDate = item.date
+                currentPriceChangeRow.currentPrice = item.price
+                currentPriceChangeRow.basePrice = item.basePrice
+                currentPriceChangeRow.pricePer = item.pricePer
+                currentPriceChangeRow.unitOfMeasure = item.unitOfMeasure
+
+        if priceChangeRows[len(priceChangeRows) - 1].currentPrice != latestPrice:
+            currentPriceChangeRow.endDate = latestRow.date
+            currentPriceChangeRow.currentPriceChangeFromToday = currentPriceChangeRow.currentPrice - latestPrice
+            currentPriceChangeRow.currentPriceChangePercentageFromToday = currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice
+            currentPriceChangeRow.startDateEndDateStr = f"{currentPriceChangeRow.startDate.strftime('%B %d, %Y')} -- {currentPriceChangeRow.endDate.strftime('%B %d, %Y')}"
+            priceChangeRows.append(currentPriceChangeRow.copy())
+        return priceChangeRows
