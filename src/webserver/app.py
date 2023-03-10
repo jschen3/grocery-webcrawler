@@ -233,7 +233,7 @@ def priceChangeTable(upc: str, storeId: str, days: int = -1, db: Session = Depen
             if item.price != currentPriceChangeRow.currentPrice:
                 currentPriceChangeRow.endDate = item.date
                 currentPriceChangeRow.currentPriceChangeFromToday = currentPriceChangeRow.currentPrice - latestPrice
-                currentPriceChangeRow.currentPriceChangePercentageFromToday = currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice
+                currentPriceChangeRow.currentPriceChangePercentageFromToday = (currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice)*100
                 currentPriceChangeRow.startDateEndDateStr = f"{currentPriceChangeRow.startDate.strftime('%B %d, %Y')} -- {currentPriceChangeRow.endDate.strftime('%B %d, %Y')}"
                 priceChangeRows.append(currentPriceChangeRow.copy())
                 currentPriceChangeRow = PriceChangeRow()
@@ -246,7 +246,7 @@ def priceChangeTable(upc: str, storeId: str, days: int = -1, db: Session = Depen
         if priceChangeRows[len(priceChangeRows) - 1].currentPrice != latestPrice:
             currentPriceChangeRow.endDate = latestRow.date
             currentPriceChangeRow.currentPriceChangeFromToday = currentPriceChangeRow.currentPrice - latestPrice
-            currentPriceChangeRow.currentPriceChangePercentageFromToday = (currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice)*100
+            currentPriceChangeRow.currentPriceChangePercentageFromToday = (currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice) * 100
             currentPriceChangeRow.startDateEndDateStr = f"{currentPriceChangeRow.startDate.strftime('%B %d, %Y')} -- {currentPriceChangeRow.endDate.strftime('%B %d, %Y')}"
             priceChangeRows.append(currentPriceChangeRow.copy())
         return priceChangeRows
