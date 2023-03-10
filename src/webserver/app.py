@@ -140,7 +140,7 @@ async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset:
 
     if thirtyOr7Days:
         thirty_days_ago = date.today() - timedelta(
-            days=7)  # a price change occurred in the last 7 days. Compared to the price 7 days ago was one of the top 50 greatest price changes.
+            days=30)  # a price change occurred in the last 7 days. Compared to the price 7 days ago was one of the top 50 greatest price changes.
         greatest_percent_items: list[PriceChangeDBModel] = db.query(PriceChangeDBModel.upc,
                                                                     PriceChangeDBModel.name,
                                                                     PriceChangeDBModel.storeId,
@@ -246,7 +246,7 @@ def priceChangeTable(upc: str, storeId: str, days: int = -1, db: Session = Depen
         if priceChangeRows[len(priceChangeRows) - 1].currentPrice != latestPrice:
             currentPriceChangeRow.endDate = latestRow.date
             currentPriceChangeRow.currentPriceChangeFromToday = currentPriceChangeRow.currentPrice - latestPrice
-            currentPriceChangeRow.currentPriceChangePercentageFromToday = currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice
+            currentPriceChangeRow.currentPriceChangePercentageFromToday = (currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice)*100
             currentPriceChangeRow.startDateEndDateStr = f"{currentPriceChangeRow.startDate.strftime('%B %d, %Y')} -- {currentPriceChangeRow.endDate.strftime('%B %d, %Y')}"
             priceChangeRows.append(currentPriceChangeRow.copy())
         return priceChangeRows

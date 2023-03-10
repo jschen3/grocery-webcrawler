@@ -5,6 +5,8 @@
     import {page_store_item} from './store.js';
     import SevenDayPriceChange from './7DayPriceChange.svelte';
     import ThirtyDayPriceChange from './30DayPriceChange.svelte';
+	import PriceChangeTable from './PriceChangeTable.svelte';
+	import { page } from '$app/stores';
 </script>
 <svelte:window/>
 
@@ -16,6 +18,9 @@
         <div class="table-div"><Table storeId="{$page_store_item.storeId}" upc="{$page_store_item.upc}"/></div>
         <div class="graph-div">
             <Graph storeId="{$page_store_item.storeId}" upc="{$page_store_item.upc}"/>
+        </div>
+        <div class="pricechange-div">
+            <PriceChangeTable storeId="{$page_store_item.storeId}" upc="{$page_store_item.upc}"/>
         </div>
     {/if}
         <div class="top-price-change-div"><SevenDayPriceChange/></div>
@@ -30,5 +35,8 @@
     }
     .top-price-change-div{
         border-radius: 10px;
+    }
+    .pricechange-div{
+        margin-top:50px;
     }
 </style>
