@@ -30,8 +30,8 @@
         {#each $priceChangeTable as priceChangeRow}
         <tr>
             <td>{priceChangeRow.startDateEndDateStr}</td>
-            <td>{@html percentText(priceChangeRow.currentPrice)}</td>
-            <td>${priceChangeRow.currentPriceChangeFromToday}</td>
+            <td>${priceChangeRow.currentPrice}</td>
+            <td>{@html percentText(priceChangeRow.currentPriceChangeFromToday)}</td>
             <td>{@html percentText(priceChangeRow.currentPriceChangePercentageFromToday)}</td>
         </tr>
         {/each}
