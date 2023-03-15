@@ -1,10 +1,12 @@
-import random
+import uuid
 from datetime import date, datetime
 import requests
+from sqlalchemy import and_
+
 from grocerywebcrawler.models.safeway_item import SafewayItem, SafewayItemDBModel
 from grocerywebcrawler.headless_browser_util import headless_browser_request_id
 
-from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
+from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItems
 from grocerywebcrawler.proxy_util import ProxyUtil
 from grocerywebcrawler.rds_connection import RDSConnection
 from webserver.models.operation_db_model import OperationDbModel
@@ -71,15 +73,16 @@ def get_all_safeway_items_from_store(storeid):
                         except:
                             session.add(safeway_item_dbmodel)
                         try:
-                            existingDistinct = session.query(DistinctSafewayItem).where(
-                                safeway_item_dbmodel.upc == DistinctSafewayItem.upc).one()
+                            existingDistinct = session.query(DistinctSafewayItems).where(and_(
+                                safeway_item_dbmodel.upc == DistinctSafewayItems.upc,
+                                DistinctSafewayItems.storeId == safeway_item_dbmodel.storeId)).one()
                         except:
-                            distinct = DistinctSafewayItem(upc=safeway_item_dbmodel.upc,
-                                                           storeId=safeway_item_dbmodel.storeId,
-                                                           name=safeway_item_dbmodel.name,
-                                                           departmentName=safeway_item_dbmodel.departmentName,
-                                                           date=safeway_item_dbmodel.date,
-                                                           area=safeway_item_dbmodel.area)
+                            distinct = DistinctSafewayItems(id=uuid.uuid4(), upc=safeway_item_dbmodel.upc,
+                                                            storeId=safeway_item_dbmodel.storeId,
+                                                            name=safeway_item_dbmodel.name,
+                                                            departmentName=safeway_item_dbmodel.departmentName,
+                                                            date=safeway_item_dbmodel.date,
+                                                            area=safeway_item_dbmodel.area)
                             try:
                                 session.add(distinct)
                             except:

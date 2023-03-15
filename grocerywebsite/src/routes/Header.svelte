@@ -20,7 +20,7 @@
 <header>
 <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="."><img src={Stock_Market_Icon} class="stock-icon" alt="stock icon"/>Grocery Market Watch</a>
+    <a class="navbar-brand" on:click={seven_day_click}><img src={Stock_Market_Icon} class="stock-icon" alt="stock icon"/>Grocery Market Watch</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

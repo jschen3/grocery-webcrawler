@@ -9,7 +9,7 @@ from fastapi.responses import StreamingResponse
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, asc
-from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
+from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItems
 from grocerywebcrawler.models.safeway_item import SafewayItemDBModel, SafewayItem
 from fastapi.middleware.cors import CORSMiddleware
 from grocerywebcrawler.rds_connection import RDSConnection
@@ -70,10 +70,10 @@ async def getStoreFromRegion(region: str, db: Session = Depends(get_db)) -> list
 async def getItemsFromStore(storeId: str, q: str, limit: int = 30, db: Session = Depends(get_db)):
     split_q = q.split(" ")
     like_phrase = f"%{'%'.join(split_q)}%"
-    safeway_items_from_query: list[DistinctSafewayItem] = db.query(DistinctSafewayItem.name, DistinctSafewayItem.upc,
-                                                                   DistinctSafewayItem.storeId).filter(and_(
-        DistinctSafewayItem.storeId == storeId,
-        func.lower(DistinctSafewayItem.name).like(func.lower(like_phrase)))).order_by(DistinctSafewayItem.name).limit(
+    safeway_items_from_query: list[DistinctSafewayItems] = db.query(DistinctSafewayItems.name, DistinctSafewayItems.upc,
+                                                                   DistinctSafewayItems.storeId).filter(and_(
+        DistinctSafewayItems.storeId == storeId,
+        func.lower(DistinctSafewayItems.name).like(func.lower(like_phrase)))).order_by(DistinctSafewayItems.name).limit(
         limit).all()
     return safeway_items_from_query
 

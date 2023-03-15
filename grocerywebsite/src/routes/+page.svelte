@@ -6,7 +6,6 @@
     import SevenDayPriceChange from './7DayPriceChange.svelte';
     import ThirtyDayPriceChange from './30DayPriceChange.svelte';
 	import PriceChangeTable from './PriceChangeTable.svelte';
-	import { page } from '$app/stores';
 </script>
 <svelte:window/>
 

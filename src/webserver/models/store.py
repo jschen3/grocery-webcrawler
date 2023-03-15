@@ -1,5 +1,5 @@
 from typing import Optional
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, Boolean
 from pydantic.main import BaseModel
 from sqlalchemy.orm import declarative_base
 
@@ -10,6 +10,7 @@ class Store(BaseModel):
     storeType: Optional[str]
     region: Optional[str]
     description: Optional[str]
+    webcrawl:Optional[bool]
 
     def dict(self, *args, **kwargs):
         return {
@@ -36,6 +37,7 @@ class StoreDbModel(Base):
     storeType = Column(String, index=True)
     region = Column(String, index=True)
     description = Column(String)
+    webcrawl = Column(Boolean)
 
     def __init__(self, storeId, location, storeType, region, description):
         self.storeId = storeId

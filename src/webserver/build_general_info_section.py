@@ -6,7 +6,7 @@ import random
 from sqlalchemy import and_, asc
 import pandas
 
-from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
+from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItems
 from grocerywebcrawler.models.safeway_item import SafewayItemDBModel, SafewayItem
 from grocerywebcrawler.rds_connection import RDSConnection
 from webserver.models.item_general_information import ItemGeneralInformation
@@ -15,8 +15,8 @@ from webserver.models.store import StoreDbModel
 
 def fillOut5ItemsInCategory(currentItemGeneralInformation, storeId, db):
     category = currentItemGeneralInformation.category
-    all_items_in_category = db.query(DistinctSafewayItem.upc, DistinctSafewayItem.name).where(and_(
-        DistinctSafewayItem.departmentName == category, DistinctSafewayItem.storeId == storeId)).all()
+    all_items_in_category = db.query(DistinctSafewayItems.upc, DistinctSafewayItems.name).where(and_(
+        DistinctSafewayItems.departmentName == category, DistinctSafewayItems.storeId == storeId)).all()
     similar_items = []
     if len(all_items_in_category) > 5:
         ten_random_numbers = set()
