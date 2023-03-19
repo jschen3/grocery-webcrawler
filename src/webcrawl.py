@@ -11,7 +11,7 @@ def webcrawl():
     for store in stores:
         if store.webcrawl:
             get_all_safeway_items_from_store(store.storeId)
-            time.sleep(5*60)
+            time.sleep(60)
 
 
 if __name__ == '__main__':
