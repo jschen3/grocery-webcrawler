@@ -140,7 +140,7 @@ async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset:
 
     if thirtyOr7Days:
         thirty_days_ago = date.today() - timedelta(
-            days=30)  # a price change occurred in the last 7 days. Compared to the price 7 days ago was one of the top 50 greatest price changes.
+            days=1)  # a price change occurred in the last 7 days. Compared to the price 7 days ago was one of the top 50 greatest price changes.
         greatest_percent_items: list[PriceChangeDBModel] = db.query(PriceChangeDBModel.upc,
                                                                     PriceChangeDBModel.name,
                                                                     PriceChangeDBModel.storeId,
@@ -159,7 +159,7 @@ async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset:
             PriceChangeDBModel.absPercentPriceChange30Days.desc()).limit(
             limit * 10).offset(offset).all()
     else:
-        one_week_ago = date.today() - timedelta(days=7)
+        one_week_ago = date.today() - timedelta(days=1)
         greatest_percent_items: list[PriceChangeDBModel] = db.query(PriceChangeDBModel.upc,
                                                                     PriceChangeDBModel.name,
                                                                     PriceChangeDBModel.storeId,
