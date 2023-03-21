@@ -10,6 +10,8 @@ export const display_7_days = writable(true);
 
 export const display_30_days = writable(false);
 
+export const store_item_days = writable(7);
+
 const server_url = "https://grocerymarketwatch.com:5000"
 export const itemData = derived(page_store_item, async($page_store_item, set)=>{
     if ($page_store_item!=null && $page_store_item!=undefined){
@@ -27,7 +29,8 @@ export const graphData = derived(page_store_item, async($page_store_item, set)=>
     if ($page_store_item!=null && $page_store_item!=undefined){
         const storeId = $page_store_item.storeId;
         const upc = $page_store_item.upc;
-        const response = await axios.get(server_url+"/items/"+storeId+"/"+upc+"/json/prices");
+        const store_item_days = $page_store_item.store_item_days
+        const response = await axios.get(server_url+"/items/"+storeId+"/"+upc+"/json/prices?days="+store_item_days);
         const data= await response.data;
         console.log(data);
         set(data);
@@ -36,9 +39,10 @@ export const graphData = derived(page_store_item, async($page_store_item, set)=>
 
 export const priceChangeTable = derived(page_store_item, async($page_store_item, set)=>{
     if ($page_store_item!=null && $page_store_item!=undefined){
+        const store_item_days = $page_store_item.store_item_days;
         const storeId = $page_store_item.storeId;
         const upc = $page_store_item.upc;
-        const response = await axios.get(server_url+"/pricechangetable/"+storeId+"/"+upc);
+        const response = await axios.get(server_url+"/pricechangetable/"+storeId+"/"+upc+"?days="+store_item_days);
         const data = await response.data;
         console.log(data)
         set(data);

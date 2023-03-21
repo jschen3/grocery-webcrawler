@@ -57,7 +57,7 @@
             console.log(`${inputValueObject.name} is submitted!`);
             console.log(`${inputValueObject.upc} upc is:`);
             console.log(`${inputValueObject.storeId} storeId:`);
-            page_store_item.set({"upc":inputValueObject.upc, "storeId":inputValueObject.storeId});
+            page_store_item.set({"upc":inputValueObject.upc, "storeId":inputValueObject.storeId, "store_item_days":7});
             display_7_days.set(false);
             display_30_days.set(false);
             console.log("display 7 days:"+$display_7_days);

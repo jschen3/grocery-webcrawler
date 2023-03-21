@@ -14,12 +14,12 @@
     </div>
     <div class="container">
     {#if $page_store_item}
-        <div class="table-div"><Table storeId="{$page_store_item.storeId}" upc="{$page_store_item.upc}"/></div>
+        <div class="table-div"><Table/></div>
         <div class="graph-div">
-            <Graph storeId="{$page_store_item.storeId}" upc="{$page_store_item.upc}"/>
+            <Graph/>
         </div>
         <div class="pricechange-div">
-            <PriceChangeTable storeId="{$page_store_item.storeId}" upc="{$page_store_item.upc}"/>
+            <PriceChangeTable/>
         </div>
     {/if}
         <div class="top-price-change-div"><SevenDayPriceChange/></div>
@@ -31,6 +31,7 @@
     }
     .graph-div{
         margin-top: 50px;
+        margin-bottom: 50px;
     }
     .top-price-change-div{
         border-radius: 10px;

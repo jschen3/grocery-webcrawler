@@ -29,7 +29,7 @@
 
     function itemNameClicked(storeId, upc){
         storeId = 2948;
-        page_store_item.set({"upc":upc, "storeId":storeId});
+        page_store_item.set({"upc":upc, "storeId":storeId, "store_item_days":7});
         display_7_days.set(false);
         display_30_days.set(false);
     }
