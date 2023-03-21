@@ -71,7 +71,7 @@ async def getItemsFromStore(storeId: str, q: str, limit: int = 30, db: Session =
     split_q = q.split(" ")
     like_phrase = f"%{'%'.join(split_q)}%"
     safeway_items_from_query: list[DistinctSafewayItems] = db.query(DistinctSafewayItems.name, DistinctSafewayItems.upc,
-                                                                   DistinctSafewayItems.storeId).filter(and_(
+                                                                    DistinctSafewayItems.storeId).filter(and_(
         DistinctSafewayItems.storeId == storeId,
         func.lower(DistinctSafewayItems.name).like(func.lower(like_phrase)))).order_by(DistinctSafewayItems.name).limit(
         limit).all()
@@ -233,7 +233,8 @@ def priceChangeTable(upc: str, storeId: str, days: int = -1, db: Session = Depen
             if item.price != currentPriceChangeRow.currentPrice:
                 currentPriceChangeRow.endDate = item.date
                 currentPriceChangeRow.currentPriceChangeFromToday = currentPriceChangeRow.currentPrice - latestPrice
-                currentPriceChangeRow.currentPriceChangePercentageFromToday = (currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice)*100
+                currentPriceChangeRow.currentPriceChangePercentageFromToday = (
+                                                                                          currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice) * 100
                 currentPriceChangeRow.startDateEndDateStr = f"{currentPriceChangeRow.startDate.strftime('%B %d, %Y')} -- {currentPriceChangeRow.endDate.strftime('%B %d, %Y')}"
                 priceChangeRows.append(currentPriceChangeRow.copy())
                 currentPriceChangeRow = PriceChangeRow()
@@ -243,10 +244,11 @@ def priceChangeTable(upc: str, storeId: str, days: int = -1, db: Session = Depen
                 currentPriceChangeRow.pricePer = item.pricePer
                 currentPriceChangeRow.unitOfMeasure = item.unitOfMeasure
 
-        if priceChangeRows[len(priceChangeRows) - 1].currentPrice != latestPrice:
+        if len(priceChangeRows) == 0 or priceChangeRows[len(priceChangeRows) - 1].currentPrice != latestPrice:
             currentPriceChangeRow.endDate = latestRow.date
             currentPriceChangeRow.currentPriceChangeFromToday = currentPriceChangeRow.currentPrice - latestPrice
-            currentPriceChangeRow.currentPriceChangePercentageFromToday = (currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice) * 100
+            currentPriceChangeRow.currentPriceChangePercentageFromToday = (
+                                                                                      currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice) * 100
             currentPriceChangeRow.startDateEndDateStr = f"{currentPriceChangeRow.startDate.strftime('%B %d, %Y')} -- {currentPriceChangeRow.endDate.strftime('%B %d, %Y')}"
             priceChangeRows.append(currentPriceChangeRow.copy())
         return priceChangeRows

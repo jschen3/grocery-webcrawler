@@ -8,12 +8,14 @@
         "offset": 0,
         "limit": 50,
     }));
+
+
     function percentText(percent){
         if (percent>0){
-            return "<i class=\"bi bi-caret-up\"></i>"+" +"+naiveRound(percent)
+            return "<span style=\"color:green;\"><i class=\"bi bi-caret-up\"></i>+"+ naiveRound(percent)+"%</span>"
         }
         else{
-            return "<i class=\"bi bi-caret-down\"></i>"+" "+naiveRound(percent)
+            return "<span style=\"color:red;\"><i class=\"bi bi-caret-down\"></i>"+" "+naiveRound(percent)+"%</span>"
         }
     }
 

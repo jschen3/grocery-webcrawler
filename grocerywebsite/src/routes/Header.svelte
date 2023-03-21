@@ -1,5 +1,5 @@
 <script>
-    import Stock_Market_Icon from "$lib/images/stock_market_icon.png";    
+  import Stock_Market_Icon from "$lib/images/stock_market_icon.png";    
 	import SelectBar from "./header_components/select_bar.svelte";
 	import { display_7_days, page_store_item, display_30_days } from "./store";
 

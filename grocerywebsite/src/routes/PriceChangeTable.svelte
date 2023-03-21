@@ -1,12 +1,21 @@
 <script>
     import {priceChangeTable} from './store.js';
 
-    function percentText(percent){
+    function color_symbol_round(percent){
         if (percent>0){
-            return "<i class=\"bi bi-caret-up\"></i>"+" +"+naiveRound(percent)
+            return "<span style=\"color:green;\"><i class=\"bi bi-caret-up\"></i>+"+ naiveRound(percent)+"</span>"
         }
         else{
-            return "<i class=\"bi bi-caret-down\"></i>"+" "+naiveRound(percent)
+            return "<span style=\"color:red;\"><i class=\"bi bi-caret-down\"></i>"+" "+naiveRound(percent)+"</span>"
+        }
+    }
+
+    function percentText(percent){
+        if (percent>0){
+            return "<span style=\"color:green;\"><i class=\"bi bi-caret-up\"></i>+"+ naiveRound(percent)+"%</span>"
+        }
+        else{
+            return "<span style=\"color:red;\"><i class=\"bi bi-caret-down\"></i>"+" "+naiveRound(percent)+"%</span>"
         }
     }
 
@@ -31,7 +40,7 @@
         <tr>
             <td>{priceChangeRow.startDateEndDateStr}</td>
             <td>${priceChangeRow.currentPrice}</td>
-            <td>{@html percentText(priceChangeRow.currentPriceChangeFromToday)}</td>
+            <td>{@html color_symbol_round(priceChangeRow.currentPriceChangeFromToday)}</td>
             <td>{@html percentText(priceChangeRow.currentPriceChangePercentageFromToday)}</td>
         </tr>
         {/each}
