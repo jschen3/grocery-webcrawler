@@ -15,11 +15,11 @@
 
 export let pricingValue;
 	let pricingData = pricingValue
-if (pricingData==undefined){
+if (pricingData==undefined || pricingData.length==0){
   pricingData = [{
     "name": "",
     "upc": "",
-    "date": "2023-01-26",
+    "date": new Date(),
     "price": 0.0,
     "basePrice": 0.0,
     "pricePer": 0.0
