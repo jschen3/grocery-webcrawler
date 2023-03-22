@@ -103,7 +103,7 @@ def getPricesOfItemJsonHelper(storeId: str, upc: str, days: int, db: Session):
     if days == -1:
         return getDataFrameJsonObject(storeId, upc, None, db)
     else:
-        days_before = (datetime.today() - timedelta(days=days)).date()
+        days_before = (datetime.today() - timedelta(days=days+1)).date()
         return getDataFrameJsonObject(storeId, upc, days_before, db)
 
 
