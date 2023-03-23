@@ -19,7 +19,7 @@
             return "<span><i class=\"bi bi-caret-up\"></i>+"+ naiveRound(percent)+"%</span>"
         }
         else{
-            return "<span style=\"color:red;\"><i class=\"bi bi-caret-down\"></i>-"+" "+naiveRound(percent)+"%</span>"
+            return "<span style=\"color:red;\"><i class=\"bi bi-caret-down\"></i>"+" "+naiveRound(percent)+"%</span>"
         }
     }
 
@@ -30,7 +30,7 @@
     }
 
     function addDollarSign(num){
-        return "$"+num.toFixed(2);
+        return "$"+naiveRound(num.toFixed(2));
     }
 
     function itemNameClicked(storeId, upc){
