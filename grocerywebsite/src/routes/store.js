@@ -25,6 +25,16 @@ export const itemData = derived(page_store_item, async($page_store_item, set)=>{
         
 });
 
+export const priceToday = derived(page_store_item, async($page_store_item, set)=>{
+    if ($page_store_item!=null && $page_store_item!=undefined){
+        const storeId = $page_store_item.storeId;
+        const upc = $page_store_item.upc;
+        const response = await axios.get(server_url+"/items/"+storeId+"/"+upc);
+        const data = await response.data;
+        set({"date":data.date, "price":data.price, "currentPriceChangeFromToday": 0.00, "currentPriceChangePercentageFromToday":0.00})
+    }
+});
+
 export const graphData = derived(page_store_item, async($page_store_item, set)=>{
     if ($page_store_item!=null && $page_store_item!=undefined){
         const storeId = $page_store_item.storeId;

@@ -1,12 +1,14 @@
 <script>
-    import {priceChangeTable} from './store.js';
-
+    import {priceChangeTable, priceToday} from './store.js';
     function color_symbol_round(percent){
         if (percent>0){
             return "<span style=\"color:green;\"><i class=\"bi bi-caret-up\"></i>+"+ naiveRound(percent)+"</span>"
         }
+        else if (percent==0){
+            return "<span><i class=\"bi bi-caret-up\"></i>+"+ naiveRound(percent)+"</span>"
+        }
         else{
-            return "<span style=\"color:red;\"><i class=\"bi bi-caret-down\"></i>"+" "+naiveRound(percent)+"</span>"
+            return "<span style=\"color:red;\"><i class=\"bi bi-caret-down\"></i>-"+" "+naiveRound(percent)+"</span>"
         }
     }
 
@@ -14,8 +16,11 @@
         if (percent>0){
             return "<span style=\"color:green;\"><i class=\"bi bi-caret-up\"></i>+"+ naiveRound(percent)+"%</span>"
         }
+        else if (percent==0){
+            return "<span><i class=\"bi bi-caret-up\"></i>+"+ naiveRound(percent)+"%</span>"
+        }
         else{
-            return "<span style=\"color:red;\"><i class=\"bi bi-caret-down\"></i>"+" "+naiveRound(percent)+"%</span>"
+            return "<span style=\"color:red;\"><i class=\"bi bi-caret-down\"></i>-"+" "+naiveRound(percent)+"%</span>"
         }
     }
 
@@ -44,6 +49,12 @@
             <td>{@html percentText(priceChangeRow.currentPriceChangePercentageFromToday)}</td>
         </tr>
         {/each}
+        <tr>
+            <td><strong>Price Today: {$priceToday.date}</strong></td>
+            <td>{$priceToday.price}</td>
+            <td>{@html color_symbol_round($priceToday.currentPriceChangeFromToday)}</td>
+            <td>{@html percentText($priceToday.currentPriceChangePercentageFromToday)}</td>
+        </tr>
     </tbody>
 </table>
 {/if}        

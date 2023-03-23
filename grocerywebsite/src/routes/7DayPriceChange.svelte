@@ -15,6 +15,9 @@
         if (percent>0){
             return "<span style=\"color:green;\"><i class=\"bi bi-caret-up\"></i>+"+ naiveRound(percent)+"%</span>"
         }
+        else if (percent==0){
+            return "<span><i class=\"bi bi-caret-up\"></i>+"+ naiveRound(percent)+"%</span>"
+        }
         else{
             return "<span style=\"color:red;\"><i class=\"bi bi-caret-down\"></i>-"+" "+naiveRound(percent)+"%</span>"
         }
