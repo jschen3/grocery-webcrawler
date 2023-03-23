@@ -2,7 +2,11 @@
 ## https://grocerymarketwatch.com
 ## 3 Pieces
 ### Piece 1:
-Web crawler that makes a selenium to a safeway website and acquires an api key. From the api key a series of web calls are triggered that downloads the prices and all items in a particular safeway store. Prices are stored in aws rds.
+Web crawler: In order to get prices from safeway.com. You do the following steps. 
+1. Selenium get an api key.
+2. Paginate and grab every item on the deals page for a particular store. Collect the price of each item. Collect prices everyday and store it into RDS. 
+Currently only supports local bay area stores. 
+
 
 ### Piece 2:
 For each distinct item we calculate the price changes for 7 days, 30 days and all records. 
