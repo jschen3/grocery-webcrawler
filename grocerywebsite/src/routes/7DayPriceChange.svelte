@@ -30,7 +30,7 @@
     }
 
     function addDollarSign(num){
-        return "$"+naiveRound(num.toFixed(2));
+        return "$"+num.toFixed(2);
     }
 
     function itemNameClicked(storeId, upc){
