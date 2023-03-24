@@ -3,25 +3,7 @@
     import {itemData} from './store.js';
     import Safeway_Icon from "$lib/images/safeway-icon.png";
     import Buy_Icon from "$lib/images/buy-icon.png";
-
-    function percentText(percent){
-        if (percent>0){
-            return "<i class=\"bi bi-caret-up\"></i>+"+naiveRound(percent) +"%"
-        }
-        else{
-            return "<i class=\"bi bi-caret-down\"></i>"+naiveRound(percent) +"%"
-        }
-    }
-    
-    function naiveRound(num, decimalPlaces = 2) {
-        var p = Math.pow(10, decimalPlaces);
-        return (Math.round(num * p) / p).toFixed(2);
-
-    }
-
-    function formatPrice(num){
-        return "$"+num.toFixed(2);
-    }
+    import {percentText, addDollarSymbol} from '../util/textformat.js'
 
     function capitalize(input){
         return input.charAt(0).toUpperCase() + input.slice(1)
@@ -46,19 +28,17 @@
         </div>
         <div class="row">
             <div class="col-sm">
-                <p><strong>Current Price:</strong><img src={Buy_Icon} alt="buy"/>{formatPrice($itemData.price)}</p>
-                <p><strong>Price Per:</strong><img src={Buy_Icon} alt="buy"/>{formatPrice($itemData.pricePer)}</p>
-                <p><strong>Base Price:</strong><img src={Buy_Icon} alt="buy"/>{formatPrice($itemData.basePrice)}</p>
+                <p><strong>Current Price:</strong><img src={Buy_Icon} alt="buy"/>{addDollarSymbol($itemData.price)}</p>
+                <p><strong>Price Per:</strong><img src={Buy_Icon} alt="buy"/>{addDollarSymbol($itemData.pricePer)}</p>
+                <p><strong>Base Price:</strong><img src={Buy_Icon} alt="buy"/>{addDollarSymbol($itemData.basePrice)}</p>
             </div>
             <div class="col-sm">
-                <p><strong>Price 7 Days Ago: </strong><img src={Buy_Icon} alt="buy"/>{formatPrice($itemData.price7DaysAgo)}</p>
-                <p><strong>Price Change Last 7 Days: </strong>{formatPrice($itemData.priceChangeLast7Days)}</p>
+                <p><strong>Price 7 Days Ago: </strong><img src={Buy_Icon} alt="buy"/>{addDollarSymbol($itemData.price7DaysAgo)}</p>
+                <p><strong>Price Change Last 7 Days: </strong>{addDollarSymbol($itemData.priceChangeLast7Days)}</p>
                 <p><strong>Percent Price Change Last 7 Days: </strong>{@html percentText($itemData.percentPriceChange7Days)}</p>
-                <p><strong>Price 30 Days Ago: </strong><img src={Buy_Icon} alt="buy"/>{formatPrice($itemData.price30DaysAgo)}</p>
-                <p><strong>Price Change Last 30 Days: </strong>{formatPrice($itemData.priceChangeLast30days)}</p>
+                <p><strong>Price 30 Days Ago: </strong><img src={Buy_Icon} alt="buy"/>{addDollarSymbol($itemData.price30DaysAgo)}</p>
+                <p><strong>Price Change Last 30 Days: </strong>{addDollarSymbol($itemData.priceChangeLast30days)}</p>
                 <p><strong>Percent Price Change Last 30 Days: </strong>{@html percentText($itemData.percentPriceChange30days)}</p>
-                <!-- <p><strong>Price Change All Records: </strong>{$itemData.priceChangeForAllRecords}</p>
-                <p><strong>Percent Price Change All Records: </strong>{$itemData.percentPriceChangeForAllRecords}</p> -->
             </div>
             <div class="col-sm">   
                 <td>

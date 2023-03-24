@@ -1,37 +1,15 @@
 <script>
-	import { redirect } from '@sveltejs/kit';
-
 // @ts-nocheck
 
 	import { onMount } from 'svelte';
     import {priceChangeData7Days, greatest_price_change_options_7, display_7_days,display_30_days, page_store_item} from './store.js';
+    import {colorPercentText, addDollarSymbol} from '../util/textformat.js'
     onMount(()=>greatest_price_change_options_7.set({
 		"thirty_day_or_7_day": false,
 		"offset": 0,
 		"limit": 50,
 	}));
 
-    function percentText(percent){
-        if (percent>0){
-            return "<span style=\"color:green;\"><i class=\"bi bi-caret-up\"></i>+"+ naiveRound(percent)+"%</span>"
-        }
-        else if (percent==0){
-            return "<span><i class=\"bi bi-caret-up\"></i>+"+ naiveRound(percent)+"%</span>"
-        }
-        else{
-            return "<span style=\"color:red;\"><i class=\"bi bi-caret-down\"></i>"+" "+naiveRound(percent)+"%</span>"
-        }
-    }
-
-    function naiveRound(num, decimalPlaces = 2) {
-        var p = Math.pow(10, decimalPlaces);
-        return (Math.round(num * p) / p).toFixed(2);
-
-    }
-
-    function addDollarSign(num){
-        return "$"+num.toFixed(2);
-    }
 
     function itemNameClicked(storeId, upc){
         storeId=2948;
@@ -53,10 +31,7 @@
             <th scope="col">Category</th>
             <th scope="col">Current Price</th>
             <th scope="col">Price 7 Days Ago</th>
-            <!--<th scope="col">Price 30 Days Ago</th>-->
             <th scope="col">Percent Price Change 7 Days</th>
-            <!--
-            <th scope="col">Percent Price Change 30 Days Ago</th> -->
         </tr>
         </thead>
         <tbody>
@@ -67,15 +42,9 @@
                     <th scope="row">{i+1}</th>
                     <td><a on:click={itemNameClicked(priceChange.storeId, priceChange.upc)} class="text-black">{priceChange.name}</a></td>
                     <td>{priceChange.category}</td>
-                    <td>{addDollarSign(priceChange.currentPrice)}</td>
-                    <td>{addDollarSign(priceChange.price7DaysAgo)}</td>
-                    <!--
-                    <td>{priceChange.price30DaysAgo}</td>
-                    -->
-                    <td>{@html percentText(priceChange.percentPriceChange7DaysAgo)}</td>
-                    <!--        
-                    <td>{priceChange.percentPriceChange30Days}</td>
-                    -->
+                    <td>{addDollarSymbol(priceChange.currentPrice)}</td>
+                    <td>{addDollarSymbol(priceChange.price7DaysAgo)}</td>
+                    <td>{@html colorPercentText(priceChange.percentPriceChange7DaysAgo)}</td>
                 </tr>
             {/each}    
         {/key}
