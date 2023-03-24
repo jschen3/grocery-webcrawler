@@ -4,31 +4,25 @@
     
     import SelectOption from './select_options.svelte';	
         
-        
-    /* FILTERING countres DATA BASED ON INPUT */	
-    let filterOptions = [];
-    // $: console.log(filteredCountries)	
+    let filterOptions = [];	
     
     const get_filter_options = async() => {
         let storageArr = []
         if (inputValueText && inputValueText.length>3){
             let storeItems;
-            //console.log("store items starting async method")
             const response = await axios.get("https://grocerymarketwatch.com:5000/items/2948?q="+inputValueText);
             const data = await response.data;
-            //console.log(data);
             storeItems = data;
             storeItems.forEach(storeItem => {
                 storageArr = [...storageArr, {"name":storeItem.name, "upc":storeItem.upc, "storeId":storeItem.storeId}];
-                //console.log("storage area is:"+storageArr);
             });
         }
         filterOptions = storageArr;
     }	
     
     
-    /* HANDLING THE INPUT */
-    let searchInput; // use with bind:this to focus element
+
+    let searchInput; 
     let inputValueText = "";
     let inputValueObject = null;
         
@@ -61,12 +55,6 @@
             display_7_days.set(false);
             display_30_days.set(false);
             console.log("display 7 days:"+$display_7_days);
-            // let prev_greatest_price_change_options = $greatest_price_change_options
-            // if (prev_greatest_price_change_options!=null && prev_greatest_price_change_options!=undefined){
-            //     prev_greatest_price_change_options.visible=false;
-            // }    
-            // greatest_price_change_options.set(prev_greatest_price_change_options)
-            // set these variables in a svelte store and pull data from svelte store 
             setTimeout(clearInput, 8000);
             filterOptions = [];
         } else {
@@ -74,18 +62,8 @@
         }
     }
     
-    
-    const removeBold = (str) => {
-        //replace < and > all characters between
-        return str.replace(/<(.)*?>/g, "");
-        // return str.replace(/<(strong)>/g, "").replace(/<\/(strong)>/g, "");
-    }	
-        
-    
-    /* NAVIGATING OVER THE LIST OF COUNTRIES W HIGHLIGHTING */	
     let hiLiteIndex = null;
-    //$: console.log(hiLiteIndex);	
-    $: hiLitedCountry = filterOptions[hiLiteIndex]; 	
+
         
     const navigateList = (e) => {
         if (e.key === "ArrowDown" && hiLiteIndex <= filterOptions.length-1) {
@@ -138,7 +116,6 @@
         background-color: #ddd;
     }	
     div.autocomplete {
-      /*the container must be positioned relative:*/
       position: relative;
       display: inline-block;
       width: 350px;
