@@ -145,6 +145,7 @@ def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: in
             if status == 200:
                 return response.json()["response"]
             else:
+
                 # proxy = ProxyUtil.getProxy()
                 request_ids = headless_browser_request_id()
                 headers["Ocp-Apim-Subscription-Key"] = request_ids["ocp-apim-subscription-key"]
@@ -157,7 +158,7 @@ def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: in
             request_ids = headless_browser_request_id()
             headers["Ocp-Apim-Subscription-Key"] = request_ids["ocp-apim-subscription-key"]
             request_parameters["request_id"] = request_ids["request-id"]
-            # proxy = ProxyUtil.getProxy()
+            ProxyUtil.reset()
             continue
     print(f"Unable to successively retrieve items from store. at start {start} storeid: {storeId}")
     raise Exception(f"Unable to successively retrieve items from store. at start {start} storeid: {storeId}")

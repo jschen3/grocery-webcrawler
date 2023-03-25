@@ -110,6 +110,10 @@ class ProxyUtil:
         ProxyUtil.__proxies_with_failure_count[proxy] += 1
         ProxyUtil.__previous = None
 
+    @staticmethod
+    def reset():
+        ProxyUtil.__previous = None
+
 
 if __name__ == '__main__':
     ProxyUtil.init_proxies2()
