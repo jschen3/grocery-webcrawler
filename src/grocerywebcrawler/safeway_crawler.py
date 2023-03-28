@@ -145,12 +145,13 @@ def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: in
             if status == 200:
                 return response.json()["response"]
             else:
-
-                # proxy = ProxyUtil.getProxy()
+                print(f"Response not 200. Incrementing proxy. {response.status_code} response: {response.text}")
+                ProxyUtil.increment(ProxyUtil.getProxy())
                 request_ids = headless_browser_request_id()
                 headers["Ocp-Apim-Subscription-Key"] = request_ids["ocp-apim-subscription-key"]
                 request_parameters["request_id"] = request_ids["request-id"]
                 attempts += 1
+                continue
         except Exception as e:
             # print(e)
             # print(proxy)
@@ -158,7 +159,6 @@ def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: in
             request_ids = headless_browser_request_id()
             headers["Ocp-Apim-Subscription-Key"] = request_ids["ocp-apim-subscription-key"]
             request_parameters["request_id"] = request_ids["request-id"]
-            ProxyUtil.reset()
             continue
     print(f"Unable to successively retrieve items from store. at start {start} storeid: {storeId}")
     raise Exception(f"Unable to successively retrieve items from store. at start {start} storeid: {storeId}")
@@ -171,7 +171,7 @@ def make_http_request(url, params, headers, use_proxy: bool):
         try:
             response = requests.get(url, proxies=proxy, params=params, headers=headers, timeout=5)
         except Exception as e:
-            ProxyUtil.increment(proxy["https"])
+            ProxyUtil.increment(proxy)
             print(e)
             raise Exception
         return response

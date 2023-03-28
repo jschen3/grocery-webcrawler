@@ -1,6 +1,4 @@
-import requests
 import random
-
 from selenium.webdriver import DesiredCapabilities
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -33,15 +31,6 @@ class ProxyUtil:
     proxy_url = "https://www.proxy-list.download/api/v1/get?type=https&country=US"
 
     proxy_url2 = "https://advanced.name/freeproxy?country=US&type=https"
-
-    @staticmethod
-    def init_proxies():
-        response = requests.get(ProxyUtil.proxy_url)
-        status = response.status_code
-        if status == 200:
-            ProxyUtil.__all_proxies = response.text.splitlines()
-        else:
-            raise Exception("Unable to get proxy addresses")
 
     @staticmethod
     def init_proxies2():
@@ -85,21 +74,21 @@ class ProxyUtil:
 
     @staticmethod
     def getProxy():
-        if ProxyUtil.__all_proxies == None:
+        if ProxyUtil.getAllProxies() == None:
             ProxyUtil.init_proxies2()
 
-        if ProxyUtil.__previous != None:
+        if ProxyUtil.getPrevious() != None:
             return {"https": ProxyUtil.__previous}
 
         smallestFailureCount = float('inf')
-        for key in ProxyUtil.__proxies_with_failure_count.keys():
-            failureCount = ProxyUtil.__proxies_with_failure_count[key]
+        for key in ProxyUtil.getAllProxyFailureCount().keys():
+            failureCount = ProxyUtil.getFailureCount(key)
             if failureCount < smallestFailureCount:
                 smallestFailureCount = failureCount
 
         keys_with_smallest = []
-        for key in ProxyUtil.__proxies_with_failure_count.keys():
-            if ProxyUtil.__proxies_with_failure_count[key] == smallestFailureCount:
+        for key in ProxyUtil.getAllProxyFailureCount().keys():
+            if ProxyUtil.getFailureCount(key) == smallestFailureCount:
                 keys_with_smallest.append(key)
 
         ProxyUtil.__previous = random.choice(keys_with_smallest)
@@ -107,13 +96,22 @@ class ProxyUtil:
 
     @staticmethod
     def increment(proxy):
-        ProxyUtil.__proxies_with_failure_count[proxy] += 1
+        proxyAddress = proxy["https"]
+        ProxyUtil.__proxies_with_failure_count[proxyAddress] += 1
         ProxyUtil.__previous = None
 
     @staticmethod
-    def reset():
-        ProxyUtil.__previous = None
+    def getFailureCount(proxy):
+        return ProxyUtil.__proxies_with_failure_count[proxy]
 
+    @staticmethod
+    def getAllProxyFailureCount():
+        return ProxyUtil.__proxies_with_failure_count;
 
-if __name__ == '__main__':
-    ProxyUtil.init_proxies2()
+    @staticmethod
+    def getPrevious():
+        return ProxyUtil.__previous
+
+    @staticmethod
+    def getAllProxies():
+        return ProxyUtil.__all_proxies
