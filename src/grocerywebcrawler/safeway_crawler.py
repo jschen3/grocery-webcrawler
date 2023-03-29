@@ -138,10 +138,10 @@ def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: in
     headers["Ocp-Apim-Subscription-Key"] = prevOcpKey
     # proxy = ProxyUtil.getProxy()
     attempts = 0
-    while attempts < 50:
+    while attempts < 40:
         try:
             # print(proxy)
-            response = make_http_request(url=url, params=request_parameters, headers=headers, use_proxy=True)
+            response = make_http_request(url=url, params=request_parameters, headers=headers, use_proxy=False)
             status = response.status_code
             if status == 200:
                 return response.json()["response"]

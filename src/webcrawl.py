@@ -6,7 +6,7 @@ from webserver.models.store import StoreDbModel
 
 
 def webcrawl():
-    db = RDSConnection.get_normal_session()
+    db = RDSConnection.get_postgres_session()
     stores: list[StoreDbModel] = db.query(StoreDbModel).all()
     for store in stores:
         if store.webcrawl:
