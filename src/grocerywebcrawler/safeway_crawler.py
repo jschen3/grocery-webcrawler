@@ -1,3 +1,4 @@
+import traceback
 import uuid
 from datetime import date, datetime
 import requests
@@ -137,7 +138,7 @@ def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: in
     headers["Ocp-Apim-Subscription-Key"] = prevOcpKey
     # proxy = ProxyUtil.getProxy()
     attempts = 0
-    while attempts < 20:
+    while attempts < 50:
         try:
             # print(proxy)
             response = make_http_request(url=url, params=request_parameters, headers=headers, use_proxy=True)
@@ -153,8 +154,7 @@ def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: in
                 attempts += 1
                 continue
         except Exception as e:
-            # print(e)
-            # print(proxy)
+            ProxyUtil.increment(ProxyUtil.getProxy())
             attempts += 1
             request_ids = headless_browser_request_id()
             headers["Ocp-Apim-Subscription-Key"] = request_ids["ocp-apim-subscription-key"]
@@ -171,9 +171,9 @@ def make_http_request(url, params, headers, use_proxy: bool):
         try:
             response = requests.get(url, proxies=proxy, params=params, headers=headers, timeout=5)
         except Exception as e:
-            ProxyUtil.increment(proxy)
+            print(proxy)
             print(e)
-            raise Exception
+            raise e
         return response
     else:
         return requests.get(url, params=params, headers=headers, timeout=5)

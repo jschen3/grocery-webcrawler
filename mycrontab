@@ -1,4 +1,4 @@
 * * * * * echo "Hello world"
 */10 * * * * /code/increment_counter.sh 2>&1 | tee /var/log/cron.log
-0 */6 * * * /code/grocerywebcrawler.sh 2>&1 | tee /var/log/webcrawl.log
+0 */3 * * * /code/grocerywebcrawler.sh 2>&1 | tee /var/log/webcrawl.log
 0 */8 * * * /code/price_calculate.sh 2>&1 | tee /var/log/pricecalculate.log
