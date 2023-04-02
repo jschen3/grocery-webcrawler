@@ -38,6 +38,7 @@ def _safeway_items_from_json(json_doc: dict, store_id: str, date: date, area: st
     return safeway_item
 
 
+
 def get_all_safeway_items_from_store(storeid):
     print("Starting webcrawling.")
     request_id = headless_browser_request_id()
@@ -141,7 +142,7 @@ def makeRestRequest(prevRequestId: str, prevOcpKey: str, start: int, storeId: in
     while attempts < 40:
         try:
             # print(proxy)
-            response = make_http_request(url=url, params=request_parameters, headers=headers, use_proxy=False)
+            response = make_http_request(url=url, params=request_parameters, headers=headers, use_proxy=True)
             status = response.status_code
             if status == 200:
                 return response.json()["response"]
