@@ -1,7 +1,7 @@
 <script>
   import Stock_Market_Icon from "$lib/images/stock_market_icon.png";    
 	import SelectBar from "./header_components/select_bar.svelte";
-	import { display_7_days, page_store_item, display_30_days } from "./store";
+	import { display_7_days, page_store_item, display_30_days ,greatest_price_change_options_30, greatest_price_change_options_7} from "./store";
 
     function seven_day_click(){
         page_store_item.set(null);
@@ -15,6 +15,13 @@
         display_30_days.set(true);
     }
 
+    function locationClicked(storeId){
+        // clone and copy variabls...
+      let clone30 = JSON.parse(JSON.stringify($greatest_price_change_options_30));
+      let clone7 = JSON.parse(JSON.stringify($greatest_price_change_options_7));
+      console.log(clone30);
+      console.log(clone7);
+    }
 </script>
 
 <header>
@@ -25,25 +32,18 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Area
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Bay Area</a>
-            <!-- <a class="dropdown-item" href="#">San Francisco</a>
-            <a class="dropdown-item" href="#">Denver</a>
-            <a class="dropdown-item" href="#">Texas</a>
-            <a class="dropdown-item" href="#">Northwest(washington, oregon</a> -->
-          </div>
-        </li>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">  
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Location
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">2948 645 San Antonio</a>
+              <a class="dropdown-item" on:click|once={locationClicked(2948)}>645 San Antonio, Mountain View, Ca</a>
+              <a class="dropdown-item" on:click|once={locationClicked(705)}>570 N Shorline Blvd, Mountain View Ca</a>
+              <a class="dropdown-item" on:click|once={locationClicked(2887)}>150 El Camino Real, Sunnyvale, Ca</a>
+              <a class="dropdown-item" on:click|once={locationClicked(1465)}>5146 Stevens Creek Blvd, San Jose, Ca</a>
+              <a class="dropdown-item" on:click|once={locationClicked(1682)}>2811 Middlefield Rd, Palo Alto, Ca</a>
+              <a class="dropdown-item" on:click|once={locationClicked(767)}>6150 Bollinger Rd, San Jose, Ca</a>
             </div>
           </li>
           {#if $display_7_days==true}

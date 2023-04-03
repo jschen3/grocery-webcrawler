@@ -4,6 +4,7 @@
     import {priceChangeData30Days, greatest_price_change_options_30, display_30_days, display_7_days, page_store_item} from './store.js';
     import {colorPercentText, addDollarSymbol} from '../util/textformat.js'
     onMount(()=>greatest_price_change_options_30.set({
+        "storeId":2948,
         "thirty_day_or_7_day": true,
         "offset": 0,
         "limit": 50,

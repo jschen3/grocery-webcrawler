@@ -12,7 +12,9 @@ export const display_30_days = writable(false);
 
 export const store_item_days = writable(7);
 
-const server_url = "https://grocerymarketwatch.com:5000"
+export const storeId = writable(2948);
+
+const server_url = "http://localhost:8000"
 export const itemData = derived(page_store_item, async($page_store_item, set)=>{
     if ($page_store_item!=null && $page_store_item!=undefined){
         const storeId = $page_store_item.storeId;
@@ -63,8 +65,10 @@ export const priceChangeData7Days = derived(greatest_price_change_options_7, asy
     let thirty_day_or_7_day;
     let offset;
     let limit;
+    let store;
     if ($greatest_price_change_options!=null){
         thirty_day_or_7_day = $greatest_price_change_options.thirty_day_or_7_day;
+        store = $greatest_price_change_options.storeId;
         offset = $greatest_price_change_options.offset;
         limit = $greatest_price_change_options.limit;
         const response = await axios.get(server_url+"/greatest_price_changes?limit="+limit+"&offset="+offset+"&thirtyOr7Days="+thirty_day_or_7_day);
@@ -79,11 +83,13 @@ export const priceChangeData30Days = derived(greatest_price_change_options_30, a
     let thirty_day_or_7_day;
     let offset;
     let limit;
+    let store;
     if ($greatest_price_change_options!=null){
         thirty_day_or_7_day = $greatest_price_change_options.thirty_day_or_7_day;
+        store = $greatest_price_change_options.storeId;
         offset = $greatest_price_change_options.offset;
         limit = $greatest_price_change_options.limit;
-        const response = await axios.get(server_url+"/greatest_price_changes?limit="+limit+"&offset="+offset+"&thirtyOr7Days="+thirty_day_or_7_day);
+        const response = await axios.get(server_url+"/greatest_price_changes?storeId="+store+"limit="+limit+"&offset="+offset+"&thirtyOr7Days="+thirty_day_or_7_day);
         const data = await response.data;
         console.log(data);
         set(data);

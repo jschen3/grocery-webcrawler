@@ -2,9 +2,10 @@
 // @ts-nocheck
 
 	import { onMount } from 'svelte';
-    import {priceChangeData7Days, greatest_price_change_options_7, display_7_days,display_30_days, page_store_item} from './store.js';
+    import {priceChangeData7Days, greatest_price_change_options_7, display_7_days, display_30_days, page_store_item} from './store.js';
     import {colorPercentText, addDollarSymbol} from '../util/textformat.js'
     onMount(()=>greatest_price_change_options_7.set({
+        "storeId":2948,
 		"thirty_day_or_7_day": false,
 		"offset": 0,
 		"limit": 50,
