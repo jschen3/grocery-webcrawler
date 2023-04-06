@@ -2,19 +2,19 @@
 // @ts-nocheck
 
 	import { onMount } from 'svelte';
-    import {priceChangeData7Days, greatest_price_change_options_7, display_7_days, display_30_days, page_store_item} from './store.js';
+    import {priceChangeData7Days, greatest_price_change_options_7, display_7_days, display_30_days, page_store_item, storeId} from './store.js';
     import {colorPercentText, addDollarSymbol} from '../util/textformat.js'
     onMount(()=>greatest_price_change_options_7.set({
-        "storeId":2948,
+        "storeId":$storeId,
 		"thirty_day_or_7_day": false,
 		"offset": 0,
 		"limit": 50,
 	}));
 
 
-    function itemNameClicked(storeId, upc){
-        storeId=2948;
-        page_store_item.set({"upc":upc, "storeId":storeId, "store_item_days":7});
+    function itemNameClicked(upc){
+        storeId=$storeId;
+        page_store_item.set({"upc":upc, "storeId":$storeId, "store_item_days":7});
         display_7_days.set(false);
         display_30_days.set(false);
     }
@@ -41,7 +41,7 @@
             {#each $priceChangeData7Days as priceChange, i}
                 <tr>
                     <th scope="row">{i+1}</th>
-                    <td><a on:click={itemNameClicked(priceChange.storeId, priceChange.upc)} class="text-black">{priceChange.name}</a></td>
+                    <td><a on:click={itemNameClicked(priceChange.upc)} class="text-black">{priceChange.name}</a></td>
                     <td>{priceChange.category}</td>
                     <td>{addDollarSymbol(priceChange.currentPrice)}</td>
                     <td>{addDollarSymbol(priceChange.price7DaysAgo)}</td>

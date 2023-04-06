@@ -1,7 +1,7 @@
 <script>
   import Stock_Market_Icon from "$lib/images/stock_market_icon.png";    
 	import SelectBar from "./header_components/select_bar.svelte";
-	import { display_7_days, page_store_item, display_30_days ,greatest_price_change_options_30, greatest_price_change_options_7} from "./store";
+	import { display_7_days, page_store_item, display_30_days ,greatest_price_change_options_30, greatest_price_change_options_7, storeId} from "./store";
 
     function seven_day_click(){
         page_store_item.set(null);
@@ -15,12 +15,27 @@
         display_30_days.set(true);
     }
 
-    function locationClicked(storeId){
+    function locationClicked(storeIdValue){
+      if (storeIdValue!=null && storeIdValue!=undefined){
         // clone and copy variabls...
-      let clone30 = JSON.parse(JSON.stringify($greatest_price_change_options_30));
-      let clone7 = JSON.parse(JSON.stringify($greatest_price_change_options_7));
-      console.log(clone30);
-      console.log(clone7);
+        let clone30 = JSON.parse(JSON.stringify($greatest_price_change_options_30));
+        let clone7 = JSON.parse(JSON.stringify($greatest_price_change_options_7));
+        storeId.set(storeIdValue)
+        greatest_price_change_options_30.set({
+          "storeId":storeIdValue,
+          "thirty_day_or_7_day": true,
+          "offset": 0,
+          "limit": 50,
+        });
+        greatest_price_change_options_7.set({
+          "storeId":storeIdValue,
+          "thirty_day_or_7_day": false,
+          "offset": 0,
+          "limit": 50,
+        });
+        console.log(clone30);
+        console.log(clone7);
+      }
     }
 </script>
 

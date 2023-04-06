@@ -21,7 +21,7 @@ export const itemData = derived(page_store_item, async($page_store_item, set)=>{
         const upc = $page_store_item.upc;
         const response = await axios.get(server_url+"/items/"+storeId+"/"+upc);
         const data = await response.data;
-        console.log(data);
+        //console.log(data);
         set(data);
     }
         
@@ -44,7 +44,7 @@ export const graphData = derived(page_store_item, async($page_store_item, set)=>
         const store_item_days = $page_store_item.store_item_days
         const response = await axios.get(server_url+"/items/"+storeId+"/"+upc+"/json/prices?days="+store_item_days);
         const data= await response.data;
-        console.log(data);
+        //console.log(data);
         set(data);
     }    
 });
@@ -56,7 +56,7 @@ export const priceChangeTable = derived(page_store_item, async($page_store_item,
         const upc = $page_store_item.upc;
         const response = await axios.get(server_url+"/pricechangetable/"+storeId+"/"+upc+"?days="+store_item_days);
         const data = await response.data;
-        console.log(data)
+        //console.log(data)
         set(data);
     }
 })
@@ -71,9 +71,9 @@ export const priceChangeData7Days = derived(greatest_price_change_options_7, asy
         store = $greatest_price_change_options.storeId;
         offset = $greatest_price_change_options.offset;
         limit = $greatest_price_change_options.limit;
-        const response = await axios.get(server_url+"/greatest_price_changes?limit="+limit+"&offset="+offset+"&thirtyOr7Days="+thirty_day_or_7_day);
+        const response = await axios.get(server_url+"/greatest_price_changes?storeId="+store+"&limit="+limit+"&offset="+offset+"&thirtyOr7Days="+thirty_day_or_7_day);
         const data = await response.data;
-        console.log(data);
+        //console.log(data);
         set(data);
     }
     
@@ -89,9 +89,9 @@ export const priceChangeData30Days = derived(greatest_price_change_options_30, a
         store = $greatest_price_change_options.storeId;
         offset = $greatest_price_change_options.offset;
         limit = $greatest_price_change_options.limit;
-        const response = await axios.get(server_url+"/greatest_price_changes?storeId="+store+"limit="+limit+"&offset="+offset+"&thirtyOr7Days="+thirty_day_or_7_day);
+        const response = await axios.get(server_url+"/greatest_price_changes?storeId="+store+"&limit="+limit+"&offset="+offset+"&thirtyOr7Days="+thirty_day_or_7_day);
         const data = await response.data;
-        console.log(data);
+        //console.log(data);
         set(data);
     }
     
