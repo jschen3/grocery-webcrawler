@@ -33,8 +33,8 @@
           "offset": 0,
           "limit": 50,
         });
-        console.log(clone30);
-        console.log(clone7);
+        //console.log(clone30);
+        //console.log(clone7);
       }
     }
 </script>
@@ -53,12 +53,12 @@
               Location
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" on:click|once={locationClicked(2948)}>645 San Antonio, Mountain View, Ca</a>
-              <a class="dropdown-item" on:click|once={locationClicked(705)}>570 N Shorline Blvd, Mountain View Ca</a>
-              <a class="dropdown-item" on:click|once={locationClicked(2887)}>150 El Camino Real, Sunnyvale, Ca</a>
-              <a class="dropdown-item" on:click|once={locationClicked(1465)}>5146 Stevens Creek Blvd, San Jose, Ca</a>
-              <a class="dropdown-item" on:click|once={locationClicked(1682)}>2811 Middlefield Rd, Palo Alto, Ca</a>
-              <a class="dropdown-item" on:click|once={locationClicked(767)}>6150 Bollinger Rd, San Jose, Ca</a>
+              <a class="dropdown-item" on:click={e=>{locationClicked(2948)}}>645 San Antonio, Mountain View, Ca</a>
+              <a class="dropdown-item" on:click={e=>{locationClicked(705)}}>570 N Shorline Blvd, Mountain View Ca</a>
+              <a class="dropdown-item" on:click={e=>{locationClicked(2887)}}>150 El Camino Real, Sunnyvale, Ca</a>
+              <a class="dropdown-item" on:click={e=>{locationClicked(1465)}}>5146 Stevens Creek Blvd, San Jose, Ca</a>
+              <a class="dropdown-item" on:click={e=>{locationClicked(1682)}}>2811 Middlefield Rd, Palo Alto, Ca</a>
+              <a class="dropdown-item" on:click={e=>{locationClicked(767)}}>6150 Bollinger Rd, San Jose, Ca</a>
             </div>
           </li>
           {#if $display_7_days==true}

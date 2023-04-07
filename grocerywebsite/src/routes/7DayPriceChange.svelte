@@ -23,7 +23,12 @@
 </script>
 {#key $display_7_days}
 {#if $display_7_days==true}
-<h1 class="text-white">Greatest Price Changes in the Last 7 Days</h1>
+<!-- Something here related to the store id using columns.... -->
+<div class="row">
+    <div class="col-sm"><h1 class="text-white">Greatest Price Changes in the Last 7 Days</h1></div>
+    <div class="float-end"><h3 class="text-white">StoreId: {$storeId}</h3></div>
+</div>
+
 <table class="table table-hover table-light table-striped table-bordered">
     <thead>
         <tr>

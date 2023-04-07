@@ -1,18 +1,18 @@
 <script>
     // @ts-nocheck
     import { onMount } from 'svelte';
-    import {priceChangeData30Days, greatest_price_change_options_30, display_30_days, display_7_days, page_store_item} from './store.js';
+    import {priceChangeData30Days, greatest_price_change_options_30, display_30_days, display_7_days, page_store_item, storeId} from './store.js';
     import {colorPercentText, addDollarSymbol} from '../util/textformat.js'
     onMount(()=>greatest_price_change_options_30.set({
-        "storeId":2948,  //set this from a another st
+        "storeId":$storeId,  //set this from a another st
         "thirty_day_or_7_day": true,
         "offset": 0,
         "limit": 50,
     }));
 
-    function itemNameClicked(storeId, upc){
-        storeId = 2948;
-        page_store_item.set({"upc":upc, "storeId":storeId, "store_item_days":7});
+    function itemNameClicked(upc){
+        storeId = $storeId;
+        page_store_item.set({"upc":upc, "storeId":$storeId, "store_item_days":7});
         display_7_days.set(false);
         display_30_days.set(false);
     }
@@ -20,7 +20,10 @@
     </script>
     {#key $display_30_days}
     {#if $display_30_days==true}
-    <h1 class="text-white">Greatest Price Changes in the Last 30 Days</h1>
+    <div class="row">
+        <div class="col-sm"><h1 class="text-white">Greatest Price Changes in the Last 30 Days</h1></div>
+        <div class="float-end"><h3 class="text-white">StoreId: {$storeId}</h3></div>
+    </div>
     <table class="table table-hover table-light table-striped table-bordered">
         <thead>
             <tr>
@@ -38,7 +41,7 @@
                 {#each $priceChangeData30Days as priceChange, i}
                     <tr>
                         <th scope="row">{i+1}</th>
-                        <td><a on:click={itemNameClicked(priceChange.storeId, priceChange.upc)} class="text-black">{priceChange.name}</a></td>
+                        <td><a on:click={itemNameClicked(priceChange.upc)} class="text-black">{priceChange.name}</a></td>
                         <td>{priceChange.category}</td>
                         <td>{addDollarSymbol(priceChange.currentPrice)}</td>
                         <td>{addDollarSymbol(priceChange.price30DaysAgo)}</td>       
