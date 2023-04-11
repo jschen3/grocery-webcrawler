@@ -3,16 +3,25 @@
     import { onMount } from 'svelte';
     import {priceChangeData30Days, greatest_price_change_options_30, display_30_days, display_7_days, page_store_item, storeId} from './store.js';
     import {colorPercentText, addDollarSymbol} from '../util/textformat.js'
-    onMount(()=>greatest_price_change_options_30.set({
-        "storeId":$storeId,  //set this from a another st
-        "thirty_day_or_7_day": true,
-        "offset": 0,
-        "limit": 50,
-    }));
+    onMount(()=>{
+        let storeValue;
+        storeId.subscribe(value =>{
+            storeValue=value;
+        });   
+        greatest_price_change_options_30.set({
+            "storeId":storeValue,  //set this from a another st
+            "thirty_day_or_7_day": true,
+            "offset": 0,
+            "limit": 50,
+        });
+    });
 
     function itemNameClicked(upc){
-        storeId = $storeId;
-        page_store_item.set({"upc":upc, "storeId":$storeId, "store_item_days":7});
+        let storeValue;
+        storeId.subscribe(value =>{
+            storeValue=value;
+        });
+        page_store_item.set({"upc":upc, "storeId":storeValue, "store_item_days":7});
         display_7_days.set(false);
         display_30_days.set(false);
     }

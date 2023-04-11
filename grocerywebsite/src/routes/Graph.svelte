@@ -6,7 +6,7 @@
     let days_select = 7
     function store_item_days_on_change(){
        let clone = JSON.parse(JSON.stringify($page_store_item));
-       console.log(clone);
+       //console.log(clone);
        page_store_item.set({"upc":clone.upc, "storeId":$storeId, "store_item_days":days_select});
     }
 

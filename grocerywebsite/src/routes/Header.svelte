@@ -20,7 +20,8 @@
         // clone and copy variabls...
         let clone30 = JSON.parse(JSON.stringify($greatest_price_change_options_30));
         let clone7 = JSON.parse(JSON.stringify($greatest_price_change_options_7));
-        storeId.set(storeIdValue)
+        let page_store_item_clone = JSON.parse(JSON.stringify($page_store_item));
+        storeId.set(storeIdValue);
         greatest_price_change_options_30.set({
           "storeId":storeIdValue,
           "thirty_day_or_7_day": true,
@@ -33,6 +34,7 @@
           "offset": 0,
           "limit": 50,
         });
+        page_store_item.set({"upc":page_store_item_clone.upc, "storeId":storeIdValue, "store_item_days":page_store_item_clone.store_item_days});
         //console.log(clone30);
         //console.log(clone7);
       }
