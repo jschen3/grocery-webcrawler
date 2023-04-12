@@ -33,10 +33,20 @@ EXPOSE 5000
 
 ### Run Scripts
 COPY ./mycrontab /code/mycrontab
-COPY ./grocerywebcrawler.sh /code
+COPY ./grocerywebcrawler705.sh /code
+COPY ./grocerywebcrawler767.sh /code
+COPY ./grocerywebcrawler1465.sh /code
+COPY ./grocerywebcrawler1682.sh /code
+COPY ./grocerywebcrawler2887.sh /code
+COPY ./grocerywebcrawler2948.sh /code
 COPY ./increment_counter.sh /code
 COPY ./price_calculate.sh /code
-RUN chmod +x /code/grocerywebcrawler.sh
+RUN chmod +x /code/grocerywebcrawler705.sh
+RUN chmod +x /code/grocerywebcrawler767.sh
+RUN chmod +x /code/grocerywebcrawler1465.sh
+RUN chmod +x /code/grocerywebcrawler1682.sh
+RUN chmod +x /code/grocerywebcrawler2887.sh
+RUN chmod +x /code/grocerywebcrawler2948.sh
 RUN chmod +x /code/increment_counter.sh
 RUN chmod +x /code/price_calculate.sh
 RUN crontab /code/mycrontab
