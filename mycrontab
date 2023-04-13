@@ -1,9 +1,9 @@
 * * * * * echo "Hello world"
 */10 * * * * /code/increment_counter.sh 2>&1 | tee /var/log/cron.log
-0 */2 * * * /code/grocerywebcrawler705.sh 2>&1 | tee /var/log/webcrawl.log
-0 */2 * * * /code/grocerywebcrawler767.sh 2>&1 | tee /var/log/webcrawl.log
-0 */2 * * * /code/grocerywebcrawler1465.sh 2>&1 | tee /var/log/webcrawl.log
-0 */2 * * * /code/grocerywebcrawler1682.sh 2>&1 | tee /var/log/webcrawl.log
-0 */2 * * * /code/grocerywebcrawler2887.sh 2>&1 | tee /var/log/webcrawl.log
-0 */2 * * * /code/grocerywebcrawler2948.sh 2>&1 | tee /var/log/webcrawl.log
+0 */2 * * * /code/grocerywebcrawler705.sh 2>&1 | tee /var/log/webcrawl705.log
+0 */2 * * * /code/grocerywebcrawler767.sh 2>&1 | tee /var/log/webcrawl767.log
+0 */2 * * * /code/grocerywebcrawler1465.sh 2>&1 | tee /var/log/webcrawl1465.log
+0 */2 * * * /code/grocerywebcrawler1682.sh 2>&1 | tee /var/log/webcrawl1682.log
+0 */2 * * * /code/grocerywebcrawler2887.sh 2>&1 | tee /var/log/webcrawl2887.log
+0 */2 * * * /code/grocerywebcrawler2948.sh 2>&1 | tee /var/log/webcrawl2948.log
 0 */8 * * * /code/price_calculate.sh 2>&1 | tee /var/log/pricecalculate.log

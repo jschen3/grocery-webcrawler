@@ -34,7 +34,11 @@
           "offset": 0,
           "limit": 50,
         });
-        page_store_item.set({"upc":page_store_item_clone.upc, "storeId":storeIdValue, "store_item_days":page_store_item_clone.store_item_days});
+        if (page_store_item_clone!=null){
+          if (page_store_item_clone.upc!=null && page_store_item_clone.store_item_days!=null){
+            page_store_item.set({"upc":page_store_item_clone.upc, "storeId":storeIdValue, "store_item_days":page_store_item_clone.store_item_days});
+          }
+        }  
         //console.log(clone30);
         //console.log(clone7);
       }

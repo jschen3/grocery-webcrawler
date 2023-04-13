@@ -17,7 +17,12 @@ WORKDIR /cronjob
 COPY ./src /cronjob
 COPY ./requirements.txt /cronjob/requirements.txt
 COPY .env /cronjob/.env
-RUN touch /var/log/webcrawl.log
+RUN touch /var/log/webcrawl705.log
+RUN touch /var/log/webcrawl767.log
+RUN touch /var/log/webcrawl1465.log
+RUN touch /var/log/webcrawl1682.log
+RUN touch /var/log/webcrawl2887.log
+RUN touch /var/log/webcrawl2948.log
 RUN touch /var/log/pricecalculate.log
 RUN touch /var/log/cron.log
 
