@@ -14,7 +14,7 @@ export const store_item_days = writable(7);
 
 export const storeId = writable(2948);
 
-const server_url = "https://grocerymarketwatch:5000"
+const server_url = "https://grocerymarketwatch.com:5000"
 export const itemData = derived(page_store_item, async($page_store_item, set)=>{
     if ($page_store_item!=null && $page_store_item!=undefined){
         const storeId = $page_store_item.storeId;
