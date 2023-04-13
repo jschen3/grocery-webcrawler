@@ -1,16 +1,20 @@
 <script>
 	import axios from 'axios';
-    import {page_store_item, display_7_days, display_30_days} from '../store.js' //  add store id as a writable here
+    import {page_store_item, display_7_days, display_30_days, storeId} from '../store.js' //  add store id as a writable here
     
     import SelectOption from './select_options.svelte';	
         
     let filterOptions = [];	
     
     const get_filter_options = async() => {
+        let storeValue;
+        storeId.subscribe(value =>{
+            storeValue=value;
+        });
         let storageArr = []
         if (inputValueText && inputValueText.length>3){
             let storeItems;
-            const response = await axios.get("https://localhost:8000/items/2948?q="+inputValueText);  //adapt search here....
+            const response = await axios.get("https://grocerymarketwatch.com:5000/items/"+storeValue+"?q="+inputValueText);  //adapt search here....
             const data = await response.data;
             storeItems = data;
             storeItems.forEach(storeItem => {
