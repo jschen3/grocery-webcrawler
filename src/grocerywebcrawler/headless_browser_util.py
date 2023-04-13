@@ -64,6 +64,7 @@ def headless_browser_request_id()->dict:
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-extensions")
+    options.add_argument("--remote-debugging-port=9222")
     options.headless = True
     with webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()),
                           desired_capabilities=capabilities, options=options) as driver:
