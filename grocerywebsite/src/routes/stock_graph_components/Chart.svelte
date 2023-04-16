@@ -14,7 +14,7 @@
   import { timeParse } from "d3-time-format";
 
 export let pricingValue;
-	let pricingData = pricingValue
+let pricingData = pricingValue
 if (pricingData==undefined || pricingData.length==0){
   pricingData = [{
     "name": "",
@@ -113,7 +113,6 @@ console.log("pricingData:" +pricingData);
     <TooltipRight
       value={formatDollars(point.price)}
       top={yScale(point.price)}
-
       type="point"
     />
     <svg on:mousemove={handleMousemove}>

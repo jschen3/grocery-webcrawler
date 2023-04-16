@@ -102,12 +102,5 @@ export const storeInfo = derived(store_id, async($store_id, set)=>{
         const response = await axios.get(server_url+"/storeinfo/"+$store_id);
         const data = await response.data;
         set(data);
-    }
-    // set({
-    //     "storeId":"2948",
-    //     "location":"645 San Antonio Rd, Mountain View, CA, 94040",
-    //     "storeType":null,
-    //     "region":"bay-area",
-    //     "description":"Safeway in the bay area."
-    // })
+    }    
 });

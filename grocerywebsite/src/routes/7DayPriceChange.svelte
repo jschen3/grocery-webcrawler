@@ -35,9 +35,11 @@
 <!-- Something here related to the store id using columns.... -->
 <div class="row">
     <div class="col-sm"><h1 class="text-white">Greatest Price Changes in the Last 7 Days</h1></div>
-    {#key $storeInfo}
-    <div class="float-end"><h3 class="text-white">Location:  {$storeInfo.location}</h3></div>
-    {/key}
+    {#if $storeInfo}
+        {#key $storeInfo}
+            <div class="float-end"><h3 class="text-white">Location:  {$storeInfo.location}</h3></div>
+        {/key}
+    {/if}
 </div>
 
 <table class="table table-hover table-light table-striped table-bordered">
