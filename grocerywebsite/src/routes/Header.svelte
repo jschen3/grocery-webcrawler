@@ -1,7 +1,7 @@
 <script>
   import Stock_Market_Icon from "$lib/images/stock_market_icon.png";    
 	import SelectBar from "./header_components/select_bar.svelte";
-	import { display_7_days, page_store_item, display_30_days ,greatest_price_change_options_30, greatest_price_change_options_7, storeId} from "./store";
+	import { display_7_days, page_store_item, display_30_days ,greatest_price_change_options_30, greatest_price_change_options_7, store_id} from "./store";
 
     function seven_day_click(){
         page_store_item.set(null);
@@ -21,7 +21,7 @@
         let clone30 = JSON.parse(JSON.stringify($greatest_price_change_options_30));
         let clone7 = JSON.parse(JSON.stringify($greatest_price_change_options_7));
         let page_store_item_clone = JSON.parse(JSON.stringify($page_store_item));
-        storeId.set(storeIdValue);
+        store_id.set(storeIdValue);
         greatest_price_change_options_30.set({
           "storeId":storeIdValue,
           "thirty_day_or_7_day": true,

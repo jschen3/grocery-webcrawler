@@ -1,13 +1,13 @@
 <script>
 
     import Chart from './stock_graph_components/Chart.svelte';
-    import {graphData, page_store_item, storeId} from './store.js';
+    import {graphData, page_store_item, store_id} from './store.js';
     
     let days_select = 7
     function store_item_days_on_change(){
        let clone = JSON.parse(JSON.stringify($page_store_item));
        //console.log(clone);
-       page_store_item.set({"upc":clone.upc, "storeId":$storeId, "store_item_days":days_select});
+       page_store_item.set({"upc":clone.upc, "storeId":$store_id, "store_item_days":days_select});
     }
 
 </script>

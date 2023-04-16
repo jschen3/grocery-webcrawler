@@ -66,6 +66,18 @@ async def getStoreFromRegion(region: str, db: Session = Depends(get_db)) -> list
     return stores
 
 
+@app.get("/storeinfo/{storeId}")
+async def getStoreInfo(storeId: str, db: Session = Depends(get_db)) -> Store:
+    stores: list[StoreDbModel] = db.query(StoreDbModel).filter(StoreDbModel.storeId == storeId).all()
+    storeList = []
+    for store in stores:
+        storeList.append(store.to_store_object())
+    if len(storeList)>0:
+        return storeList[0]
+    else:
+        return None
+
+
 @app.get("/items/{storeId}")
 async def getItemsFromStore(storeId: str, q: str, limit: int = 30, db: Session = Depends(get_db)):
     split_q = q.split(" ")
@@ -139,7 +151,8 @@ async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset:
     # don't know why this query doesn't quite work. The distinct piece doesn't work....
 
     if thirtyOr7Days:
-        thirty_days_ago = date.today()-timedelta(days=1)  # a price change occurred in the last 7 days. Compared to the price 7 days ago was one of the top 50 greatest price changes.
+        thirty_days_ago = date.today() - timedelta(
+            days=1)  # a price change occurred in the last 7 days. Compared to the price 7 days ago was one of the top 50 greatest price changes.
         greatest_percent_items: list[PriceChangeDBModel] = db.query(PriceChangeDBModel.upc,
                                                                     PriceChangeDBModel.name,
                                                                     PriceChangeDBModel.storeId,
@@ -158,7 +171,7 @@ async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset:
             PriceChangeDBModel.absPercentPriceChange30Days.desc()).limit(
             limit * 10).offset(offset).all()
     else:
-        one_week_ago = date.today()-timedelta(days=1)
+        one_week_ago = date.today() - timedelta(days=1)
         greatest_percent_items: list[PriceChangeDBModel] = db.query(PriceChangeDBModel.upc,
                                                                     PriceChangeDBModel.name,
                                                                     PriceChangeDBModel.storeId,
@@ -233,7 +246,7 @@ def priceChangeTable(upc: str, storeId: str, days: int = -1, db: Session = Depen
                 currentPriceChangeRow.endDate = item.date
                 currentPriceChangeRow.currentPriceChangeFromToday = currentPriceChangeRow.currentPrice - latestPrice
                 currentPriceChangeRow.currentPriceChangePercentageFromToday = (
-                                                                                          currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice) * 100
+                                                                                      currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice) * 100
                 currentPriceChangeRow.startDateEndDateStr = f"{currentPriceChangeRow.startDate.strftime('%B %d, %Y')} -- {currentPriceChangeRow.endDate.strftime('%B %d, %Y')}"
                 priceChangeRows.append(currentPriceChangeRow.copy())
                 currentPriceChangeRow = PriceChangeRow()
@@ -247,7 +260,7 @@ def priceChangeTable(upc: str, storeId: str, days: int = -1, db: Session = Depen
             currentPriceChangeRow.endDate = latestRow.date
             currentPriceChangeRow.currentPriceChangeFromToday = currentPriceChangeRow.currentPrice - latestPrice
             currentPriceChangeRow.currentPriceChangePercentageFromToday = (
-                                                                                      currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice) * 100
+                                                                                  currentPriceChangeRow.currentPriceChangeFromToday / currentPriceChangeRow.currentPrice) * 100
             currentPriceChangeRow.startDateEndDateStr = f"{currentPriceChangeRow.startDate.strftime('%B %d, %Y')} -- {currentPriceChangeRow.endDate.strftime('%B %d, %Y')}"
             priceChangeRows.append(currentPriceChangeRow.copy())
         return priceChangeRows

@@ -2,11 +2,11 @@
 // @ts-nocheck
 
 	import { onMount } from 'svelte';
-    import {priceChangeData7Days, greatest_price_change_options_7, display_7_days, display_30_days, page_store_item, storeId} from './store.js';
+    import {priceChangeData7Days, greatest_price_change_options_7, display_7_days, display_30_days, page_store_item, store_id, storeInfo} from './store.js';
     import {colorPercentText, addDollarSymbol} from '../util/textformat.js'
     onMount(()=>{
         let storeValue;
-        storeId.subscribe(value =>{
+        store_id.subscribe(value =>{
             storeValue=value;
         });
         greatest_price_change_options_7.set({
@@ -20,7 +20,7 @@
 
     function itemNameClicked(upc){
         let storeValue;
-        storeId.subscribe(value =>{
+        store_id.subscribe(value =>{
             storeValue=value;
         })
         page_store_item.set({"upc":upc, "storeId":storeValue, "store_item_days":7});
@@ -35,7 +35,9 @@
 <!-- Something here related to the store id using columns.... -->
 <div class="row">
     <div class="col-sm"><h1 class="text-white">Greatest Price Changes in the Last 7 Days</h1></div>
-    <div class="float-end"><h3 class="text-white">StoreId: {$storeId}</h3></div>
+    {#key $storeInfo}
+    <div class="float-end"><h3 class="text-white">Location:  {$storeInfo.location}</h3></div>
+    {/key}
 </div>
 
 <table class="table table-hover table-light table-striped table-bordered">

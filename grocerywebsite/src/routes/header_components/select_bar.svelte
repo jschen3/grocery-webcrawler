@@ -1,6 +1,6 @@
 <script>
 	import axios from 'axios';
-    import {page_store_item, display_7_days, display_30_days, storeId} from '../store.js' //  add store id as a writable here
+    import {page_store_item, display_7_days, display_30_days, store_id} from '../store.js' //  add store id as a writable here
     
     import SelectOption from './select_options.svelte';	
         
@@ -8,7 +8,7 @@
     
     const get_filter_options = async() => {
         let storeValue;
-        storeId.subscribe(value =>{
+        store_id.subscribe(value =>{
             storeValue=value;
         });
         let storageArr = []

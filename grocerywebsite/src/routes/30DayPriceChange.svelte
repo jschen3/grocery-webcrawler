@@ -1,11 +1,11 @@
 <script>
     // @ts-nocheck
     import { onMount } from 'svelte';
-    import {priceChangeData30Days, greatest_price_change_options_30, display_30_days, display_7_days, page_store_item, storeId} from './store.js';
+    import {priceChangeData30Days, greatest_price_change_options_30, display_30_days, display_7_days, page_store_item, store_id} from './store.js';
     import {colorPercentText, addDollarSymbol} from '../util/textformat.js'
     onMount(()=>{
         let storeValue;
-        storeId.subscribe(value =>{
+        store_id.subscribe(value =>{
             storeValue=value;
         });   
         greatest_price_change_options_30.set({
@@ -18,7 +18,7 @@
 
     function itemNameClicked(upc){
         let storeValue;
-        storeId.subscribe(value =>{
+        store_id.subscribe(value =>{
             storeValue=value;
         });
         page_store_item.set({"upc":upc, "storeId":storeValue, "store_item_days":7});
@@ -31,7 +31,7 @@
     {#if $display_30_days==true}
     <div class="row">
         <div class="col-sm"><h1 class="text-white">Greatest Price Changes in the Last 30 Days</h1></div>
-        <div class="float-end"><h3 class="text-white">StoreId: {$storeId}</h3></div>
+        <div class="float-end"><h3 class="text-white">StoreId: {$store_id}</h3></div>
     </div>
     <table class="table table-hover table-light table-striped table-bordered">
         <thead>

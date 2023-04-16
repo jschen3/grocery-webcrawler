@@ -12,14 +12,14 @@ export const display_30_days = writable(false);
 
 export const store_item_days = writable(7);
 
-export const storeId = writable(2948);
+export const store_id = writable(2948);
 
 const server_url = "https://grocerymarketwatch.com:5000"
 export const itemData = derived(page_store_item, async($page_store_item, set)=>{
     if ($page_store_item!=null && $page_store_item!=undefined){
-        const storeId = $page_store_item.storeId;
+        const store_id = $page_store_item.storeId;
         const upc = $page_store_item.upc;
-        const response = await axios.get(server_url+"/items/"+storeId+"/"+upc);
+        const response = await axios.get(server_url+"/items/"+store_id+"/"+upc);
         const data = await response.data;
         //console.log(data);
         set(data);
@@ -29,9 +29,9 @@ export const itemData = derived(page_store_item, async($page_store_item, set)=>{
 
 export const priceToday = derived(page_store_item, async($page_store_item, set)=>{
     if ($page_store_item!=null && $page_store_item!=undefined){
-        const storeId = $page_store_item.storeId;
+        const store_id = $page_store_item.storeId;
         const upc = $page_store_item.upc;
-        const response = await axios.get(server_url+"/items/"+storeId+"/"+upc);
+        const response = await axios.get(server_url+"/items/"+store_id+"/"+upc);
         const data = await response.data;
         set({"date":data.date, "price":data.price, "currentPriceChangeFromToday": 0.00, "currentPriceChangePercentageFromToday":0.00})
     }
@@ -39,10 +39,10 @@ export const priceToday = derived(page_store_item, async($page_store_item, set)=
 
 export const graphData = derived(page_store_item, async($page_store_item, set)=>{
     if ($page_store_item!=null && $page_store_item!=undefined){
-        const storeId = $page_store_item.storeId;
+        const store_id = $page_store_item.storeId;
         const upc = $page_store_item.upc;
         const store_item_days = $page_store_item.store_item_days
-        const response = await axios.get(server_url+"/items/"+storeId+"/"+upc+"/json/prices?days="+store_item_days);
+        const response = await axios.get(server_url+"/items/"+store_id+"/"+upc+"/json/prices?days="+store_item_days);
         const data= await response.data;
         //console.log(data);
         set(data);
@@ -97,3 +97,17 @@ export const priceChangeData30Days = derived(greatest_price_change_options_30, a
     
 });
 
+export const storeInfo = derived(store_id, async($store_id, set)=>{
+    if ($store_id!=null && $store_id!=undefined){
+        const response = await axios.get(server_url+"/storeinfo/"+$store_id);
+        const data = await response.data;
+        set(data);
+    }
+    // set({
+    //     "storeId":"2948",
+    //     "location":"645 San Antonio Rd, Mountain View, CA, 94040",
+    //     "storeType":null,
+    //     "region":"bay-area",
+    //     "description":"Safeway in the bay area."
+    // })
+});
