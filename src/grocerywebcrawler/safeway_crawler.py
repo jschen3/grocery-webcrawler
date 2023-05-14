@@ -95,14 +95,7 @@ def get_all_safeway_items_from_store(storeid):
                         print(f"unable to process json_doc:{json_doc[1]}")
                         continue
             session.commit()
-            # if i % 300 == 0:
-            #     session.query(OperationDbModel).filter(
-            #         OperationDbModel.id == f"webcrawl_{datetime.today().strftime('%Y-%m-%d')}_{storeid}").update({
-            #         OperationDbModel.currentProcessed: i, OperationDbModel.status: "Processing"
-            #     })
-            #     session.commit()
             print(f"looped through and created safeway items. Committed items. Current at {i} out of {num_found}")
-            # sleep(0.25)
     except Exception:
         print("loop failed unable to go through all items")
     print(f"finished items at store: {storeid}")

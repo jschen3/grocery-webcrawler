@@ -22,6 +22,7 @@ from webserver.models.store import StoreDbModel, Store
 from webserver.models.price_change_object import PriceChangeDBModel
 
 from util.logging import info
+from webserver.price_comparison_between_stores import create_price_comparison_between_stores
 
 app = FastAPI()
 
@@ -264,3 +265,8 @@ def priceChangeTable(upc: str, storeId: str, days: int = -1, db: Session = Depen
             currentPriceChangeRow.startDateEndDateStr = f"{currentPriceChangeRow.startDate.strftime('%B %d, %Y')} -- {currentPriceChangeRow.endDate.strftime('%B %d, %Y')}"
             priceChangeRows.append(currentPriceChangeRow.copy())
         return priceChangeRows
+
+
+@app.get("/pricecomparison/{upc}")
+def priceComparison(upc:str, db: Session = Depends(get_db)):
+    return create_price_comparison_between_stores(upc, db)
