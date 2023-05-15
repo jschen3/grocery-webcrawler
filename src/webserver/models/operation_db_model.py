@@ -1,6 +1,5 @@
-from sqlalchemy import String, Column, TIMESTAMP, Integer
-
 from grocerywebcrawler.models.safeway_item import Base
+from sqlalchemy import String, Column, TIMESTAMP, Integer
 
 
 class OperationDbModel(Base):

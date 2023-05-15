@@ -1,15 +1,14 @@
-import traceback
 import uuid
 from datetime import date, datetime
+
 import requests
-from sqlalchemy import and_
-
-from grocerywebcrawler.models.safeway_item import SafewayItem, SafewayItemDBModel
 from grocerywebcrawler.headless_browser_util import headless_browser_request_id
-
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItems
+from grocerywebcrawler.models.safeway_item import SafewayItem
+from grocerywebcrawler.models.safeway_item import SafewayItemDBModel
 from grocerywebcrawler.proxy_util import ProxyUtil
 from grocerywebcrawler.rds_connection import RDSConnection
+from sqlalchemy import and_
 from webserver.models.operation_db_model import OperationDbModel
 
 
@@ -36,7 +35,6 @@ def _safeway_items_from_json(json_doc: dict, store_id: str, date: date, area: st
                                date=date, area=area, storeType=storeType)
     safeway_item.upc_date_store_id = f"{safeway_item.upc}_{date}_{store_id}"
     return safeway_item
-
 
 
 def get_all_safeway_items_from_store(storeid):

@@ -1,10 +1,9 @@
 import os
-import pathlib
 
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, scoped_session
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
 
 
 class RDSConnection:
@@ -33,8 +32,9 @@ class RDSConnection:
             RDSConnection.__engine = create_rds_engine()
         return RDSConnection.__engine
 
+
 def create_rds_engine():
-    #print(pathlib.Path().absolute())
+    # print(pathlib.Path().absolute())
     load_dotenv()
     AWS_RDS_PATH = os.getenv('AWS_RDS_PATH')
     if AWS_RDS_PATH is None:

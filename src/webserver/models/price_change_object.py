@@ -1,5 +1,6 @@
 from datetime import date
 from typing import Optional
+
 from sqlalchemy import Column, String, TIMESTAMP, FLOAT
 from sqlalchemy.orm import declarative_base
 
@@ -25,7 +26,8 @@ class PriceChangeObject:
 
     def to_db_object(self):
         return PriceChangeDBModel(
-            id=f"{self.storeId}_{self.upc}_{self.currentDate.strftime('%Y-%m-%d')}", storeId=self.storeId, name=self.name, upc=self.upc,
+            id=f"{self.storeId}_{self.upc}_{self.currentDate.strftime('%Y-%m-%d')}", storeId=self.storeId,
+            name=self.name, upc=self.upc,
             category=self.category,
             priceChange30Days=self.priceChange30Days, price30DaysAgo=self.price30DaysAgo,
             percentPriceChange30Days=self.percentPriceChange30Days,

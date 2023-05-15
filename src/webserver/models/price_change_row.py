@@ -14,4 +14,3 @@ class PriceChangeRow(BaseModel):
     unitOfMeasure: Optional[str]
     currentPriceChangeFromToday: Optional[float]
     currentPriceChangePercentageFromToday: Optional[float]
-

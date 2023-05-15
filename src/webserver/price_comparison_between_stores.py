@@ -1,14 +1,11 @@
-import json
 from datetime import date
 from operator import and_
 from typing import Optional
 
+from grocerywebcrawler.models.safeway_item import SafewayItemDBModel
 from pydantic.main import BaseModel
-
-from grocerywebcrawler.models.safeway_item import SafewayItem, SafewayItemDBModel
-from grocerywebcrawler.rds_connection import RDSConnection
-from webserver.models.store import StoreDbModel
 from sqlalchemy.orm import Session
+from webserver.models.store import StoreDbModel
 
 
 class StorePriceObject(BaseModel):
@@ -51,4 +48,4 @@ def create_price_comparison_between_stores(upc: str, db: Session):
     new_price_comparison_object.prices = priceObjects
     return new_price_comparison_object
 
-#print(create_price_comparison_between_stores('0004200015810', None))
+# print(create_price_comparison_between_stores('0004200015810', None))

@@ -1,5 +1,7 @@
 from datetime import datetime
+
 from sqlalchemy import Column, Integer, TIMESTAMP
+
 from grocerywebcrawler.models.safeway_item import Base
 from grocerywebcrawler.rds_connection import RDSConnection
 from webserver.models.operation_db_model import OperationDbModel

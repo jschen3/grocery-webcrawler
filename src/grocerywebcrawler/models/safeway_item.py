@@ -1,9 +1,9 @@
+from datetime import date
 from typing import Optional
 
 from pydantic import BaseModel
 from sqlalchemy import Column, String, TIMESTAMP, FLOAT, JSON
 from sqlalchemy.orm import declarative_base
-from datetime import date
 
 
 class SafewayItem(BaseModel):

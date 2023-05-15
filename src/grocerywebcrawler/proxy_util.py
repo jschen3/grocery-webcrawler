@@ -1,6 +1,7 @@
 import random
-from selenium.webdriver import DesiredCapabilities
+
 from selenium import webdriver
+from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 

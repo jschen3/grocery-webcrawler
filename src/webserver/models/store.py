@@ -1,6 +1,7 @@
 from typing import Optional
-from sqlalchemy import Column, String, Integer, Boolean
+
 from pydantic.main import BaseModel
+from sqlalchemy import Column, String, Integer, Boolean
 from sqlalchemy.orm import declarative_base
 
 
@@ -10,7 +11,7 @@ class Store(BaseModel):
     storeType: Optional[str]
     region: Optional[str]
     description: Optional[str]
-    webcrawl:Optional[bool]
+    webcrawl: Optional[bool]
 
     def dict(self, *args, **kwargs):
         return {

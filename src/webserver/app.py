@@ -1,27 +1,25 @@
 import io
 import json
-import pytz  # $ pip install pytz
-import tzlocal  # $ pip install tzlocal
-import pandas
 from datetime import datetime, timedelta, date
 
-from fastapi.responses import StreamingResponse
+import pandas
+import pytz  # $ pip install pytz
+import tzlocal  # $ pip install tzlocal
+from counter import Counter
 from fastapi import FastAPI, Depends
-from sqlalchemy.orm import Session
-from sqlalchemy import func, and_, asc
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItems
 from grocerywebcrawler.models.safeway_item import SafewayItemDBModel, SafewayItem
-from fastapi.middleware.cors import CORSMiddleware
 from grocerywebcrawler.rds_connection import RDSConnection
+from sqlalchemy import func, and_, asc
+from sqlalchemy.orm import Session
+from util.logging import info
 from webserver.build_general_info_section import build_general_information
-from counter import Counter
 from webserver.models.operation_db_model import OperationDbModel
+from webserver.models.price_change_object import PriceChangeDBModel
 from webserver.models.price_change_row import PriceChangeRow
 from webserver.models.store import StoreDbModel, Store
-
-from webserver.models.price_change_object import PriceChangeDBModel
-
-from util.logging import info
 from webserver.price_comparison_between_stores import create_price_comparison_between_stores
 
 app = FastAPI()
@@ -73,7 +71,7 @@ async def getStoreInfo(storeId: str, db: Session = Depends(get_db)) -> Store:
     storeList = []
     for store in stores:
         storeList.append(store.to_store_object())
-    if len(storeList)>0:
+    if len(storeList) > 0:
         return storeList[0]
     else:
         return None
@@ -268,5 +266,5 @@ def priceChangeTable(upc: str, storeId: str, days: int = -1, db: Session = Depen
 
 
 @app.get("/pricecomparison/{upc}")
-def priceComparison(upc:str, db: Session = Depends(get_db)):
+def priceComparison(upc: str, db: Session = Depends(get_db)):
     return create_price_comparison_between_stores(upc, db)

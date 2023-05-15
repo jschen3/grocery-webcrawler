@@ -5,13 +5,11 @@ from datetime import date, datetime
 from time import sleep
 
 import requests
-from sqlalchemy.exc import NoResultFound
-
-from grocerywebcrawler.models.safeway_item import SafewayItem, SafewayItemDBModel
 from grocerywebcrawler.headless_browser_util import headless_browser_request_id
-
-from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItem
+from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItems
+from grocerywebcrawler.models.safeway_item import SafewayItem, SafewayItemDBModel
 from grocerywebcrawler.rds_connection import RDSConnection
+from sqlalchemy.exc import NoResultFound
 from util.logging import info
 from webserver.models.operation_db_model import OperationDbModel
 
@@ -78,7 +76,7 @@ def get_all_safeway_items_from_store(storeid):
         session.add(operationsRecord)
         session.commit()
     ranges = []
-    for i in range(0, math.ceil(num_found/4), 30):
+    for i in range(0, math.ceil(num_found / 4), 30):
         ranges.append((i, storeid, num_found))
     try:
         pool_obj = multiprocessing.Pool()
@@ -93,6 +91,7 @@ def get_all_safeway_items_from_store(storeid):
     session.commit()
     print(f"finished items at store: {storeid}")
     info(f"finished items at store: {storeid}")
+
 
 # write_excel_file(doc_models, 2948)
 # https://pybit.es/articles/how-to-package-and-deploy-cli-apps/
@@ -139,15 +138,15 @@ def loop(ranges):
                     except:
                         session.add(safeway_item_dbmodel)
                     try:
-                        existingDistinct = session.query(DistinctSafewayItem).where(
-                            safeway_item_dbmodel.upc == DistinctSafewayItem.upc).one()
+                        existingDistinct = session.query(DistinctSafewayItems).where(
+                            safeway_item_dbmodel.upc == DistinctSafewayItems.upc).one()
                     except:
-                        distinct = DistinctSafewayItem(upc=safeway_item_dbmodel.upc,
-                                                       storeId=safeway_item_dbmodel.storeId,
-                                                       name=safeway_item_dbmodel.name,
-                                                       departmentName=safeway_item_dbmodel.departmentName,
-                                                       date=safeway_item_dbmodel.date,
-                                                       area=safeway_item_dbmodel.area)
+                        distinct = DistinctSafewayItems(upc=safeway_item_dbmodel.upc,
+                                                        storeId=safeway_item_dbmodel.storeId,
+                                                        name=safeway_item_dbmodel.name,
+                                                        departmentName=safeway_item_dbmodel.departmentName,
+                                                        date=safeway_item_dbmodel.date,
+                                                        area=safeway_item_dbmodel.area)
                         try:
                             session.add(distinct)
                         except:
@@ -179,6 +178,3 @@ def loop(ranges):
     print(f"looped through and created safeway items. Committed items. Current at {start} out of {num_found}")
     info(f"looped through and created safeway items. Committed items. Current at {start} out of {num_found}")
     sleep(.25)
-
-
-

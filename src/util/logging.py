@@ -1,6 +1,6 @@
 import logging
-import os
 import logging.config
+import os
 
 LOGGING_SETTINGS = {
     "version": 1,

@@ -7,3 +7,4 @@
 0 */2 * * * /code/grocerywebcrawler2948.sh 2>&1 | tee /var/log/webcrawl2948.log
 0 0 * * * /code/clear_price_change_object.py
 0 */8 * * * /code/price_calculate.sh 2>&1 | tee /var/log/pricecalculate.log
+0 0 1 * * rm /var/log/*.log

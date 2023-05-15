@@ -38,12 +38,12 @@ EXPOSE 5000
 
 ### Run Scripts
 COPY ./mycrontab /code/mycrontab
-COPY ./grocerywebcrawler705.sh /code
-COPY ./grocerywebcrawler767.sh /code
-COPY ./grocerywebcrawler1465.sh /code
-COPY ./grocerywebcrawler1682.sh /code
-COPY ./grocerywebcrawler2887.sh /code
-COPY ./grocerywebcrawler2948.sh /code
+COPY ./webcrawlers_bash/grocerywebcrawler705.sh /code
+COPY ./webcrawlers_bash/grocerywebcrawler767.sh /code
+COPY ./webcrawlers_bash/grocerywebcrawler1465.sh /code
+COPY ./webcrawlers_bash/grocerywebcrawler1682.sh /code
+COPY ./webcrawlers_bash/grocerywebcrawler2887.sh /code
+COPY ./webcrawlers_bash/grocerywebcrawler2948.sh /code
 COPY ./price_calculate.sh /code
 COPY ./clear_price_change_object.sh /code
 RUN chmod +x /code/grocerywebcrawler705.sh

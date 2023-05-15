@@ -1,10 +1,3 @@
-from uuid import uuid4
-
-from sqlalchemy import and_
-from sqlalchemy.exc import NoResultFound
-
-from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItems
-from grocerywebcrawler.rds_connection import RDSConnection
 from webserver.largest_price_changes import createPriceChangeObjects
 
 if __name__ == '__main__':

@@ -1,11 +1,11 @@
 import multiprocessing
 import traceback
 from datetime import datetime, timedelta, date
-from grocerywebcrawler.models.safeway_item import SafewayItem
-from sqlalchemy.exc import NoResultFound
 
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItems
+from grocerywebcrawler.models.safeway_item import SafewayItem
 from grocerywebcrawler.rds_connection import RDSConnection
+from sqlalchemy.exc import NoResultFound
 from util.logging import info, debug
 from webserver.build_general_info_section import allTimeDataframe, calculatePriceChangeDays
 from webserver.models.operation_db_model import OperationDbModel
