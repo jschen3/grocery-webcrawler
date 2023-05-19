@@ -5,15 +5,16 @@ from datetime import datetime, timedelta, date
 import pandas
 import pytz  # $ pip install pytz
 import tzlocal  # $ pip install tzlocal
-from counter import Counter
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
+from sqlalchemy import func, and_, asc
+from sqlalchemy.orm import Session
+
+from counter import Counter
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItems
 from grocerywebcrawler.models.safeway_item import SafewayItemDBModel, SafewayItem
 from grocerywebcrawler.rds_connection import RDSConnection
-from sqlalchemy import func, and_, asc
-from sqlalchemy.orm import Session
 from util.logging import info
 from webserver.build_general_info_section import build_general_information
 from webserver.models.operation_db_model import OperationDbModel
@@ -204,10 +205,17 @@ async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset:
 
 
 @app.get("/operations")
-def getOperations(operation: str = "webcrawl", status: str = "finished", db: Session = Depends(get_db)):
-    return db.query(OperationDbModel).filter(
-        and_(OperationDbModel.operationName == operation.lower(), OperationDbModel.status == status)).order_by(
-        OperationDbModel.intId.desc()).all()
+def getOperations(operation: str = "webcrawl", status: str = "finished", store: str = None,
+                  db: Session = Depends(get_db)):
+    if store == None:
+        return db.query(OperationDbModel).filter(
+            and_(OperationDbModel.operationName == operation.lower(), OperationDbModel.status == status)).order_by(
+            OperationDbModel.intId.desc()).all()
+    else:
+        return db.query(OperationDbModel).filter(and_(
+            and_(OperationDbModel.operationName == operation.lower(), OperationDbModel.status == status),
+            OperationDbModel.storeId == store)).order_by(
+            OperationDbModel.intId.desc()).all()
 
 
 @app.get("/counter")
