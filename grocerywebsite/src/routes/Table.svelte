@@ -3,11 +3,8 @@
     import {itemData} from './store.js';
     import Safeway_Icon from "$lib/images/safeway-icon.png";
     import Buy_Icon from "$lib/images/buy-icon.png";
-    import {percentText, addDollarSymbol} from '../util/textformat.js'
-
-    function capitalize(input){
-        return input.charAt(0).toUpperCase() + input.slice(1)
-    }    
+    import {percentText, addDollarSymbol, capitalize} from '../util/textformat.js'
+  
 </script>
 {#if $itemData!= undefined}
     <h2 class="text-white item-name-header"><strong>Item Name: </strong> {$itemData.name}</h2>

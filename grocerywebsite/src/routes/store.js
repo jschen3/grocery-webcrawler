@@ -1,5 +1,6 @@
 import {writable, derived} from 'svelte/store';
 import axios from 'axios';
+
 export const page_store_item = writable(null);
 
 export const greatest_price_change_options_7=writable(null);
@@ -104,3 +105,4 @@ export const storeInfo = derived(store_id, async($store_id, set)=>{
         set(data);
     }    
 });
+

@@ -207,7 +207,7 @@ async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset:
 @app.get("/operations")
 def getOperations(operation: str = "webcrawl", status: str = "finished", store: str = None,
                   db: Session = Depends(get_db)):
-    if store == None:
+    if store is None:
         return db.query(OperationDbModel).filter(
             and_(OperationDbModel.operationName == operation.lower(), OperationDbModel.status == status)).order_by(
             OperationDbModel.intId.desc()).all()

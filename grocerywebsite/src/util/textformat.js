@@ -42,3 +42,7 @@ export function colorSymbolRound(percent){
         return "<span style=\"color:red;\"><i class=\"bi bi-caret-down\"></i>"+ naiveRound(percent)+"</span>"
     }
 }
+
+export function capitalize(input){
+    return input.charAt(0).toUpperCase() + input.slice(1)
+}  

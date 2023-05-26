@@ -2,17 +2,19 @@
   import Stock_Market_Icon from "$lib/images/stock_market_icon.png";    
 	import SelectBar from "./header_components/select_bar.svelte";
 	import { display_7_days, page_store_item, display_30_days ,greatest_price_change_options_30, greatest_price_change_options_7, store_id} from "./store";
-
+  import { changeURLParams } from "../util/url.js";
     function seven_day_click(){
         page_store_item.set(null);
         display_7_days.set(true);
         display_30_days.set(false);
+        changeURLParams(null, null);
     }
 
     function thirty_day_click(){
         page_store_item.set(null);
         display_7_days.set(false);
         display_30_days.set(true);
+        changeURLParams(null, null);
     }
 
     function locationClicked(storeIdValue){
@@ -37,6 +39,8 @@
         if (page_store_item_clone!=null){
           if (page_store_item_clone.upc!=null && page_store_item_clone.store_item_days!=null){
             page_store_item.set({"upc":page_store_item_clone.upc, "storeId":storeIdValue, "store_item_days":page_store_item_clone.store_item_days});
+            //https://dev.to/mohamadharith/mutating-query-params-in-sveltekit-without-page-reloads-or-navigations-2i2b
+            //changeURLParams(storeIdValue, page_store_item_clone.upc);
           }
         }  
         //console.log(clone30);

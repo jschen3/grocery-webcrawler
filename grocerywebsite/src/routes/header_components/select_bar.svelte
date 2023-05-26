@@ -1,7 +1,7 @@
 <script>
 	import axios from 'axios';
     import {page_store_item, display_7_days, display_30_days, store_id} from '../store.js' //  add store id as a writable here
-    
+    import { changeURLParams } from '../../util/url.js';
     import SelectOption from './select_options.svelte';	
         
     let filterOptions = [];	
@@ -56,6 +56,7 @@
             //console.log(`${inputValueObject.upc} upc is:`);
             //console.log(`${inputValueObject.storeId} storeId:`);
             page_store_item.set({"upc":inputValueObject.upc, "storeId":inputValueObject.storeId, "store_item_days":7});
+            changeURLParams(inputValueObject.storeId, inputValueObject.upc);
             display_7_days.set(false);
             display_30_days.set(false);
             //console.log("display 7 days:"+$display_7_days);
