@@ -73,7 +73,7 @@ COPY ./grocerywebsite/static /frontend/static
 COPY ./grocerywebsite/tests /frontend/tests
 RUN npm --prefix /frontend install
 RUN npm --prefix /frontend run build
-EXPOSE 443
+EXPOSE 80
 WORKDIR /code
 
 
