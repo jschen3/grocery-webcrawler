@@ -14,7 +14,7 @@
         let storageArr = []
         if (inputValueText && inputValueText.length>3){
             let storeItems;
-            const response = await axios.get("http://http://groceryapp-env.eba-h9ffuphq.us-west-2.elasticbeanstalk.com:5000/items/"+storeValue+"?q="+inputValueText);  //adapt search here....
+            const response = await axios.get("https://grocerymarketwatch.com:5000/items/"+storeValue+"?q="+inputValueText);  //adapt search here....
             const data = await response.data;
             storeItems = data;
             storeItems.forEach(storeItem => {
