@@ -6,8 +6,8 @@ from webserver.models.price_change_object import PriceChangeDBModel
 
 def clear_price_change_objects():
     db = RDSConnection.get_postgres_session()
-    sevenDaysAgo = datetime.now() - timedelta(days=7)
-    db.query(PriceChangeDBModel).filter(PriceChangeDBModel.currentDate < sevenDaysAgo).delete()
+    thirtyFiveDaysAgo = datetime.now() - timedelta(days=35)
+    db.query(PriceChangeDBModel).filter(PriceChangeDBModel.currentDate < thirtyFiveDaysAgo).delete()
     db.commit()
 
 
