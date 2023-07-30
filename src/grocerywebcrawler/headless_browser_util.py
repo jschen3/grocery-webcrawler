@@ -4,7 +4,7 @@ from urllib.parse import urlparse, parse_qs
 
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
-from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 """
@@ -66,7 +66,7 @@ def headless_browser_request_id() -> dict:
     options.add_argument("--disable-extensions")
     options.add_argument("--remote-debugging-port=9222")
     options.headless = True
-    with webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()),
+    with webdriver.Chrome(service=Service(ChromeDriverManager(version='114.0.5735.90').install()),
                           desired_capabilities=capabilities, options=options) as driver:
         driver.get(url)
         logs = driver.get_log("performance")
