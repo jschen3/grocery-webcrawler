@@ -1,7 +1,10 @@
 import random
 
 from selenium.webdriver import DesiredCapabilities
+<<<<<<< Updated upstream
 from selenium import webdriver
+=======
+>>>>>>> Stashed changes
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -44,6 +47,7 @@ class ProxyUtil:
         # options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-extensions")
         options.headless = True
+<<<<<<< Updated upstream
         with webdriver.Chrome(service=Service(ChromeDriverManager(version='114.0.5735.90').install()),
                               desired_capabilities=capabilities, options=options) as driver:
             driver.get(url)
@@ -65,6 +69,29 @@ class ProxyUtil:
                 except Exception:
                     print("unable to parse proxy list")
             all_proxies_from_advanced = sorted(all_proxies_from_advanced, key=lambda x: x.speed)
+=======
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager(version='114.0.5735.90').install()),
+                                  desired_capabilities=capabilities, options=options)
+        driver.get(url)
+        table_rows = driver.find_element(by="xpath",
+                                         value="/html/body/section[2]/div[4]/table/tbody").text.splitlines()
+        all_proxies_from_advanced = []
+        for row in table_rows:
+            splitBySpaces = row.split(" ")
+            try:
+                indexUtilSplitBySpaceUS = 0
+                for split in enumerate(splitBySpaces):
+                    if split[1] == "US":
+                        indexUtilSplitBySpaceUS = split[0]
+                proxyLine = ProxyLine(splitBySpaces[0], splitBySpaces[1], splitBySpaces[2], splitBySpaces[3],
+                                      splitBySpaces[indexUtilSplitBySpaceUS],
+                                      int(splitBySpaces[indexUtilSplitBySpaceUS + 1]),
+                                      splitBySpaces[indexUtilSplitBySpaceUS + 2])
+                all_proxies_from_advanced.append(proxyLine)
+            except Exception:
+                print("unable to parse proxy list")
+        all_proxies_from_advanced = sorted(all_proxies_from_advanced, key=lambda x: x.speed)
+>>>>>>> Stashed changes
 
             ProxyUtil.__all_proxies = []
             ProxyUtil.__proxies_with_failure_count = {}
