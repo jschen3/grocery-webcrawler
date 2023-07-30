@@ -21,7 +21,7 @@
         store_id.subscribe(value =>{
             storeValue=value;
         });
-        page_store_item.set({"upc":upc, "storeId":storeValue, "store_item_days":7});
+        page_store_item.set({"upc":upc, "storeId":storeValue, "store_item_days":-1});
         display_7_days.set(false);
         display_30_days.set(false);
     }

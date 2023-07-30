@@ -10,7 +10,7 @@
     function hasURLPatterns(){
         if ($page.url.searchParams.has("storeId") && $page.url.searchParams.has("upc")){
             let urlParams = $page.url.searchParams
-            page_store_item.set({"upc":urlParams.get("upc"), "storeId":urlParams.get("storeId"), "store_item_days":7});
+            page_store_item.set({"upc":urlParams.get("upc"), "storeId":urlParams.get("storeId"), "store_item_days":-1});
             display_7_days.set(false);
             display_30_days.set(false);
             return true;

@@ -3,7 +3,7 @@
     import Chart from './stock_graph_components/Chart.svelte';
     import {graphData, page_store_item, store_id} from './store.js';
     
-    let days_select = 7
+    let days_select = -1
     function store_item_days_on_change(){
        let clone = JSON.parse(JSON.stringify($page_store_item));
        //console.log(clone);
@@ -18,10 +18,10 @@
 {#key $graphData}
 <div class="days-select-div">
     <select bind:value={days_select} on:change={store_item_days_on_change} class="days-select">
+        <option selected value={-1}>All Days</option>
         <option value={7}>7 Days</option>
         <option value={14}>14 Days</option>
         <option value={30}>30 Days</option>
-        <option value={-1}>All Days</option>
     </select>   
 </div>         
     <Chart pricingValue={$graphData}/>

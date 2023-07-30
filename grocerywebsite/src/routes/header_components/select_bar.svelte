@@ -55,7 +55,7 @@
             //console.log(`${inputValueObject.name} is submitted!`);
             //console.log(`${inputValueObject.upc} upc is:`);
             //console.log(`${inputValueObject.storeId} storeId:`);
-            page_store_item.set({"upc":inputValueObject.upc, "storeId":inputValueObject.storeId, "store_item_days":7});
+            page_store_item.set({"upc":inputValueObject.upc, "storeId":inputValueObject.storeId, "store_item_days":-1});
             changeURLParams(inputValueObject.storeId, inputValueObject.upc);
             display_7_days.set(false);
             display_30_days.set(false);

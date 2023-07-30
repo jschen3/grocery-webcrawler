@@ -11,7 +11,7 @@ export const display_7_days = writable(true);
 
 export const display_30_days = writable(false);
 
-export const store_item_days = writable(7);
+export const store_item_days = writable(-1);
 
 export const store_id = writable(2948);
 
