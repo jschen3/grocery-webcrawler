@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, date
 import pandas
 import pytz  # $ pip install pytz
 import tzlocal  # $ pip install tzlocal
+from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
@@ -17,8 +18,8 @@ from grocerywebcrawler.models.safeway_item import SafewayItemDBModel, SafewayIte
 from grocerywebcrawler.rds_connection import RDSConnection
 from util.logging import info
 from webserver.build_general_info_section import build_general_information
+from webserver.greatest_price_changes_cache import GreatestPriceChangesCache
 from webserver.models.operation_db_model import OperationDbModel
-from webserver.models.price_change_object import PriceChangeDBModel
 from webserver.models.price_change_row import PriceChangeRow
 from webserver.models.store import StoreDbModel, Store
 from webserver.price_comparison_between_stores import create_price_comparison_between_stores
@@ -45,6 +46,11 @@ def get_db():
     finally:
         db.close()
 
+@app.on_event('startup')
+def init():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(RDSConnection.clear_normal_session, 'cron', hour="*/2")
+    scheduler.add_job(GreatestPriceChangesCache.clear_cache, 'cron', hour="*/2")
 
 @app.get("/")
 async def root():
@@ -148,48 +154,7 @@ async def getItem(storeId: str, upc: str, db: Session = Depends(get_db)):
 @app.get("/greatest_price_changes")
 async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset: int = 0, thirtyOr7Days: bool = False,
                                  db: Session = Depends(get_db)):
-    # don't know why this query doesn't quite work. The distinct piece doesn't work....
-
-    if thirtyOr7Days:
-        thirty_days_ago = date.today() - timedelta(
-            days=1)  # a price change occurred in the last 7 days. Compared to the price 7 days ago was one of the top 50 greatest price changes.
-        greatest_percent_items: list[PriceChangeDBModel] = db.query(PriceChangeDBModel.upc,
-                                                                    PriceChangeDBModel.name,
-                                                                    PriceChangeDBModel.storeId,
-                                                                    PriceChangeDBModel.category,
-                                                                    PriceChangeDBModel.price7DaysAgo,
-                                                                    PriceChangeDBModel.price30DaysAgo,
-                                                                    PriceChangeDBModel.currentPrice,
-                                                                    PriceChangeDBModel.priceChange7DaysAgo,
-                                                                    PriceChangeDBModel.priceChange30Days,
-                                                                    PriceChangeDBModel.percentPriceChange7DaysAgo,
-                                                                    PriceChangeDBModel.percentPriceChange30Days,
-                                                                    PriceChangeDBModel.absPercentPriceChange7Days,
-                                                                    PriceChangeDBModel.absPercentPriceChange30Days,
-                                                                    PriceChangeDBModel.currentDate).filter(and_(
-            PriceChangeDBModel.currentDate > thirty_days_ago, PriceChangeDBModel.storeId == storeId)).order_by(
-            PriceChangeDBModel.absPercentPriceChange30Days.desc()).limit(
-            limit * 10).offset(offset).all()
-    else:
-        one_week_ago = date.today() - timedelta(days=1)
-        greatest_percent_items: list[PriceChangeDBModel] = db.query(PriceChangeDBModel.upc,
-                                                                    PriceChangeDBModel.name,
-                                                                    PriceChangeDBModel.storeId,
-                                                                    PriceChangeDBModel.category,
-                                                                    PriceChangeDBModel.price7DaysAgo,
-                                                                    PriceChangeDBModel.price30DaysAgo,
-                                                                    PriceChangeDBModel.currentPrice,
-                                                                    PriceChangeDBModel.priceChange7DaysAgo,
-                                                                    PriceChangeDBModel.priceChange30Days,
-                                                                    PriceChangeDBModel.percentPriceChange7DaysAgo,
-                                                                    PriceChangeDBModel.percentPriceChange30Days,
-                                                                    PriceChangeDBModel.absPercentPriceChange7Days,
-                                                                    PriceChangeDBModel.absPercentPriceChange30Days,
-                                                                    PriceChangeDBModel.currentDate).filter(and_(
-            PriceChangeDBModel.currentDate > one_week_ago, PriceChangeDBModel.storeId == storeId)).order_by(
-            PriceChangeDBModel.absPercentPriceChange7Days.desc()).limit(
-            limit * 10).offset(offset).all()
-
+    greatest_percent_items=GreatestPriceChangesCache.get_greatest_price_changes(storeId, limit, offset, thirtyOr7Days, db)
     upcs = set()
     items = []
     for item in greatest_percent_items:
@@ -202,8 +167,6 @@ async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset:
         return items[0:limit]
     else:
         return items
-
-
 @app.get("/operations")
 def getOperations(operation: str = "webcrawl", status: str = "finished", store: str = None,
                   db: Session = Depends(get_db)):

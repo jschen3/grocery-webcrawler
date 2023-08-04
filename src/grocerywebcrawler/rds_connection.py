@@ -27,6 +27,9 @@ class RDSConnection:
         return RDSConnection.__normal_session
 
     @staticmethod
+    def clear_normal_session():
+        RDSConnection.__normal_sesion = None
+    @staticmethod
     def get_engine():
         if RDSConnection.__engine is None:
             RDSConnection.__engine = create_rds_engine()
@@ -49,3 +52,4 @@ def create_rds_engine():
     # print("engine_url:" + engine_url)
     engine = create_engine(engine_url, pool_size=20, pool_pre_ping=True, pool_recycle=600, max_overflow=0)
     return engine
+
