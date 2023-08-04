@@ -154,7 +154,7 @@ async def getItem(storeId: str, upc: str, db: Session = Depends(get_db)):
 @app.get("/greatest_price_changes")
 async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset: int = 0, thirtyOr7Days: bool = False,
                                  db: Session = Depends(get_db)):
-    greatest_percent_items=GreatestPriceChangesCache.get_greatest_price_changes(storeId, limit, offset, thirtyOr7Days, db)
+    greatest_percent_items=GreatestPriceChangesCache.get_greatest_price_changes(storeId=storeId, limit=limit, offset=offset, thirtyOr7Days=thirtyOr7Days, db=db)
     upcs = set()
     items = []
     for item in greatest_percent_items:
