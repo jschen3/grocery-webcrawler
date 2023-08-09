@@ -1,10 +1,7 @@
 import random
 
-from selenium.webdriver import DesiredCapabilities
-<<<<<<< Updated upstream
 from selenium import webdriver
-=======
->>>>>>> Stashed changes
+from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -47,7 +44,6 @@ class ProxyUtil:
         # options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-extensions")
         options.headless = True
-<<<<<<< Updated upstream
         with webdriver.Chrome(service=Service(ChromeDriverManager(version='114.0.5735.90').install()),
                               desired_capabilities=capabilities, options=options) as driver:
             driver.get(url)
@@ -68,8 +64,7 @@ class ProxyUtil:
                     all_proxies_from_advanced.append(proxyLine)
                 except Exception:
                     print("unable to parse proxy list")
-            all_proxies_from_advanced = sorted(all_proxies_from_advanced, key=lambda x: x.speed)
-=======
+            sorted(all_proxies_from_advanced, key=lambda x: x.speed)
         driver = webdriver.Chrome(service=Service(ChromeDriverManager(version='114.0.5735.90').install()),
                                   desired_capabilities=capabilities, options=options)
         driver.get(url)
@@ -91,14 +86,15 @@ class ProxyUtil:
             except Exception:
                 print("unable to parse proxy list")
         all_proxies_from_advanced = sorted(all_proxies_from_advanced, key=lambda x: x.speed)
->>>>>>> Stashed changes
+        ProxyUtil.__all_proxies = []
+        ProxyUtil.__proxies_with_failure_count = {}
+        for proxy in all_proxies_from_advanced:
+            if f"{proxy.ip}:{proxy.port}" not in ProxyUtil.__all_proxies:
+                ProxyUtil.__all_proxies.append(f"{proxy.ip}:{proxy.port}")
+                ProxyUtil.__proxies_with_failure_count[f"{proxy.ip}:{proxy.port}"] = 0
 
-            ProxyUtil.__all_proxies = []
-            ProxyUtil.__proxies_with_failure_count = {}
-            for proxy in all_proxies_from_advanced:
-                if f"{proxy.ip}:{proxy.port}" not in ProxyUtil.__all_proxies:
-                    ProxyUtil.__all_proxies.append(f"{proxy.ip}:{proxy.port}")
-                    ProxyUtil.__proxies_with_failure_count[f"{proxy.ip}:{proxy.port}"] = 0
+
+
 
     @staticmethod
     def getProxy():
@@ -122,23 +118,28 @@ class ProxyUtil:
         ProxyUtil.__previous = random.choice(keys_with_smallest)
         return {"https": ProxyUtil.__previous}
 
+
     @staticmethod
     def increment(proxy):
         proxyAddress = proxy["https"]
         ProxyUtil.__proxies_with_failure_count[proxyAddress] += 1
         ProxyUtil.__previous = None
 
+
     @staticmethod
     def getFailureCount(proxy):
         return ProxyUtil.__proxies_with_failure_count[proxy]
+
 
     @staticmethod
     def getAllProxyFailureCount():
         return ProxyUtil.__proxies_with_failure_count;
 
+
     @staticmethod
     def getPrevious():
         return ProxyUtil.__previous
+
 
     @staticmethod
     def getAllProxies():

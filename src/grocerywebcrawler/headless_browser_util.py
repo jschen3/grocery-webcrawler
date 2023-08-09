@@ -1,14 +1,11 @@
 import json
 from time import sleep
 from urllib.parse import urlparse, parse_qs
-from selenium.webdriver import DesiredCapabilities
-<<<<<<< Updated upstream
-=======
+
 from selenium import webdriver
->>>>>>> Stashed changes
+from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-
 
 """
 https://www.rkengler.com/how-to-capture-network-traffic-when-scraping-with-selenium-and-python/
@@ -69,12 +66,7 @@ def headless_browser_request_id() -> dict:
     options.add_argument("--disable-extensions")
     options.add_argument("--remote-debugging-port=9222")
     options.headless = True
-<<<<<<< Updated upstream
     with webdriver.Chrome(service=Service(ChromeDriverManager(version='114.0.5735.90').install()),
-=======
-    with webdriver.Chrome(service=Service(
-    ChromeDriverManager(version='114.0.5735.90').install()),
->>>>>>> Stashed changes
                           desired_capabilities=capabilities, options=options) as driver:
         driver.get(url)
         logs = driver.get_log("performance")

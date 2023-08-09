@@ -1,14 +1,14 @@
 import io
 import json
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 
 import pandas
-import pytz  # $ pip install pytz
-import tzlocal  # $ pip install tzlocal
-from apscheduler.schedulers.background import BackgroundScheduler
+import pytz
+import tzlocal
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
+from fastapi_utils.tasks import repeat_every
 from sqlalchemy import func, and_, asc
 from sqlalchemy.orm import Session
 
@@ -46,11 +46,13 @@ def get_db():
     finally:
         db.close()
 
+
 @app.on_event('startup')
-def init():
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(RDSConnection.clear_normal_session, 'cron', hour="*/2")
-    scheduler.add_job(GreatestPriceChangesCache.clear_cache, 'cron', hour="*/2")
+@repeat_every(seconds=60 * 60)  # 1 hour
+def scheduled_tasks():
+    RDSConnection.clear_normal_session()
+    GreatestPriceChangesCache.clear_cache()
+
 
 @app.get("/")
 async def root():
@@ -154,7 +156,9 @@ async def getItem(storeId: str, upc: str, db: Session = Depends(get_db)):
 @app.get("/greatest_price_changes")
 async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset: int = 0, thirtyOr7Days: bool = False,
                                  db: Session = Depends(get_db)):
-    greatest_percent_items=GreatestPriceChangesCache.get_greatest_price_changes(storeId=storeId, limit=limit, offset=offset, thirtyOr7Days=thirtyOr7Days, db=db)
+    greatest_percent_items = GreatestPriceChangesCache.get_greatest_price_changes(storeId=storeId, limit=limit,
+                                                                                  offset=offset,
+                                                                                  thirtyOr7Days=thirtyOr7Days, db=db)
     upcs = set()
     items = []
     for item in greatest_percent_items:
@@ -167,6 +171,8 @@ async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset:
         return items[0:limit]
     else:
         return items
+
+
 @app.get("/operations")
 def getOperations(operation: str = "webcrawl", status: str = "finished", store: str = None,
                   db: Session = Depends(get_db)):
