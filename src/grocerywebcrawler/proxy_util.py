@@ -1,9 +1,8 @@
 import random
 
+import chromedriver_autoinstaller
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
 
 
 class ProxyLine:
@@ -44,8 +43,8 @@ class ProxyUtil:
         # options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-extensions")
         options.headless = True
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager(version='114.0.5735.90').install()),
-                                  desired_capabilities=capabilities, options=options)
+        chromedriver_autoinstaller.install()
+        driver = webdriver.Chrome(options=options)
         driver.get(url)
         table_rows = driver.find_element(by="xpath",
                                          value="/html/body/section[2]/div[4]/table/tbody").text.splitlines()

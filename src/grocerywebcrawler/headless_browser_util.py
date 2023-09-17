@@ -1,14 +1,10 @@
 import json
 from time import sleep
 from urllib.parse import urlparse, parse_qs
-from selenium.webdriver import DesiredCapabilities
-<<<<<<< Updated upstream
-=======
-from selenium import webdriver
->>>>>>> Stashed changes
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 
+import chromedriver_autoinstaller
+from selenium import webdriver
+from selenium.webdriver import DesiredCapabilities
 
 """
 https://www.rkengler.com/how-to-capture-network-traffic-when-scraping-with-selenium-and-python/
@@ -41,8 +37,8 @@ def _get_search_requests(logs):
 
 
 def _get_request_id(search_requests):
-    if len(search_requests) > 1:
-        raise Exception("more than 1 search request")
+    if len(search_requests)!=1:
+        return None
     else:
         search_request = search_requests[0]
         ocp_key = search_requests[0]["params"]["request"]["headers"]["Ocp-Apim-Subscription-Key"]
@@ -69,18 +65,18 @@ def headless_browser_request_id() -> dict:
     options.add_argument("--disable-extensions")
     options.add_argument("--remote-debugging-port=9222")
     options.headless = True
-<<<<<<< Updated upstream
-    with webdriver.Chrome(service=Service(ChromeDriverManager(version='114.0.5735.90').install()),
-=======
-    with webdriver.Chrome(service=Service(
-    ChromeDriverManager(version='114.0.5735.90').install()),
->>>>>>> Stashed changes
-                          desired_capabilities=capabilities, options=options) as driver:
+    chromedriver_autoinstaller.install()
+    driver = webdriver.Chrome()
+    attempts=0
+    while attempts<3:
         driver.get(url)
         logs = driver.get_log("performance")
         search_requests = _get_search_requests(logs)
         request_id = _get_request_id(search_requests)
+        if request_id!=None:
+            driver.quit()
+            return request_id
         sleep(3)
-        driver.quit()
-        # print(f"Safeway request id obtained. request_id: {request_id}")
-        return request_id
+    raise Exception("Cannot get request id in 3 ids")
+    # print(f"Safeway request id obtained. request_id: {request_id}")
+
