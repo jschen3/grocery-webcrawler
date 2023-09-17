@@ -77,6 +77,6 @@ def headless_browser_request_id() -> dict:
             driver.quit()
             return request_id
         sleep(3)
-    raise Exception("Cannot get request id in 3 ids")
+    raise Exception("unable to get request id in 3 tries.")
     # print(f"Safeway request id obtained. request_id: {request_id}")
 
