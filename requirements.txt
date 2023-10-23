@@ -25,7 +25,7 @@ pure-eval==0.2.2
 pydantic==1.9.0
 Pygments==2.11.2
 python-dateutil==2.8.2
-s3transfer==0.6.0
+s3transfer==0.7.0
 stack-data==0.1.4
 starlette==0.22.0
 tomli==2.0.0
@@ -63,10 +63,10 @@ html5lib
 selenium==4.10.0
 webdriver-manager==4.0.0
 chromedriver-autoinstaller
-amazon-dax-client>=1.1.7
-boto3>=1.18.50
-botocore>=1.21.50
-awscli==1.27.43
+amazon-dax-client==2.0.3
+boto3==1.28.68
+botocore==1.31.68
+awscli==1.29.68
 psycopg2-binary==2.9.7
 requests==2.28.2
 pytz

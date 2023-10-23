@@ -1,4 +1,5 @@
 import json
+import sys
 from time import sleep
 from urllib.parse import urlparse, parse_qs
 
@@ -55,6 +56,7 @@ def _get_request_id(search_requests):
 
 
 def headless_browser_request_id() -> dict:
+
     url = "https://www.safeway.com/shop/deals/member-specials.html"
     capabilities = DesiredCapabilities.CHROME
     capabilities["goog:loggingPrefs"] = {"performance": "ALL"}
@@ -66,7 +68,8 @@ def headless_browser_request_id() -> dict:
     options.add_argument("--remote-debugging-port=9222")
     options.headless = True
     chromedriver_autoinstaller.install()
-    driver = webdriver.Chrome()
+    sys.path.insert(0, '/opt/google/chrome')
+    driver = webdriver.Chrome(options=options)
     attempts=0
     while attempts<3:
         driver.get(url)
