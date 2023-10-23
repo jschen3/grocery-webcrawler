@@ -53,7 +53,7 @@ RUN crontab /code/mycrontab
 
 ### UI
 RUN mkdir -p /etc/supervisor/conf.d
-RUN curl -fsSL https://deb.nodesource.com/setup_19.x | bash - &&\
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - &&\
 apt-get install -y nodejs
 WORKDIR /frontend
 COPY ./grocerywebsite/package.json /frontend/package.json
