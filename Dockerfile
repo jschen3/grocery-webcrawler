@@ -54,7 +54,9 @@ RUN crontab /code/mycrontab
 ### UI
 RUN mkdir -p /etc/supervisor/conf.d
 RUN curl -fsSL https://deb.nodesource.com/setup_19.x | bash - &&\
-apt-get install -y nodejs
+sudo apt-get install -y ca-certificates curl gnupg
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 WORKDIR /frontend
 COPY ./grocerywebsite/package.json /frontend/package.json
 COPY ./grocerywebsite/package-lock.json /frontend/package-lock.json

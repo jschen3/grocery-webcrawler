@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
@@ -12,9 +12,11 @@ class GreatestPriceChangesCache:
 
     @staticmethod
     def get_greatest_price_changes(storeId: str, thirtyOr7Days: bool, limit: int, offset: int, db: Session):
-        thirty_days_ago = date.today() - timedelta(
+        date_string = '2023-08-09'
+        august_date = datetime.strptime(date_string, "%Y-%m-%d")
+        thirty_days_ago = august_date - timedelta(
             days=1)
-        one_week_ago = date.today() - timedelta(days=1)
+        one_week_ago = august_date - timedelta(days=1)
         if limit != 50 and offset != 0:
             # true = thirtydays
             # false = 7 days
