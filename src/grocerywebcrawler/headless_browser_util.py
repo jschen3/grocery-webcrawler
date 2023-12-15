@@ -2,8 +2,6 @@ import json
 import sys
 from time import sleep
 from urllib.parse import urlparse, parse_qs
-
-import chromedriver_autoinstaller
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 
@@ -67,7 +65,6 @@ def headless_browser_request_id() -> dict:
     options.add_argument("--disable-extensions")
     options.add_argument("--remote-debugging-port=9222")
     options.headless = True
-    chromedriver_autoinstaller.install()
     sys.path.insert(0, '/opt/google/chrome')
     driver = webdriver.Chrome(options=options)
     attempts=0
