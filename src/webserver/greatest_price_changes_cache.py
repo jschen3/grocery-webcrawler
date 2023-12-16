@@ -1,4 +1,4 @@
-from datetime import date, timedelta, datetime
+from datetime import timedelta, datetime
 
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
@@ -12,33 +12,34 @@ class GreatestPriceChangesCache:
 
     @staticmethod
     def get_greatest_price_changes(storeId: str, thirtyOr7Days: bool, limit: int, offset: int, db: Session):
+        today = datetime.today()
         date_string = '2023-08-09'
         august_date = datetime.strptime(date_string, "%Y-%m-%d")
         thirty_days_ago = august_date - timedelta(
-            days=1)
-        one_week_ago = august_date - timedelta(days=1)
+            days=30)
+        one_week_ago = august_date - timedelta(days=7)
         if limit != 50 and offset != 0:
             # true = thirtydays
             # false = 7 days
             if thirtyOr7Days:
                 return db.query(PriceChangeDBModel.upc,
-                                                     PriceChangeDBModel.name,
-                                                     PriceChangeDBModel.storeId,
-                                                     PriceChangeDBModel.category,
-                                                     PriceChangeDBModel.price7DaysAgo,
-                                                     PriceChangeDBModel.price30DaysAgo,
-                                                     PriceChangeDBModel.currentPrice,
-                                                     PriceChangeDBModel.priceChange7DaysAgo,
-                                                     PriceChangeDBModel.priceChange30Days,
-                                                     PriceChangeDBModel.percentPriceChange7DaysAgo,
-                                                     PriceChangeDBModel.percentPriceChange30Days,
-                                                     PriceChangeDBModel.absPercentPriceChange7Days,
-                                                     PriceChangeDBModel.absPercentPriceChange30Days,
-                                                     PriceChangeDBModel.currentDate).filter(and_(
-                        PriceChangeDBModel.currentDate > thirty_days_ago,
-                        PriceChangeDBModel.storeId == storeId)).order_by(
-                        PriceChangeDBModel.absPercentPriceChange30Days.desc()).limit(
-                        limit * 10).offset(offset).all()
+                                PriceChangeDBModel.name,
+                                PriceChangeDBModel.storeId,
+                                PriceChangeDBModel.category,
+                                PriceChangeDBModel.price7DaysAgo,
+                                PriceChangeDBModel.price30DaysAgo,
+                                PriceChangeDBModel.currentPrice,
+                                PriceChangeDBModel.priceChange7DaysAgo,
+                                PriceChangeDBModel.priceChange30Days,
+                                PriceChangeDBModel.percentPriceChange7DaysAgo,
+                                PriceChangeDBModel.percentPriceChange30Days,
+                                PriceChangeDBModel.absPercentPriceChange7Days,
+                                PriceChangeDBModel.absPercentPriceChange30Days,
+                                PriceChangeDBModel.currentDate).filter(and_(
+                    PriceChangeDBModel.currentDate > thirty_days_ago,
+                    PriceChangeDBModel.storeId == storeId)).order_by(
+                    PriceChangeDBModel.absPercentPriceChange30Days.desc()).limit(
+                    limit * 10).offset(offset).all()
             else:
                 return db.query(PriceChangeDBModel.upc,
                                 PriceChangeDBModel.name,
@@ -56,7 +57,7 @@ class GreatestPriceChangesCache:
                                 PriceChangeDBModel.currentDate).filter(and_(
                     PriceChangeDBModel.currentDate > one_week_ago, PriceChangeDBModel.storeId == storeId)).order_by(
                     PriceChangeDBModel.absPercentPriceChange7Days.desc()).limit(
-                    limit*10).offset(offset).all()
+                    limit * 10).offset(offset).all()
         else:
             if thirtyOr7Days:
                 if storeId in GreatestPriceChangesCache.__store_30day_price_change:

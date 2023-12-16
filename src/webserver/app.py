@@ -125,6 +125,7 @@ def getPricesOfItemJsonHelper(storeId: str, upc: str, days: int, db: Session):
     if days == -1:
         return getDataFrameJsonObject(storeId, upc, None, db)
     else:
+        today = datetime.today()
         date_string = '2023-08-09'
         august_date = datetime.strptime(date_string, "%Y-%m-%d")
         days_before = (august_date - timedelta(days=days)).date()
@@ -178,17 +179,17 @@ async def greatest_price_changes(storeId: str = "2948", limit: int = 30, offset:
 
 
 @app.get("/operations")
-def getOperations(operation: str = "webcrawl", status: str = "finished", store: str = None,
+def getOperations(operation: str = "webcrawl", status: str = "finished", store: str = None, limit: int = 50,
                   db: Session = Depends(get_db)):
     if store is None:
         return db.query(OperationDbModel).filter(
             and_(OperationDbModel.operationName == operation.lower(), OperationDbModel.status == status)).order_by(
-            OperationDbModel.intId.desc()).all()
+            OperationDbModel.intId.desc()).limit(limit)
     else:
         return db.query(OperationDbModel).filter(and_(
             and_(OperationDbModel.operationName == operation.lower(), OperationDbModel.status == status),
             OperationDbModel.storeId == store)).order_by(
-            OperationDbModel.intId.desc()).all()
+            OperationDbModel.intId.desc()).limit(limit)
 
 
 @app.get("/counter")
