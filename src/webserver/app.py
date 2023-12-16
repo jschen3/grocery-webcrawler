@@ -184,12 +184,12 @@ def getOperations(operation: str = "webcrawl", status: str = "finished", store: 
     if store is None:
         return db.query(OperationDbModel).filter(
             and_(OperationDbModel.operationName == operation.lower(), OperationDbModel.status == status)).order_by(
-            OperationDbModel.intId.desc()).limit(limit)
+            OperationDbModel.intId.desc()).limit(limit).all()
     else:
         return db.query(OperationDbModel).filter(and_(
             and_(OperationDbModel.operationName == operation.lower(), OperationDbModel.status == status),
             OperationDbModel.storeId == store)).order_by(
-            OperationDbModel.intId.desc()).limit(limit)
+            OperationDbModel.intId.desc()).limit(limit).all()
 
 
 @app.get("/counter")
