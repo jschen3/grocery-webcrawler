@@ -15,7 +15,7 @@ export const store_item_days = writable(-1);
 
 export const store_id = writable(2948);
 
-const server_url = "https://grocerymarketwatch.com:5000"
+const server_url = "http://localhost:8000"
 export const itemData = derived(page_store_item, async($page_store_item, set)=>{
     if ($page_store_item!=null && $page_store_item!=undefined){
         const store_id = $page_store_item.storeId;
@@ -27,6 +27,17 @@ export const itemData = derived(page_store_item, async($page_store_item, set)=>{
     }
         
 });
+export const priceComparison = derived(page_store_item, async($page_store_item, set)=>{
+    if ($page_store_item!=null && $page_store_item!=undefined){
+        const upc = $page_store_item.upc;
+        const response = await axios.get(server_url+"/pricecomparison/0004800121336");
+        const data = await response.data;
+        console.log(data);
+        set(data);
+    }
+});
+
+
 
 export const priceToday = derived(page_store_item, async($page_store_item, set)=>{
     if ($page_store_item!=null && $page_store_item!=undefined){

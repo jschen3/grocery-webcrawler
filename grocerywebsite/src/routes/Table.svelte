@@ -1,6 +1,7 @@
 <script>
     
     import {itemData} from './store.js';
+    import {priceComparison} from './store.js';
     import Safeway_Icon from "$lib/images/safeway-icon.png";
     import Buy_Icon from "$lib/images/buy-icon.png";
     import {percentText, addDollarSymbol, capitalize} from '../util/textformat.js'
@@ -37,7 +38,7 @@
                 <p><strong>Price Change Last 30 Days: </strong>{addDollarSymbol($itemData.priceChangeLast30days)}</p>
                 <p><strong>Percent Price Change Last 30 Days: </strong>{@html percentText($itemData.percentPriceChange30days)}</p>
             </div>
-            <div class="col-sm">   
+            <div class="col-sm">  
                 <td>
                     <p><strong>Category: </strong>{$itemData.category}</p>
                     <p>Same Store Similar Items</p>
@@ -50,7 +51,6 @@
             </div>
         </div>
     </div>
-
 {/if}
 <style>
     .table-div{

@@ -6,7 +6,6 @@
     let days_select = -1
     function store_item_days_on_change(){
        let clone = JSON.parse(JSON.stringify($page_store_item));
-       //console.log(clone);
        page_store_item.set({"upc":clone.upc, "storeId":$store_id, "store_item_days":days_select});
     }
 
@@ -16,6 +15,7 @@
         https://layercake.graphics/example/MultiLine/
     -->
 {#key $graphData}
+<h2 class="text-white">Graphs:</h2>
 <div class="days-select-div">
     <select bind:value={days_select} on:change={store_item_days_on_change} class="days-select">
         <option selected value={-1}>All Days</option>

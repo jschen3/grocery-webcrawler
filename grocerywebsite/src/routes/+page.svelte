@@ -6,6 +6,7 @@
     import SevenDayPriceChange from './7DayPriceChange.svelte';
     import ThirtyDayPriceChange from './30DayPriceChange.svelte';
 	import PriceChangeTable from './PriceChangeTable.svelte';
+    import PriceComparison from './PriceComparison.svelte';
     import { page } from '$app/stores';
     function hasURLPatterns(){
         if ($page.url.searchParams.has("storeId") && $page.url.searchParams.has("upc")){
@@ -29,6 +30,7 @@
     {#if $page_store_item || hasURLPatterns()}
         {#key page_store_item}
         <div class="table-div"><Table/></div>
+        <div class="price-comparison"><PriceComparison/></div>
         <div class="graph-div">
             <Graph/>
         </div>
