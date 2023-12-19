@@ -4,12 +4,14 @@ from bisect import bisect_left
 from datetime import datetime, timedelta
 
 import pandas
+from sqlalchemy import and_, asc
+
 from grocerywebcrawler.models.distinct_safeway_items import DistinctSafewayItems
 from grocerywebcrawler.models.safeway_item import SafewayItemDBModel, SafewayItem
 from grocerywebcrawler.rds_connection import RDSConnection
-from sqlalchemy import and_, asc
 from webserver.models.item_general_information import ItemGeneralInformation
 from webserver.models.store import StoreDbModel
+from webserver.price_comparison_between_stores import create_price_comparison_between_stores
 
 
 def fillOut5ItemsInCategory(currentItemGeneralInformation, storeId, db):
@@ -48,6 +50,7 @@ def fillOutGeneralInformation(itemGeneralInformation, storeId, upc, db):
     itemGeneralInformation.storeType = storeInfo.storeType
     itemGeneralInformation.category = todays_info.departmentName
     itemGeneralInformation.date = datetime.today().strftime("%B %d, %Y")
+    itemGeneralInformation.priceComparison = create_price_comparison_between_stores(upc, db)
 
 
 def build_general_information(upc, storeId, db):

@@ -12,12 +12,16 @@ class GreatestPriceChangesCache:
 
     @staticmethod
     def get_greatest_price_changes(storeId: str, thirtyOr7Days: bool, limit: int, offset: int, db: Session):
+        # The query finds the greatest price change that happened in the last interval.
+        # The current interval is 7 days for greatest price change in the last week and 30 days
+        # The price change is comparing price 1 week ago or 1 month ago.
         today = datetime.today()
         date_string = '2023-08-09'
         august_date = datetime.strptime(date_string, "%Y-%m-%d")
-        thirty_days_ago = august_date - timedelta(
+        # replace august_date with today after data collection again for a while.
+        thirty_days_ago = today - timedelta(
             days=30)
-        one_week_ago = august_date - timedelta(days=7)
+        one_week_ago = today - timedelta(days=7)
         if limit != 50 and offset != 0:
             # true = thirtydays
             # false = 7 days

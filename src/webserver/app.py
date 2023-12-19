@@ -100,9 +100,10 @@ async def getItemsFromStore(storeId: str, q: str, limit: int = 30, db: Session =
 
 @app.get("/items/{storeId}/{upc}/prices")
 async def getPricesOfItem(storeId: str, upc: str, days: int, db: Session = Depends(get_db)):
+    today = datetime.today()
     date_string = '2023-08-09'
     august_date = datetime.strptime(date_string, "%Y-%m-%d")
-    days_before = (august_date - timedelta(days=days)).date()
+    days_before = (today - timedelta(days=days)).date()
     query = db.query(SafewayItemDBModel.name, SafewayItemDBModel.upc, SafewayItemDBModel.date, SafewayItemDBModel.price,
                      SafewayItemDBModel.basePrice, SafewayItemDBModel.pricePer).filter(and_(
         SafewayItemDBModel.storeId == storeId, SafewayItemDBModel.upc == upc,
@@ -128,7 +129,7 @@ def getPricesOfItemJsonHelper(storeId: str, upc: str, days: int, db: Session):
         today = datetime.today()
         date_string = '2023-08-09'
         august_date = datetime.strptime(date_string, "%Y-%m-%d")
-        days_before = (august_date - timedelta(days=days)).date()
+        days_before = (today - timedelta(days=days)).date()
         return getDataFrameJsonObject(storeId, upc, days_before, db)
 
 

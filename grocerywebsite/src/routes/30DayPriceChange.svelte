@@ -3,6 +3,7 @@
     import { onMount } from 'svelte';
     import {priceChangeData30Days, greatest_price_change_options_30, display_30_days, display_7_days, page_store_item, store_id, storeInfo} from './store.js';
     import {colorPercentText, addDollarSymbol} from '../util/textformat.js'
+    import { changeURLParams } from '../util/url.js';
     onMount(()=>{
         let storeValue;
         store_id.subscribe(value =>{
@@ -24,6 +25,7 @@
         page_store_item.set({"upc":upc, "storeId":storeValue, "store_item_days":-1});
         display_7_days.set(false);
         display_30_days.set(false);
+        changeURLParams(storeValue, upc);
     }
     
     </script>
