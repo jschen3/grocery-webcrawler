@@ -50,7 +50,6 @@ def fillOutGeneralInformation(itemGeneralInformation, storeId, upc, db):
     itemGeneralInformation.storeType = storeInfo.storeType
     itemGeneralInformation.category = todays_info.departmentName
     itemGeneralInformation.date = datetime.today().strftime("%B %d, %Y")
-    itemGeneralInformation.priceComparison = create_price_comparison_between_stores(upc, db)
 
 
 def build_general_information(upc, storeId, db):

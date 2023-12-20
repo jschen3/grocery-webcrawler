@@ -1,8 +1,6 @@
 from datetime import date
 from typing import Optional
 
-from webserver.price_comparison_between_stores import PriceComparisonBetweenStores
-
 
 class ItemGeneralInformation:
     name: Optional[str]
@@ -32,7 +30,6 @@ class ItemGeneralInformation:
     highestPriceAtLocalStores: Optional[str]
     earliestDatePriceAvailable: Optional[str]
     lastUpdatedDate: Optional[date]
-    priceComparison: Optional[PriceComparisonBetweenStores]
 
     def dict(self):
         return {
