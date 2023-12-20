@@ -2,7 +2,7 @@
     import { addDollarSymbol } from '../util/textformat.js';
     import {priceComparison} from './store.js';
 </script>
- {#if $priceComparison!=undefined} 
+ {#if $priceComparison!=undefined && $priceComparison.prices.length>0} 
  <h2 class="text-white">Price Comparison:</h2>
     <table class="table table-hover table-light table-striped table-bordered">
         <thead>
