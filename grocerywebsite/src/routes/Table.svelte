@@ -1,7 +1,6 @@
 <script>
     
     import {itemData} from './store.js';
-    import {priceComparison} from './store.js';
     import Safeway_Icon from "$lib/images/safeway-icon.png";
     import Buy_Icon from "$lib/images/buy-icon.png";
     import {percentText, addDollarSymbol, capitalize} from '../util/textformat.js'
