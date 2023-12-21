@@ -15,8 +15,9 @@
         https://layercake.graphics/example/MultiLine/
     -->
 {#key $graphData}
-<h2 class="text-white">Graphs:</h2>
+
 <div class="days-select-div">
+    <h2 class="text-white">Graphs:</h2>
     <select bind:value={days_select} on:change={store_item_days_on_change} class="days-select">
         <option selected value={-1}>All Days</option>
         <option value={7}>7 Days</option>

@@ -50,10 +50,6 @@
     .table-div{
         border-radius: 10px;
     }
-    .graph-div{
-        margin-top: 50px;
-        margin-bottom: 50px;
-    }
     .top-price-change-div{
         border-radius: 10px;
     }
