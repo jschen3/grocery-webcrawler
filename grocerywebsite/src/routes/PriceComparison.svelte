@@ -24,5 +24,4 @@
     </table>       
 {/if}
 <style>
-    .h2
 </style>
