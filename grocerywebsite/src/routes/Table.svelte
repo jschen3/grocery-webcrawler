@@ -23,7 +23,7 @@
         <p class="text-white go-to-safeway-link"><strong>Go to item: </strong><a href="https://www.safeway.com/shop/search-results.html?q={$itemData.name}">https://www.safeway.com/shop/search-results.html?q={$itemData.name}</a></p>
     </div>
     <div class="row">
-        <p class="text-white"><strong>Add to shopping list</strong><img class="cart-image" src={Add_To_Cart_Icon} alt="add to cart icon"/></p>
+        <p class="text-white"><strong>Add to shopping list: </strong><img class="cart-image" src={Add_To_Cart_Icon} alt="add to cart icon"/></p>
     </div>
     <div class="table-div bg-secondary">
         <div class="row">
@@ -77,7 +77,7 @@
         overflow:hidden;
     }
     .cart-image{
-        height:75px;
-        width: 75px;
+        height:50px;
+        width: 50px;
     }
 </style>
