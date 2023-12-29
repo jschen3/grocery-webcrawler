@@ -3,11 +3,14 @@
     import {itemData} from './store.js';
     import Safeway_Icon from "$lib/images/safeway-icon.png";
     import Buy_Icon from "$lib/images/buy-icon.png";
+    import Add_To_Cart_Icon from "$lib/images/add-to-cart.png"
     import {percentText, addDollarSymbol, capitalize} from '../util/textformat.js'
   
 </script>
 {#if $itemData!= undefined}
-    <h2 class="text-white item-name-header"><strong>Item Name: </strong> {$itemData.name}</h2>
+    <div class="row">
+        <div class="col-md"><h2 class="text-white item-name-header "><strong>Item Name: </strong>{$itemData.name}</h2></div>
+    </div>
     <div class="row store-info">
         <div class="col-sm text-white"><strong>Store Name: </strong><img src={Safeway_Icon} alt="safeway icon"/>{capitalize($itemData.storeType)} </div>
         <div class="col-sm text-white"><strong>Location:</strong> {$itemData.storeLocation} </div>
@@ -16,7 +19,12 @@
         <div class="col-sm text-white"><strong>Current Date:</strong> {$itemData.date} </div>
         <div class="col-sm text-white"><strong>Last Updated Date: </strong>{$itemData.lastUpdatedDate} </div>
     </div>
-    <p class="text-white go-to-safeway-link"><strong>Go to item: </strong><a href="https://www.safeway.com/shop/search-results.html?q={$itemData.name}">https://www.safeway.com/shop/search-results.html?q={$itemData.name}</a></p>
+   <div class="row">
+        <p class="text-white go-to-safeway-link"><strong>Go to item: </strong><a href="https://www.safeway.com/shop/search-results.html?q={$itemData.name}">https://www.safeway.com/shop/search-results.html?q={$itemData.name}</a></p>
+    </div>
+    <div class="row">
+        <p class="text-white"><strong>Add to shopping list</strong><img class="cart-image" src={Add_To_Cart_Icon} alt="add to cart icon"/></p>
+    </div>
     <div class="table-div bg-secondary">
         <div class="row">
             <div class="col-sm"><h2>Prices</h2></div>
@@ -64,5 +72,12 @@
     }
     .item-name-header{
         padding-top: 5px;
+        text-overflow:clip;
+        white-space: nowrap;
+        overflow:hidden;
+    }
+    .cart-image{
+        height:75px;
+        width: 75px;
     }
 </style>
