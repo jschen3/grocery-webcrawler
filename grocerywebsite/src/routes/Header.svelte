@@ -1,12 +1,13 @@
 <script>
   import Stock_Market_Icon from "$lib/images/stock_market_icon.png";    
 	import SelectBar from "./header_components/select_bar.svelte";
-	import { display_7_days, page_store_item, display_30_days ,greatest_price_change_options_30, greatest_price_change_options_7, store_id} from "./store";
+	import { display_7_days, page_store_item, display_30_days, greatest_price_change_options_30, greatest_price_change_options_7, store_id, display_shopping_list} from "./store";
   import { changeURLParams } from "../util/url.js";
     function seven_day_click(){
         page_store_item.set(null);
         display_7_days.set(true);
         display_30_days.set(false);
+        display_shopping_list.set(false)
         changeURLParams(null, null);
     }
 
@@ -14,7 +15,15 @@
         page_store_item.set(null);
         display_7_days.set(false);
         display_30_days.set(true);
+        display_shopping_list.set(false);
         changeURLParams(null, null);
+    }
+
+    function shopping_list_click(){
+        page_store_item.set(null);
+        display_7_days.set(false);
+        display_30_days.set(false);
+        display_shopping_list.set(true);
     }
 
     function locationClicked(storeIdValue){
@@ -74,12 +83,19 @@
           {#if $display_7_days==true}
               <a class="nav-item nav-link active" on:click={seven_day_click}>7 Day Price Changes</a>
               <a class="nav-item nav-link" on:click={thirty_day_click}>30 Day Price Changes</a>
+              <a class="nav-item nav-link" on:click={shopping_list_click}>Shopping List</a>
           {:else if $display_30_days==true}          
               <a class="nav-item nav-link" on:click={seven_day_click}>7 Day Price Changes</a>
               <a class="nav-item nav-link active" on:click={thirty_day_click}>30 Day Price Changes</a>
-          {:else}
+             <a class="nav-item nav-link" on:click={shopping_list_click}>Shopping List</a>
+          {:else if $display_shopping_list==true}
               <a class="nav-item nav-link" on:click={seven_day_click}>7 Day Price Changes</a>
               <a class="nav-item nav-link" on:click={thirty_day_click}>30 Day Price Changes</a>
+              <a class="nav-item nav-link active" on:click={shopping_list_click}>Shopping List</a>
+          {:else}
+              <a class="nav-item nav-link active" on:click={seven_day_click}>7 Day Price Changes</a>
+              <a class="nav-item nav-link" on:click={thirty_day_click}>30 Day Price Changes</a>
+              <a class="nav-item nav-link" on:click={shopping_list_click}>Shopping List</a>
           {/if}    
       </ul>
       <SelectBar/>

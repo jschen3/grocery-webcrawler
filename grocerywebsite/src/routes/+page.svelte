@@ -7,6 +7,7 @@
     import ThirtyDayPriceChange from './30DayPriceChange.svelte';
 	import PriceChangeTable from './PriceChangeTable.svelte';
     import PriceComparison from './PriceComparison.svelte';
+    import ShoppingList from './ShoppingList.svelte';
     import { page } from '$app/stores';
     function hasURLPatterns(){
         if ($page.url.searchParams.has("storeId") && $page.url.searchParams.has("upc")){
@@ -14,6 +15,7 @@
             page_store_item.set({"upc":urlParams.get("upc"), "storeId":urlParams.get("storeId"), "store_item_days":-1});
             display_7_days.set(false);
             display_30_days.set(false);
+            //display_shopping_list.set(false);
             return true;
         }
         return false;
@@ -44,7 +46,10 @@
     {/key}
     {#key display_30_days}    
         <div class="top-price-change-div"><ThirtyDayPriceChange/></div>
-    {/key}    
+    {/key}
+    {#key display_shopping_list}
+        <div><ShoppingList/></div>
+    {/key}
 </div>
 <style>
     .table-div{
