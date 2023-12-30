@@ -1,6 +1,6 @@
 <script>
     
-    import {itemData cart_list} from './store.js';
+    import {itemData, cart_list} from './store.js';
     import Safeway_Icon from "$lib/images/safeway-icon.png";
     import Buy_Icon from "$lib/images/buy-icon.png";
     import Add_To_Cart_Icon from "$lib/images/add-to-cart.png"

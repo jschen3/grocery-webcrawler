@@ -33,12 +33,8 @@
         {#key page_store_item}
         <div class="table-div"><Table/></div>
         <div class="price-comparison"><PriceComparison/></div>
-        <div class="graph-div">
-            <Graph/>
-        </div>
-        <div class="pricechange-div">
-            <PriceChangeTable/>
-        </div>
+        <div class="graph-div"><Graph/></div>
+        <div class="pricechange-div"><PriceChangeTable/></div>
         {/key}
     {/if}
     {#key display_7_days}
