@@ -17,6 +17,8 @@ export const store_item_days = writable(-1);
 
 export const store_id = writable(2948);
 
+export const cart_list = writable([]);
+
 const server_url = "https://grocerymarketwatch.com:5000"
 export const itemData = derived(page_store_item, async($page_store_item, set)=>{
     if ($page_store_item!=null && $page_store_item!=undefined){
@@ -118,4 +120,5 @@ export const storeInfo = derived(store_id, async($store_id, set)=>{
         set(data);
     }    
 });
+
 

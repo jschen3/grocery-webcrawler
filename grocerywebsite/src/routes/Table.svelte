@@ -1,11 +1,29 @@
 <script>
     
-    import {itemData} from './store.js';
+    import {itemData cart_list} from './store.js';
     import Safeway_Icon from "$lib/images/safeway-icon.png";
     import Buy_Icon from "$lib/images/buy-icon.png";
     import Add_To_Cart_Icon from "$lib/images/add-to-cart.png"
     import {percentText, addDollarSymbol, capitalize} from '../util/textformat.js'
-  
+	import axios from 'axios';
+    
+  function addToCart(upc){
+    cart_clone=JSON.parse(JSON.stringify($cart_list));
+    cart_clone.push(upc)
+    cart_list.set(cart_clone)
+    //rest call to api 
+    // save result as localstorage shopping list
+    axios({
+        method:'post',
+        url: 'http://localhost:8000/shoppinglist',
+        data: $cart_list
+    }).then((response)=>{
+        console.log(response);
+        // local storage
+    }, (error)=>{
+        console.log(error);
+    });
+  }
 </script>
 {#if $itemData!= undefined}
     <div class="row">
@@ -23,7 +41,7 @@
         <p class="text-white go-to-safeway-link"><strong>Go to item: </strong><a href="https://www.safeway.com/shop/search-results.html?q={$itemData.name}">https://www.safeway.com/shop/search-results.html?q={$itemData.name}</a></p>
     </div>
     <div class="row">
-        <p class="text-white"><strong>Add to shopping list: </strong><img class="cart-image" src={Add_To_Cart_Icon} alt="add to cart icon"/></p>
+        <p class="text-white" on:click={addToCart($itemData.upc)}><strong>Add to shopping list: </strong><img class="cart-image" src={Add_To_Cart_Icon} alt="add to cart icon"/></p>
     </div>
     <div class="table-div bg-secondary">
         <div class="row">
