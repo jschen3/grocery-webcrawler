@@ -39,9 +39,6 @@ export const priceComparison = derived(page_store_item, async($page_store_item, 
         console.log(data);
         set(data);
     }
-    else{
-        set(undefined)
-    }    
 });
 
 
