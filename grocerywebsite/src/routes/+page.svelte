@@ -2,7 +2,7 @@
     import Header from './Header.svelte';
     import Table from './Table.svelte';
     import Graph from './Graph.svelte';
-    import {page_store_item, display_30_days, display_7_days} from './store.js';
+    import {page_store_item, display_30_days, display_7_days, display_shopping_list} from './store.js';
     import SevenDayPriceChange from './7DayPriceChange.svelte';
     import ThirtyDayPriceChange from './30DayPriceChange.svelte';
 	import PriceChangeTable from './PriceChangeTable.svelte';
@@ -15,7 +15,7 @@
             page_store_item.set({"upc":urlParams.get("upc"), "storeId":urlParams.get("storeId"), "store_item_days":-1});
             display_7_days.set(false);
             display_30_days.set(false);
-            //display_shopping_list.set(false);
+            display_shopping_list.set(false);
             return true;
         }
         return false;
