@@ -1,7 +1,7 @@
 <script>
 import {display_shopping_list} from './store'
-// import {getFromLocalStorage} from '../shopping_list/LocalStorage'
-// import {IShoppingListItem} from '../shopping_list/IShoppingListItem'
+import {getFromLocalStorage} from './shopping_list/LocalStorage'
+import {IShoppingListItem} from './shopping_list/IShoppingListItem'
 // import { addDollarSymbol } from '../util/textformat.js';
 
 
