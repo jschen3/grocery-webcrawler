@@ -18,6 +18,7 @@ from grocerywebcrawler.models.safeway_item import SafewayItemDBModel, SafewayIte
 from grocerywebcrawler.rds_connection import RDSConnection
 from util.logging import info
 from webserver.build_general_info_section import build_general_information
+from webserver.create_shopping_list import create_shopping_list_output
 from webserver.greatest_price_changes_cache import GreatestPriceChangesCache
 from webserver.models.operation_db_model import OperationDbModel
 from webserver.models.price_change_row import PriceChangeRow
@@ -62,7 +63,7 @@ async def root():
 @app.get("/regions")
 async def get_regions():
     info("testing logging quickly inside docker")
-    return {"regions": ["bay-area"]}  # later when more regions are available update
+    return {"regions": ["bay-area"]}
 
 
 @app.get("/stores/{region}")
@@ -251,3 +252,8 @@ def priceChangeTable(upc: str, storeId: str, days: int = -1, db: Session = Depen
 @app.get("/pricecomparison/{upc}")
 def priceComparison(upc: str, db: Session = Depends(get_db)):
     return create_price_comparison_between_stores(upc, db)
+
+
+@app.post("/shoppinglist")
+def shoppingList(shoppingList: list[str], db: Session = Depends(get_db)):
+    return create_shopping_list_output(shoppingList, db)
