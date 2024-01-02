@@ -5,6 +5,7 @@ from pydantic.main import BaseModel
 
 
 class ShoppingListItem(BaseModel):
+    index:Optional[int]
     updatedDate: Optional[date]
     itemName: Optional[str]
     upc: Optional[str]

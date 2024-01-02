@@ -1,94 +1,86 @@
 <script>
+	import { json } from '@sveltejs/kit';
 import {display_shopping_list} from './store'
-import {getFromLocalStorage} from './shopping_list/LocalStorage'
-//import {IShoppingListItem} from './shopping_list/IShoppingListItem'
-// import { addDollarSymbol } from '../util/textformat.js';
+import {shoppingListOutput} from './shopping_list/shoppingliststore';
+import {addDollarSymbol} from '../util/textformat.js';
 
-
-
-  
-//let shoppingItems = getFromLocalStorage<IShoppingListItem>('shoppinglist', [])
-let shoppingItems=[{
-    "index":0,
-	"itemName":"beef",
-	"itemCategory":"meat",
-	"upc":123457,
-	"cheapestPrice":8.99,
-	"cheapestPriceLocation":"500 arapahoe",
-	"highestPrice":11.99,
-	"highestPriceLocation":"500 camino",
-	"optimalPrice":8.99,
-	"optimalPriceLocation":"500 arapahoe",
-},
-{
-    "index":1,
-	"itemName":"beef2",
-	"itemCategory":"meat",
-	"upc":123457,
-	"cheapestPrice":8.99,
-	"cheapestPriceLocation":"500 arapahoe",
-	"highestPrice":11.99,
-	"highestPriceLocation":"500 camino",
-	"optimalPrice":8.99,
-	"optimalPriceLocation":"500 arapahoe"
-}]
-
-function deleteItem(index, shoppingItems){
-
-}
-
-
+const shoppingList = shoppingListOutput.shoppingListItems;
+const optimalStore = shoppingListOutput.optimalStore;
+const optimalStoreShoppingList = optimalStore.shoppingItems;
 </script>
 {#key $display_shopping_list}
     {#if $display_shopping_list==true}
-        <h1 class="text-white">Shopping List</h1>
+        <h1 class="text-white">Optimal Store Location: optimalStore.storeLocation</h1>
+        <h2 class="text-white">Optimal Store Shopping List</h2>
         <table class="table table-hover table-light table-striped table-bordered">
             <thead>
                 <tr>
-                    <th scope="col">X</th>
+                    <th scope="col">Item Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Remove Item</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#if optimalStoreShoppingList && optimalStoreShoppingList.length>0}
+                        {#each optimalStoreShoppingList as item}
+                            <tr>
+                                <td>{item.itemName}</td>
+                                <td>{addDollarSymbol(item.price)}</td>
+                                <td><a>delete item</a></td>
+                            </tr>
+                        {/each}
+                    <tr>
+                        <td><strong>Total Price:</strong></td>
+                        <td>{addDollarSymbol(optimalStore.totalPrice)}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Maximal Savings:</strong></td>
+                        <td>{addDollarSymbol(optimalStore.maximalSavings)}</td>
+                        <td></td>
+                    </tr>
+                {/if}    
+            </tbody>
+        </table>
+        <h1 class="text-white">Shopping List Additional Options</h1>
+        <table class="table table-hover table-light table-striped table-bordered">
+            <thead>
+                <tr>
                     <th scope="col">Item Name</th>
                     <th scope="col">Category</th>
                     <th scope="col">Cheapest Price</th>
                     <th scope="col">Cheapest Price Location</th>
                     <th scope="col">Highest Price</th>
                     <th scope="col">Highest Price Location</th>
-                    <th scope="col">Optimal Store Price</th>
-                    <th scope="col">Optimal Location</th>
-
+                    <th scope="col">Remove Item</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- {#if $shoppingItems && $shoppingItems.length>0}
-                    {#each $shoppingItems as item}
+                 {#if shoppingList && shoppingList.length>0}
+                    {#each shoppingList as item}
                         <tr>
                             <td>
-                                item.itemName
+                                {item.itemName}
                             </td>
                             <td>
-                                item.itemCategory
+                                {item.itemCategory}
                             </td>
                             <td>
-                                addDollarSymbol(item.cheapestPrice)
+                                {addDollarSymbol(item.cheapestPrice)}
                             </td>
                             <td>
-                                item.cheapestPriceLocation
+                                {item.cheapestPriceLocation}
                             </td>
                             <td>
-                                addDollarSymbol(item.highestPrice)
+                                {addDollarSymbol(item.highestPrice)}
                             </td>
                             <td>
-                                item.highestPriceLocation
+                                {item.highestPriceLocation}
                             </td>
-                            <td>
-                                addDollarSymbol(item.optimalPrice)
-                            </td>
-                            <td>
-                                item.optimalPriceLocation
-                            </td>
-                            <td></td>  item clicked delete item action
+                            <td><a>delete item</a></td>  
                         </tr>
                     {/each}
-                {/if} -->
+                {/if} 
             </tbody>
         </table>
     {/if}

@@ -7,6 +7,5 @@ export interface IShoppingListItem{
     cheapestPriceLocation:string
     highestPrice:number
     highestPriceLocation:string
-    optimalPrice:number
-    optimalPriceLocation:string
+    updatedDate:Date
 }

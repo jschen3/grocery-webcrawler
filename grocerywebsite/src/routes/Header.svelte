@@ -24,6 +24,7 @@
         display_7_days.set(false);
         display_30_days.set(false);
         display_shopping_list.set(true);
+        changeURLParams(null, null);
     }
 
     function locationClicked(storeIdValue){

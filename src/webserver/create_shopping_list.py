@@ -8,9 +8,8 @@ from webserver.price_comparison_between_stores import create_price_comparison_be
     PriceComparisonBetweenStores
 
 
-
-
 class PriceAtStore(BaseModel):
+    index: Optional[int]
     upc: Optional[str]
     name: Optional[str]
     storeId: Optional[str]
@@ -21,9 +20,11 @@ class PriceAtStore(BaseModel):
 
 class GroupedStoreAndItems(BaseModel):
     storeId: Optional[str]
+    storeLocation: Optional[str]
     shoppingItems: Optional[list[PriceAtStore]]
     totalPrice: Optional[float]
     missingItems: Optional[list[str]]
+
 
 class ShoppingListOutput(BaseModel):
     shoppingListItems: Optional[list[ShoppingListItem]]
@@ -34,15 +35,16 @@ def create_shopping_list_output(shoppingList, db):
     priceAtStores = []
     stores = set()
     shoppingListItemsList = []
-    for upc in shoppingList:
+    for index, upc in enumerate(shoppingList):
         priceComparisonObject: PriceComparisonBetweenStores = create_price_comparison_between_stores(upc, db)
         highestPrice = 0.0
         highestPriceLocation = None
         lowestPrice = 1000000
         lowestPriceLocation = None
         lowestDate = None
+        # fix bug not every item has multiple price objects here...
         for price in priceComparisonObject.prices:
-            newPriceAtStore = PriceAtStore(upc=priceComparisonObject.upc, name=priceComparisonObject.name,
+            newPriceAtStore = PriceAtStore(index=index, upc=priceComparisonObject.upc, name=priceComparisonObject.name,
                                            storeLocation=price.storeLocation, price=price.price, storeId=price.storeId,
                                            updatedDate=price.date)
             priceAtStores.append(newPriceAtStore)
@@ -54,7 +56,8 @@ def create_shopping_list_output(shoppingList, db):
                 lowestPriceLocation = price.storeLocation
                 lowestDate = price.date
             stores.add(price.storeId)
-        shoppingListItem = ShoppingListItem(updatedDate=lowestDate, itemName=priceComparisonObject.name, upc=upc,
+        shoppingListItem = ShoppingListItem(index=index, updatedDate=lowestDate, itemName=priceComparisonObject.name,
+                                            upc=upc,
                                             cheapestPrice=lowestPrice, cheapestPriceLocation=lowestPriceLocation,
                                             highestPrice=highestPrice, highestPriceLocation=highestPriceLocation)
         shoppingListItemsList.append(shoppingListItem)
@@ -81,6 +84,7 @@ def create_shopping_list_output(shoppingList, db):
 
         group = GroupedStoreAndItems(storeId=store, shoppingItems=itemsAtStore, totalPrice=price,
                                      missingItems=missingItems)
+        group.storeLocation = itemsAtStore[0].storeLocation # may be buggy
         storeItems.append(group)
 
     optimalStoreGroup = None
@@ -90,7 +94,7 @@ def create_shopping_list_output(shoppingList, db):
             lowestPrice = groupedStoreAndItems.totalPrice
             optimalStoreGroup = groupedStoreAndItems
 
-    shoppinglistOutput=ShoppingListOutput()
-    shoppinglistOutput.shoppingListItems=shoppingListItemsList
-    shoppinglistOutput.optimalStore=optimalStoreGroup
+    shoppinglistOutput = ShoppingListOutput()
+    shoppinglistOutput.shoppingListItems = shoppingListItemsList
+    shoppinglistOutput.optimalStore = optimalStoreGroup
     return shoppinglistOutput

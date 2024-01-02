@@ -6,9 +6,9 @@
     import Add_To_Cart_Icon from "$lib/images/add-to-cart.png"
     import {percentText, addDollarSymbol, capitalize} from '../util/textformat.js'
 	import axios from 'axios';
-    
+    import { writable } from "svelte/store";
   function addToCart(upc){
-    cart_clone=JSON.parse(JSON.stringify($cart_list));
+    let cart_clone=JSON.parse(JSON.stringify($cart_list));
     cart_clone.push(upc)
     cart_list.set(cart_clone)
     //rest call to api 
@@ -19,7 +19,12 @@
         data: $cart_list
     }).then((response)=>{
         console.log(response);
-        // local storage
+        const shoppingList = localStorage.get("shoppingList")
+        const localStorageShoppingList = writable(shoppingList);
+        localStorageShoppingList.subscribe(value=>{
+            localStorage.setItem("shoppingList", response);
+        });
+        
     }, (error)=>{
         console.log(error);
     });
