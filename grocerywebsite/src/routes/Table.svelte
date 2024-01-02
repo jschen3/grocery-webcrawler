@@ -22,9 +22,8 @@
         const shoppingList = localStorage.get("shoppingList")
         const localStorageShoppingList = writable(shoppingList);
         localStorageShoppingList.subscribe(value=>{
-            localStorage.setItem("shoppingList", response);
+            localStorage.setItem("shoppingList", JSON.stringify(response))
         });
-        
     }, (error)=>{
         console.log(error);
     });
