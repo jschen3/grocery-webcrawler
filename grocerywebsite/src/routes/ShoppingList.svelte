@@ -10,7 +10,7 @@ const optimalStoreShoppingList = optimalStore.shoppingItems;
 </script>
 {#key $display_shopping_list}
     {#if $display_shopping_list==true}
-        <h1 class="text-white">Optimal Store Location: optimalStore.storeLocation</h1>
+        <h1 class="text-white">Optimal Store Location: {optimalStore.storeLocation}</h1>
         <h2 class="text-white">Optimal Store Shopping List</h2>
         <table class="table table-hover table-light table-striped table-bordered">
             <thead>
