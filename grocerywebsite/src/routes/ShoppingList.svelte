@@ -4,8 +4,8 @@ import {display_shopping_list} from './store'
 import {shoppingListOutput} from './shopping_list/shoppingliststore';
 import {addDollarSymbol} from '../util/textformat.js';
 
-const shoppingList = shoppingListOutput.shoppingListItems;
-const optimalStore = shoppingListOutput.optimalStore;
+const shoppingList = $shoppingListOutput.shoppingListItems;
+const optimalStore = $shoppingListOutput.optimalStore;
 const optimalStoreShoppingList = optimalStore.shoppingItems;
 </script>
 {#key $display_shopping_list}
@@ -24,7 +24,7 @@ const optimalStoreShoppingList = optimalStore.shoppingItems;
                 {#if optimalStoreShoppingList && optimalStoreShoppingList.length>0}
                         {#each optimalStoreShoppingList as item}
                             <tr>
-                                <td>{item.itemName}</td>
+                                <td>{item.name}</td>
                                 <td>{addDollarSymbol(item.price)}</td>
                                 <td><a>delete item</a></td>
                             </tr>
@@ -34,11 +34,11 @@ const optimalStoreShoppingList = optimalStore.shoppingItems;
                         <td>{addDollarSymbol(optimalStore.totalPrice)}</td>
                         <td></td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td><strong>Maximal Savings:</strong></td>
                         <td>{addDollarSymbol(optimalStore.maximalSavings)}</td>
                         <td></td>
-                    </tr>
+                    </tr> -->
                 {/if}    
             </tbody>
         </table>
@@ -47,7 +47,6 @@ const optimalStoreShoppingList = optimalStore.shoppingItems;
             <thead>
                 <tr>
                     <th scope="col">Item Name</th>
-                    <th scope="col">Category</th>
                     <th scope="col">Cheapest Price</th>
                     <th scope="col">Cheapest Price Location</th>
                     <th scope="col">Highest Price</th>
@@ -61,9 +60,6 @@ const optimalStoreShoppingList = optimalStore.shoppingItems;
                         <tr>
                             <td>
                                 {item.itemName}
-                            </td>
-                            <td>
-                                {item.itemCategory}
                             </td>
                             <td>
                                 {addDollarSymbol(item.cheapestPrice)}
