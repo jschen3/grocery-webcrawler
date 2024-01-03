@@ -17,19 +17,19 @@ export const shoppingListOutput = writable({
             "itemName": "De Wafelbakkers Buttermilk Pancakes Pack - 18 Count",
             "upc": "0067984410457",
             "cheapestPrice": 4.99,
-            "cheapestPriceLocation": "6150 Bollinger Rd, San Jose, CA, 95129",
+            "cheapestPriceLocation": "570 N Shorline Blvd, Mountain View, CA, 94040",
             "highestPrice": 4.99,
-            "highestPriceLocation": "6150 Bollinger Rd, San Jose, CA, 95129"
+            "highestPriceLocation": "570 N Shorline Blvd, Mountain View, CA, 94040"
         },
         {
             "index": 2,
-            "updatedDate": "2024-01-02",
+            "updatedDate": "2024-01-03",
             "itemName": "waterfront BISTRO Shrimp Raw Extra Jumbo Shell & Tail On Frozen 16-20 Count - 2 Lb",
             "upc": "0002113012531",
             "cheapestPrice": 11.98,
-            "cheapestPriceLocation": "645 San Antonio Rd, Mountain View, CA, 94040 ",
-            "highestPrice": 11.98,
-            "highestPriceLocation": "645 San Antonio Rd, Mountain View, CA, 94040 "
+            "cheapestPriceLocation": "6150 Bollinger Rd, San Jose, CA, 95129",
+            "highestPrice": 25.98,
+            "highestPriceLocation": "2811 Middlefield Rd, Palo Alto, CA, 94306"
         }
     ],
     "optimalStore": {
@@ -61,10 +61,12 @@ export const shoppingListOutput = writable({
                 "storeId": "705",
                 "storeLocation": "570 N Shorline Blvd, Mountain View, CA, 94040",
                 "price": 11.98,
-                "updatedDate": "2024-01-02"
+                "updatedDate": "2024-01-03"
             }
         ],
         "totalPrice": 18.22,
-        "missingItems": []
+        "missingItems": [],
+        "maximumPrice": 35.96,
+        "maximumSavings": 17.740000000000002
     }
 });

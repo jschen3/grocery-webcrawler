@@ -34,11 +34,16 @@ const optimalStoreShoppingList = optimalStore.shoppingItems;
                         <td>{addDollarSymbol(optimalStore.totalPrice)}</td>
                         <td></td>
                     </tr>
-                    <!-- <tr>
-                        <td><strong>Maximal Savings:</strong></td>
-                        <td>{addDollarSymbol(optimalStore.maximalSavings)}</td>
+                    <tr>
+                        <td><strong>Maximum Price:</strong></td>
+                        <td>{addDollarSymbol(optimalStore.maximumPrice)}</td>
                         <td></td>
-                    </tr> -->
+                    </tr>
+                    <tr>
+                        <td><strong>Savings:</strong></td>
+                        <td>{addDollarSymbol(optimalStore.maximumSavings)}</td>
+                        <td></td>
+                    </tr>
                 {/if}    
             </tbody>
         </table>
