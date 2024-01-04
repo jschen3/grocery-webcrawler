@@ -12,7 +12,7 @@ const optimalStoreShoppingList = optimalStore.shoppingItems;
 function itemNameClicked(upc, storeValue){
     page_store_item.set({"upc":upc, "storeId":storeValue, "store_item_days":-1});
     display_shopping_list.set(false);
-    //changeURLParams(storeValue, upc);
+    changeURLParams(storeValue, upc);
 }   
 </script>
 {#key $display_shopping_list}
