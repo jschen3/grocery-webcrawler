@@ -1,12 +1,19 @@
 <script>
 	import { json } from '@sveltejs/kit';
-import {display_shopping_list} from './store'
+import {display_shopping_list, page_store_item} from './store'
 import {shoppingListOutput} from './shopping_list/shoppingliststore';
 import {addDollarSymbol} from '../util/textformat.js';
+import { changeURLParams } from '../util/url.js';
 
 const shoppingList = $shoppingListOutput.shoppingListItems;
 const optimalStore = $shoppingListOutput.optimalStore;
 const optimalStoreShoppingList = optimalStore.shoppingItems;
+
+function itemNameClicked(upc, storeValue){
+    page_store_item.set({"upc":upc, "storeId":storeValue, "store_item_days":-1});
+    display_shopping_list.set(false);
+    //changeURLParams(storeValue, upc);
+}   
 </script>
 {#key $display_shopping_list}
     {#if $display_shopping_list==true}
@@ -24,7 +31,7 @@ const optimalStoreShoppingList = optimalStore.shoppingItems;
                 {#if optimalStoreShoppingList && optimalStoreShoppingList.length>0}
                         {#each optimalStoreShoppingList as item}
                             <tr>
-                                <td>{item.name}</td>
+                                <td><a on:click={()=>itemNameClicked(item.upc, optimalStore.storeId)} class="text-black">{item.name}</a></td>
                                 <td>{addDollarSymbol(item.price)}</td>
                                 <td><a>delete item</a></td>
                             </tr>
@@ -64,7 +71,7 @@ const optimalStoreShoppingList = optimalStore.shoppingItems;
                     {#each shoppingList as item}
                         <tr>
                             <td>
-                                {item.itemName}
+                                <a class="text-black" on:click={()=>itemNameClicked(item.upc, optimalStore.storeId)}>{item.itemName}</a>
                             </td>
                             <td>
                                 {addDollarSymbol(item.cheapestPrice)}
