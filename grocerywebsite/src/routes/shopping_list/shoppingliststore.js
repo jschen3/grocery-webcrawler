@@ -70,3 +70,7 @@ export const shoppingListOutput = writable({
         "maximumSavings": 17.740000000000002
     }
 });
+if (typeof localStorage !== 'undefined') {
+    const storageShoppingList = JSON.parse(localStorage.getItem("shoppingList"))
+    shoppingListOutput.subscribe((value)=>localStorage.shoppingList = JSON.stringify(value))
+}

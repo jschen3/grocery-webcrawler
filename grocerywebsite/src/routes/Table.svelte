@@ -31,7 +31,7 @@
 </script>
 {#if $itemData!= undefined}
     <div class="row">
-        <div class="col-md"><h2 class="text-white item-name-header "><strong>Item Name: </strong>{$itemData.name}</h2></div>
+        <div class="col-md"><h2 class="text-white item-name-header ">{$itemData.name}</h2></div>
     </div>
     <div class="row store-info">
         <div class="col-sm text-white"><strong>Store Name: </strong><img src={Safeway_Icon} alt="safeway icon"/>{capitalize($itemData.storeType)} </div>

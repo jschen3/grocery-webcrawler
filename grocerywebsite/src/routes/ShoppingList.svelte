@@ -1,11 +1,11 @@
 <script>
-	import { json } from '@sveltejs/kit';
 import {display_shopping_list, page_store_item} from './store'
-import {shoppingListOutput} from './shopping_list/shoppingliststore';
 import {addDollarSymbol} from '../util/textformat.js';
 import { changeURLParams } from '../util/url.js';
+import axios from 'axios';
+import {shoppingListOutput} from './shopping_list/shoppingliststore.js'
 
-const shoppingList = $shoppingListOutput.shoppingListItems;
+const shoppingList = $shoppingListOutput.shoppingListItems; 
 const optimalStore = $shoppingListOutput.optimalStore;
 const optimalStoreShoppingList = optimalStore.shoppingItems;
 
@@ -14,11 +14,35 @@ function itemNameClicked(upc, storeValue){
     display_shopping_list.set(false);
     changeURLParams(storeValue, upc);
 }   
+function deleteItem(index, staticShoppingList){
+    let upcsWithRemovedIndex = []
+    for (let i=0; i<staticShoppingList.length;i++){
+        if (staticShoppingList[i].index==index){
+            continue
+        }    
+        else{
+            upcsWithRemovedIndex.push(staticShoppingList[i].upc)
+        }
+    }        
+    axios({
+        method:'post',
+        url: 'http://localhost:8000/shoppinglist',
+        data: upcsWithRemovedIndex
+    }).then((response)=>{
+        console.log(response);
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem("shoppingList", JSON.stringify(response.data))
+        }    
+        }, (error)=>{
+        console.log(error);
+    });
+
+}
 </script>
 {#key $display_shopping_list}
     {#if $display_shopping_list==true}
+    {#key $shoppingListOutput}
         <h1 class="text-white">Optimal Store Location: {optimalStore.storeLocation}</h1>
-        <h2 class="text-white">Optimal Store Shopping List</h2>
         <table class="table table-hover table-light table-striped table-bordered">
             <thead>
                 <tr>
@@ -33,7 +57,7 @@ function itemNameClicked(upc, storeValue){
                             <tr>
                                 <td><a on:click={()=>itemNameClicked(item.upc, optimalStore.storeId)} class="text-black">{item.name}</a></td>
                                 <td>{addDollarSymbol(item.price)}</td>
-                                <td><a>delete item</a></td>
+                                <td><a on:click={()=>deleteItem(item.index, optimalStoreShoppingList)}>delete item</a></td>
                             </tr>
                         {/each}
                     <tr>
@@ -54,7 +78,7 @@ function itemNameClicked(upc, storeValue){
                 {/if}    
             </tbody>
         </table>
-        <h1 class="text-white">Shopping List Additional Options</h1>
+        <h1 class="text-white">Additional Options</h1>
         <table class="table table-hover table-light table-striped table-bordered">
             <thead>
                 <tr>
@@ -85,12 +109,13 @@ function itemNameClicked(upc, storeValue){
                             <td>
                                 {item.highestPriceLocation}
                             </td>
-                            <td><a>delete item</a></td>  
+                            <td><a on:click={()=>deleteItem(item.index, shoppingList)}>delete item</a></td>  
                         </tr>
                     {/each}
                 {/if} 
             </tbody>
         </table>
+        {/key}
     {/if}
 {/key}
 <style>
