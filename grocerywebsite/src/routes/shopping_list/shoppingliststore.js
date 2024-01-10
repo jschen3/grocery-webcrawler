@@ -1,5 +1,6 @@
 import {writable} from 'svelte/store'
-export const shoppingListOutput = writable({
+import { browser } from '$app/environment';
+let shoppingListOutputDefault = JSON.stringify({
     "shoppingListItems": [
         {
             "index": 0,
@@ -70,7 +71,13 @@ export const shoppingListOutput = writable({
         "maximumSavings": 17.740000000000002
     }
 });
-if (typeof localStorage !== 'undefined') {
-    const storageShoppingList = JSON.parse(localStorage.getItem("shoppingList"))
-    shoppingListOutput.subscribe((value)=>localStorage.shoppingList = JSON.stringify(value))
-}
+
+
+const initialValue = browser ? window.localStorage.getItem("shoppingList") ?? shoppingListOutputDefault : JSON.parse(shoppingListOutputDefault);
+const shoppingListOutput = writable(initialValue);
+shoppingListOutput.subscribe((value=>{
+    if (browser){
+        window.localStorage.setItem('shoppingList', value);
+    }
+}));
+export default shoppingListOutput;
